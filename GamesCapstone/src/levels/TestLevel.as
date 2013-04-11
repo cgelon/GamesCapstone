@@ -1,4 +1,4 @@
-package  
+package levels
 {
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxTilemap;
@@ -9,8 +9,8 @@ package
 	 */
 	public class TestLevel extends FlxGroup 
 	{
-		[Embed(source = "../assets/test.csv", mimeType = "application/octet-stream")] public var testCSV : Class;
-		[Embed(source = "../assets/test_tiles.png")] public var testPNG : Class;
+		[Embed(source = "../../assets/test.csv", mimeType = "application/octet-stream")] public var testCSV : Class;
+		[Embed(source = "../../assets/test_tiles.png")] public var testPNG : Class;
 		
 		public var map : FlxTilemap;
 		public var width : int;

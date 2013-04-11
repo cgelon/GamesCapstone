@@ -136,7 +136,7 @@ package org.flixel.plugin.photonstorm
 		}
 		
 		/**
-		 * Abors a currently active timer without firing any callbacks (if set)
+		 * Aborts a currently active timer without firing any callbacks (if set)
 		 */
 		public function abort():void
 		{
