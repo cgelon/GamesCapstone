@@ -2,6 +2,7 @@ package managers
 {
 	import org.flixel.FlxGroup;
 	import people.enemies.Enemy;
+	import people.enemies.Jock;
 	import org.flixel.FlxG;
 	
 	/**
@@ -13,9 +14,9 @@ package managers
 	{
 		public function EnemyManager() 
 		{
-			var enemy : Enemy = recycle( Enemy ) as Enemy;
-			enemy.initialize(FlxG.width / 2, FlxG.height / 5);
-			add(enemy);
+			var jock : Jock = recycle( Jock ) as Jock;
+			jock.initialize(FlxG.width / 2, FlxG.height / 5);
+			add(jock);
 		}
 	}
 }
