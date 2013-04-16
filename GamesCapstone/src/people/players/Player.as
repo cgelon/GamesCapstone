@@ -147,7 +147,7 @@ package people.players
 				
 				if (_directionPressed[3] && isTouching(FlxObject.FLOOR) && _jumpReleased)
 				{
-					velocity.y = -maxVelocity.y / 3;
+					velocity.y = -maxVelocity.y / 2.5;
 					_jumpReleased = false;
 				}
 				
