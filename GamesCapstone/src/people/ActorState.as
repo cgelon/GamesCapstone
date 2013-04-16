@@ -10,6 +10,7 @@ package people
 		public static const IDLE : ActorState = new ActorState();
 		public static const MOVING : ActorState = new ActorState();
 		public static const JUMPING : ActorState = new ActorState();
+		public static const ROLLING : ActorState = new ActorState();
 		public static const ATTACKING : ActorState = new ActorState();
 		public static const HURT : ActorState = new ActorState();
 		

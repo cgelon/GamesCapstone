@@ -35,6 +35,8 @@ package people.players
 		
 		private var _hurtTimer : FlxDelay;
 		
+		private var _rollTimer : FlxDelay;
+		
 		/**
 		 * True if the player has released the jump button 
 		 * from the last time they jumped, false otherwise.
@@ -97,6 +99,14 @@ package people.players
 			{
 				if (state == ActorState.HURT) state = ActorState.IDLE;
 			};
+			
+			_rollTimer = new FlxDelay(1000);
+			_rollTimer.callback = function() : void 
+			{
+				velocity.x = 0;
+				state = ActorState.IDLE;
+			};
+			
 			FlxG.watch(this, "_attackCombo");
 		}
 		
@@ -169,13 +179,21 @@ package people.players
 					}
 					else
 					{
-						state = ActorState.IDLE;
+						if (FlxG.keys.pressed("P"))
+						{
+							state = ActorState.ROLLING;
+						}
+						else
+						{
+							state = ActorState.IDLE;
+						}
 					}
 				}
 				else if (velocity.y < 0)
 				{
 					state = ActorState.JUMPING;
 				}
+				
 			}
 			else if (state == ActorState.HURT)
 			{
@@ -183,6 +201,13 @@ package people.players
 				{
 					_hurtTimer.start();
 				}
+			}
+			else if (state == ActorState.ROLLING)
+			{
+				if (!_rollTimer.isRunning)
+					_rollTimer.start();
+					
+				velocity.x = maxVelocity.x / 3;
 			}
 			drag.x = (touching == FlxObject.FLOOR || state != ActorState.HURT) ? maxVelocity.x * 4 : maxVelocity.x;
 		}
