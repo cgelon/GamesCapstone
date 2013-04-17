@@ -8,12 +8,20 @@ package people.players
 	import org.flixel.plugin.photonstorm.FlxDelay;
 	import people.Actor;
 	import people.ActorState;
+	import states.GameState;
 	
 	/** 
 	 * Contains all of the information for a player.
 	 */
 	public class Player extends Actor
 	{
+		private const ROLLS_PER_ANIMATION : int = 2;
+		
+		/**
+		 * Keep track of our previous state so that we can play animations just once.
+		 */
+		private var _prevState : ActorState;
+		
 		/** 
 		 * An array that keeps hold of what directions are currently being pressed. 
 		 * 0 = right, 1 = down, 2 = left, 3 = up
@@ -34,6 +42,7 @@ package people.players
 		private var _attackComboTimer : FlxDelay;
 		
 		private var _hurtTimer : FlxDelay;
+		private var _playedHurtAnimation : Boolean;
 		
 		private var _rollTimer : FlxDelay;
 		
@@ -41,7 +50,11 @@ package people.players
 		 * True if the player has released the jump button 
 		 * from the last time they jumped, false otherwise.
 		 */
-		private var _jumpReleased : Boolean;
+		public var _jumpReleased : Boolean;
+		
+		// Number of jumps the player has done in their current state.
+		// 0 on the ground, 1 during jump, and 2 during double jump.
+		public var _jumpCount : int;
 		
 		/** The PNG for the player. */
 		[Embed(source = '../../../assets/player.png')] private var playerPNG : Class;
@@ -69,8 +82,11 @@ package people.players
 			
 			// Create the animations we need.
 			addAnimation("idle", [0], 0, false);
-			addAnimation("walk", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 20, true);
-			addAnimation("jump", [1], 0, false);
+			addAnimation("walk", [36, 37, 38, 39, 40, 45, 46, 47, 48, 49], 20, true);
+			addAnimation("jump", [21], 0, false);
+			addAnimation("hurt", [18, 22, 23], 10, false);
+			addAnimation("attack", [1, 2, 3], 10, false);
+			addAnimation("roll", [27, 28, 29, 30, 31, 32], 12, true);
 			
 			// Set physic constants.
 			maxVelocity = new FlxPoint(200, 1000);
@@ -79,6 +95,7 @@ package people.players
 			drag.x = maxVelocity.x * 4;
 			state = ActorState.IDLE;
 			_jumpReleased = true;
+			_jumpCount = 0;
 			
 			// Set up the attack variables.
 			_attackTimer = new FlxDelay(_attackDelay);
@@ -100,14 +117,18 @@ package people.players
 				if (state == ActorState.HURT) state = ActorState.IDLE;
 			};
 			
-			_rollTimer = new FlxDelay(1000);
+			_rollTimer = new FlxDelay(500);
 			_rollTimer.callback = function() : void 
 			{
 				velocity.x = 0;
 				state = ActorState.IDLE;
 			};
 			
-			FlxG.watch(this, "_attackCombo");
+			FlxG.watch(this, "_attackCombo", "combo");
+			FlxG.watch(velocity, "x", "xVel");
+			FlxG.watch(velocity, "y", "yVel");
+			FlxG.watch(this.state, "name", "state");
+			FlxG.watch(this, "_jumpReleased", "jumpReleased");
 		}
 		
 		override public function update():void 
@@ -155,10 +176,11 @@ package people.players
 					acceleration.x = 0;
 				}
 				
-				if (_directionPressed[3] && isTouching(FlxObject.FLOOR) && _jumpReleased)
+				if (_directionPressed[3] && _jumpReleased && _jumpCount < 2)
 				{
 					velocity.y = -maxVelocity.y / 2.5;
 					_jumpReleased = false;
+					_jumpCount++;
 				}
 				
 				if (FlxG.keys.justReleased("W"))
@@ -173,20 +195,20 @@ package people.players
 				// Update state based on movement.
 				if (touching == FlxObject.FLOOR)
 				{
-					if (velocity.x != 0)
+					if (velocity.y == 0)
+						_jumpCount = 0;
+					
+					if (FlxG.keys.pressed("P"))
+					{
+						state = ActorState.ROLLING;
+					}
+					else if (velocity.x != 0)
 					{
 						state = ActorState.MOVING;
 					}
 					else
-					{
-						if (FlxG.keys.pressed("P"))
-						{
-							state = ActorState.ROLLING;
-						}
-						else
-						{
-							state = ActorState.IDLE;
-						}
+					{	
+						state = ActorState.IDLE;	
 					}
 				}
 				else if (velocity.y < 0)
@@ -207,7 +229,10 @@ package people.players
 				if (!_rollTimer.isRunning)
 					_rollTimer.start();
 					
-				velocity.x = maxVelocity.x / 3;
+				if (facing == FlxObject.RIGHT)
+					velocity.x = maxVelocity.x;
+				else
+					velocity.x = -maxVelocity.x;
 			}
 			drag.x = (touching == FlxObject.FLOOR || state != ActorState.HURT) ? maxVelocity.x * 4 : maxVelocity.x;
 		}
@@ -222,21 +247,25 @@ package people.players
 					{
 						case 0:
 							attackManager.attack((facing == FlxObject.LEFT) ? x - 20 : x + width, y);
-							velocity.x = (facing == FlxObject.LEFT) ? -maxVelocity.x : maxVelocity.x;
 							break;
 						case 1:
 							attackManager.attack((facing == FlxObject.LEFT) ? x - 20 : x + width, y);
-							velocity.x = (facing == FlxObject.LEFT) ? -maxVelocity.x : maxVelocity.x;
 							break;
 						case 2:
 							attackManager.superAttack((facing == FlxObject.LEFT) ? x - 40 : x + width, y);
-							velocity.x = (facing == FlxObject.LEFT) ? -maxVelocity.x : maxVelocity.x;
 							_attackCombo = -1;
 							break;
 						default:
 							break;
 					}
-					acceleration.x = 0;
+					
+					// If the player is on the ground while attacking, make them move forward slightly
+					// with the attack.
+					if (touching == FlxObject.FLOOR)
+					{
+						velocity.x = (facing == FlxObject.LEFT) ? -maxVelocity.x : maxVelocity.x;
+						acceleration.x = 0;
+					}
 					state = ActorState.ATTACKING;
 					_attackReleased = false;
 					_attackTimer.start();
@@ -259,17 +288,32 @@ package people.players
 		 */
 		private function animate() : void
 		{
-			switch(state)
+			// Only animate the player when they change states. Looping
+			// is taken care of by play().
+			if (state != _prevState)
 			{
-				case ActorState.IDLE:
-					play("idle");
-					break;
-				case ActorState.MOVING:
-					play("walk");
-					break;
-				case ActorState.JUMPING:
-					play("jump");
-					break;
+				switch(state)
+				{
+					case ActorState.IDLE:
+						play("idle");
+						break;
+					case ActorState.MOVING:
+						play("walk");
+						break;
+					case ActorState.JUMPING:
+						play("jump");
+						break;
+					case ActorState.ROLLING:
+						play("roll");
+						break;
+					case ActorState.ATTACKING:
+						play("attack");
+						break;
+					case ActorState.HURT:
+						play("hurt");
+						break;
+				}
+				_prevState = state;
 			}
 		}
 		

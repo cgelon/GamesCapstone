@@ -8,6 +8,7 @@ package states
 	import org.flixel.FlxCamera;
 	import org.flixel.FlxG;
 	import org.flixel.FlxRect;
+	import org.flixel.FlxObject;
 	import people.ActorState;
 	import people.enemies.Enemy;
 	import people.players.Player;
@@ -44,7 +45,12 @@ package states
 			FlxG.collide(getManager(PlayerManager), _level);
 			FlxG.collide(getManager(EnemyManager), _level);
 			FlxG.overlap(getManager(EnemyManager), getManager(AttackManager), enemyHit);
-			FlxG.overlap(getManager(PlayerManager), getManager(EnemyManager), playerHit);
+			
+			// Detect collisions between the player and enemies UNLESS the player is rolling.
+			var player : Player = (getManager(PlayerManager) as PlayerManager).player;
+			if (player.state != ActorState.ROLLING)
+				FlxG.overlap(getManager(PlayerManager), getManager(EnemyManager), playerHit);
+				
 			for each (var enemy : Enemy in getManager(EnemyManager).members)
 			{
 				//enemy.velocity.x = (enemy.x - _player.x < 0) ? enemy.maxVelocity.x / 2 : -enemy.maxVelocity.x / 2;
@@ -61,6 +67,14 @@ package states
 			player.acceleration.x = 0;
 			player.velocity.y = -player.maxVelocity.y / 6;
 			player.velocity.x = ((player.x - enemy.x < 0) ? -1 : 1) * player.maxVelocity.x * 2;
+			
+			// If the player is pinned against a wall, make the fly the other direction.
+			if ((player.touching == FlxObject.RIGHT && player.velocity.x > 0)
+				|| (player.touching == FlxObject.LEFT && player.velocity.x < 0))
+			{
+				player.velocity.x = -player.velocity.x;
+			}
+			
 			player.state = ActorState.HURT;
 		}
 		
