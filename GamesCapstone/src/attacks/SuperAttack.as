@@ -21,6 +21,7 @@ package attacks
 			revive();
 			
 			makeGraphic(40, 40, Color.WHITE, true);
+			alpha = 0;
 			FlxG.clearBitmapCache();
 		}
 		

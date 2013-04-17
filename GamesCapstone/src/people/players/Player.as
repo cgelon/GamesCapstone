@@ -181,6 +181,7 @@ package people.players
 					velocity.y = -maxVelocity.y / 2.5;
 					_jumpReleased = false;
 					_jumpCount++;
+					state = ActorState.JUMPING;
 				}
 				
 				if (FlxG.keys.justReleased("W"))
@@ -193,9 +194,9 @@ package people.players
 				}
 				
 				// Update state based on movement.
-				if (touching == FlxObject.FLOOR)
+				if (touching == FlxObject.FLOOR && velocity.y == 0)
 				{
-					if (velocity.y == 0)
+					if (_jumpCount > 0)
 						_jumpCount = 0;
 					
 					if (FlxG.keys.pressed("P"))
@@ -210,10 +211,6 @@ package people.players
 					{	
 						state = ActorState.IDLE;	
 					}
-				}
-				else if (velocity.y < 0)
-				{
-					state = ActorState.JUMPING;
 				}
 				
 			}
@@ -335,6 +332,7 @@ package people.players
 			kill();
 			super.destroy();
 			
+			_prevState = null;
 			_directionPressed.length = 0;
 			_directionPressed = null;
 			_attackDelay = 0;
@@ -342,7 +340,6 @@ package people.players
 			_attackTimer.callback = null;
 			_attackTimer = null;
 			_attackReleased = false;
-			_jumpReleased = false;
 			_attackCombo = 0;
 			_attackComboDelay = 0;
 			_attackComboTimer.abort();
@@ -351,6 +348,12 @@ package people.players
 			_hurtTimer.abort();
 			_hurtTimer.callback = null;
 			_hurtTimer = null;
+			_playedHurtAnimation = false;
+			_rollTimer.abort();
+			_rollTimer.callback = null;
+			_rollTimer = null;
+			_jumpReleased = false;
+			_jumpCount = 0;
 		}
 	}
 }

@@ -85,7 +85,8 @@ package states
 		 */
 		private function enemyHit(enemy : Enemy, attack : Attack) : void
 		{
-			enemy.velocity.x = ((enemy.x - attack.x < 0) ? -1 : 1) * enemy.maxVelocity.x;
+			var player : Player = (getManager(PlayerManager) as PlayerManager).player;
+			enemy.velocity.x = ((enemy.x - player.x < 0) ? -1 : 1) * enemy.maxVelocity.x;
 		}
 		
 		override public function destroy() : void

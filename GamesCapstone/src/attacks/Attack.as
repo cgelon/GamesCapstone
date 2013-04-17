@@ -15,13 +15,13 @@ package attacks
 		
 		public function initialize(x : Number, y : Number) : void
 		{
-			
 			this.x = x;
 			this.y = y;
 			
 			revive();
 			
 			makeGraphic(20, 40, Color.WHITE, true);
+			alpha = 0;
 			FlxG.clearBitmapCache();
 		}
 		
