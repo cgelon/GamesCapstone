@@ -64,6 +64,7 @@ package org.flixel
 			_regen = true;
 			_shadow = 0;
 			allowCollisions = NONE;
+			moves = false;
 			calcFrame();
 		}
 		
@@ -295,6 +296,12 @@ package org.flixel
 		{
 			var defaultTextFormat:TextFormat = _textField.defaultTextFormat;
 			return new TextFormat(defaultTextFormat.font,defaultTextFormat.size,defaultTextFormat.color,defaultTextFormat.bold,defaultTextFormat.italic,defaultTextFormat.underline,defaultTextFormat.url,defaultTextFormat.target,defaultTextFormat.align);
+		}
+		
+		/** The number of lines that the text is currently taking up. */
+		public function get numLines():int
+		{
+			return _textField.numLines;
 		}
 	}
 }

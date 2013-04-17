@@ -1,6 +1,7 @@
 package org.flixel
 {
 	import flash.display.BitmapData;
+  import flash.display.Bitmap;
 	import flash.display.Graphics;
 	import flash.display.Sprite;
 	import flash.display.Stage;
@@ -246,7 +247,7 @@ package org.flixel
 		static public function log(Data:Object):void
 		{
 			if((_game != null) && (_game._debugger != null))
-				_game._debugger.log.add((Data == null)?"ERROR: null object":Data.toString());
+				_game._debugger.log.add((Data == null)?"ERROR: null object":((Data is Array)?FlxU.formatArray(Data as Array):Data.toString()));
 		}
 		
 		/**
@@ -320,6 +321,18 @@ package org.flixel
 			_game._maxAccumulation = 2000/_game._flashFramerate - 1;
 			if(_game._maxAccumulation < _game._step)
 				_game._maxAccumulation = _game._step;
+		}
+		
+		/**
+		 * Switch to full-screen display.
+		 */
+		static public function fullscreen():void
+		{
+			FlxG.stage.displayState = "fullScreen";
+			var fsw:uint = FlxG.width*FlxG.camera.zoom;
+			var fsh:uint = FlxG.height*FlxG.camera.zoom;
+			FlxG.camera.x = (FlxG.stage.fullScreenWidth - fsw)/2;
+			FlxG.camera.y = (FlxG.stage.fullScreenHeight - fsh)/2;
 		}
 		
 		/**
@@ -716,7 +729,6 @@ package org.flixel
 		 */
 		static public function addBitmap(Graphic:Class, Reverse:Boolean=false, Unique:Boolean=false, Key:String=null):BitmapData
 		{
-			var needReverse:Boolean = false;
 			if(Key == null)
 			{
 				Key = String(Graphic)+(Reverse?"_REVERSE_":"");
@@ -731,29 +743,31 @@ package org.flixel
 					Key = ukey;
 				}
 			}
-			
 			//If there is no data for this key, generate the requested graphic
 			if(!checkBitmapCache(Key))
 			{
-				_cache[Key] = (new Graphic).bitmapData;
+				var bitmap:Bitmap = new Graphic() as Bitmap;
+				if(bitmap == null)
+				{
+					FlxG.log("Error: " + FlxU.getClassName(Graphic) + " must extend flash.display.Bitmap.");
+					return FlxG.addBitmap(FlxSprite.ImgDefault, Reverse);
+				}
+				
+				var pixels:BitmapData = bitmap.bitmapData;
 				if(Reverse)
-					needReverse = true;
-			}
-			var pixels:BitmapData = _cache[Key];
-			if(!needReverse && Reverse && (pixels.width == (new Graphic).bitmapData.width))
-				needReverse = true;
-			if(needReverse)
-			{
-				var newPixels:BitmapData = new BitmapData(pixels.width<<1,pixels.height,true,0x00000000);
-				newPixels.draw(pixels);
-				var mtx:Matrix = new Matrix();
-				mtx.scale(-1,1);
-				mtx.translate(newPixels.width,0);
-				newPixels.draw(pixels,mtx);
-				pixels = newPixels;
+				{
+					var newPixels:BitmapData = new BitmapData(pixels.width<<1,pixels.height,true,0x00000000);
+					newPixels.draw(pixels);
+					var mtx:Matrix = new Matrix();
+					mtx.scale(-1,1);
+					mtx.translate(newPixels.width,0);
+					newPixels.draw(pixels, mtx);
+					pixels.dispose();
+					pixels = newPixels;	
+				}
 				_cache[Key] = pixels;
 			}
-			return pixels;
+			return _cache[Key];
 		}
 		
 		/**
@@ -834,14 +848,14 @@ package org.flixel
 		 */
 		static public function removeCamera(Camera:FlxCamera,Destroy:Boolean=true):void
 		{
-			try
+			if(Camera && FlxG._game.contains(Camera._flashSprite))
 			{
+				FlxG.cameras.splice(FlxG.cameras.indexOf(Camera), 1);
 				FlxG._game.removeChild(Camera._flashSprite);
 			}
-			catch(E:Error)
-			{
+			else 
 				FlxG.log("Error removing camera, not part of game.");
-			}
+				
 			if(Destroy)
 				Camera.destroy();
 		}

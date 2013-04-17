@@ -139,6 +139,7 @@ package org.flixel
 			_tiles = null;
 			_tileObjects = null;
 			immovable = true;
+			moves = false;
 			cameras = null;
 			_debugTileNotSolid = null;
 			_debugTilePartial = null;
@@ -156,16 +157,25 @@ package org.flixel
 			_flashPoint = null;
 			_flashRect = null;
 			_tiles = null;
-			var i:uint = 0;
-			var l:uint = _tileObjects.length;
-			while(i < l)
-				(_tileObjects[i++] as FlxTile).destroy();
-			_tileObjects = null;
-			i = 0;
-			l = _buffers.length;
-			while(i < l)
-				(_buffers[i++] as FlxTilemapBuffer).destroy();
-			_buffers = null;
+			
+			if (_tileObjects != null)
+			{
+				var i:uint = 0;
+				var l:uint = _tileObjects.length;
+				while(i < l)
+					(_tileObjects[i++] as FlxTile).destroy();
+				_tileObjects = null;
+			}
+			
+			if (_buffers != null)
+			{
+				i = 0;
+				l = _buffers.length;
+				while(i < l)
+					(_buffers[i++] as FlxTilemapBuffer).destroy();
+				_buffers = null;
+			}
+			
 			_data = null;
 			_rects = null;
 			_debugTileNotSolid = null;
@@ -1278,10 +1288,11 @@ package org.flixel
 					ry = ly + stepY*((q-lx)/stepX);
 					if((ry > tileY) && (ry < tileY + _tileHeight))
 					{
-						if(Result == null)
-							Result = new FlxPoint();
-						Result.x = rx;
-						Result.y = ry;
+						if(Result != null)
+						{
+							Result.x = rx;
+							Result.y = ry;
+						}
 						return false;
 					}
 					
@@ -1293,10 +1304,11 @@ package org.flixel
 					ry = q;
 					if((rx > tileX) && (rx < tileX + _tileWidth))
 					{
-						if(Result == null)
-							Result = new FlxPoint();
-						Result.x = rx;
-						Result.y = ry;
+						if(Result != null)
+						{
+							Result.x = rx;
+							Result.y = ry;
+						}
 						return false;
 					}
 					return true;
@@ -1361,10 +1373,11 @@ package org.flixel
 		 * @param	bitmapData	A Flash <code>BitmapData</code> object, preferably black and white.
 		 * @param	Invert		Load white pixels as solid instead.
 		 * @param	Scale		Default is 1.  Scale of 2 means each pixel forms a 2x2 block of tiles, and so on.
+		 * @param	ColorMap	An array of color values (uint 0xAARRGGBB) in the order they're intended to be assigned as indices
 		 * 
 		 * @return	A comma-separated string containing the level data in a <code>FlxTilemap</code>-friendly format.
 		 */
-		static public function bitmapToCSV(bitmapData:BitmapData,Invert:Boolean=false,Scale:uint=1):String
+		static public function bitmapToCSV(bitmapData:BitmapData,Invert:Boolean=false,Scale:uint=1,ColorMap:Array=null):String
 		{
 			//Import and scale image if necessary
 			if(Scale > 1)
@@ -1390,7 +1403,9 @@ package org.flixel
 				{
 					//Decide if this pixel/tile is solid (1) or not (0)
 					pixel = bitmapData.getPixel(column,row);
-					if((Invert && (pixel > 0)) || (!Invert && (pixel == 0)))
+					if(ColorMap != null)
+						pixel = ColorMap.indexOf(pixel);
+					else if((Invert && (pixel > 0)) || (!Invert && (pixel == 0)))
 						pixel = 1;
 					else
 						pixel = 0;

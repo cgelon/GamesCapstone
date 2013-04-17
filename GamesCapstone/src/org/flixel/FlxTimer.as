@@ -123,6 +123,14 @@ package org.flixel
 		}
 		
 		/**
+		 * Pauses the timer.
+		 */
+		public function pause() : void
+		{
+			paused = true;
+		}
+		
+		/**
 		 * Stops the timer and removes it from the timer manager.
 		 */
 		public function stop():void

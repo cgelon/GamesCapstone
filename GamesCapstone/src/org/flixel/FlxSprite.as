@@ -18,7 +18,7 @@ package org.flixel
 	 */
 	public class FlxSprite extends FlxObject
 	{
-		[Embed(source="data/default.png")] protected var ImgDefault:Class;
+		[Embed(source="data/default.png")] public static var ImgDefault:Class;
 		
 		/**
 		 * WARNING: The origin of the sprite will default to its center.
@@ -166,8 +166,6 @@ package org.flixel
 		public function FlxSprite(X:Number=0,Y:Number=0,SimpleGraphic:Class=null)
 		{
 			super(X,Y);
-			
-			health = 1;
 
 			_flashPoint = new Point();
 			_flashRect = new Rectangle();
@@ -230,6 +228,8 @@ package org.flixel
 			_matrix = null;
 			_callback = null;
 			framePixels = null;
+			
+			super.destroy();
 		}
 		
 		/**
