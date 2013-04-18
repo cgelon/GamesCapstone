@@ -12,7 +12,7 @@ package managers
 	 */
 	public class EnemyManager extends Manager
 	{		
-		public function addEnemy(location : FlxPoint) 
+		public function addEnemy(location : FlxPoint)  : void
 		{			
 			var jock : Jock = recycle( Jock ) as Jock;
 			jock.initialize(location.x, location.y);

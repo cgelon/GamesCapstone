@@ -3,6 +3,7 @@ package states
 	import attacks.Attack;
 	import levels.EvilLabVatLevel;
 	import levels.TestLevel;
+	import levels.Level;
 	import managers.AttackManager;
 	import managers.EnemyManager;
 	import managers.PlayerManager;
@@ -16,7 +17,7 @@ package states
 	
 	public class State extends GameState 
 	{
-		private var _level : EvilLabVatLevel;
+		private var _level : Level;
 		
 		override public function create() : void
 		{
