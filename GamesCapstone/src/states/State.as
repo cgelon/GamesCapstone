@@ -1,6 +1,7 @@
 package states
 {
 	import attacks.Attack;
+	import levels.EvilLabVatLevel;
 	import levels.TestLevel;
 	import managers.AttackManager;
 	import managers.EnemyManager;
@@ -15,16 +16,19 @@ package states
 	
 	public class State extends GameState 
 	{
-		private var _level : TestLevel;
+		private var _level : EvilLabVatLevel;
 		
 		override public function create() : void
 		{
 			super.create();
-			_level = new TestLevel();
+			_level = new EvilLabVatLevel();
 			add(_level);
 			var enemyManager : EnemyManager = new EnemyManager();
+			for (var i: int = 0; i < _level.enemyStarts.length; i++) {
+				enemyManager.addEnemy(_level.enemyStarts[i]);
+			}
 			addManager(enemyManager);
-			var playerManager : PlayerManager = new PlayerManager();
+			var playerManager : PlayerManager = new PlayerManager(_level.playerStart);
 			addManager(playerManager);
 			var attackManager : AttackManager = new AttackManager();
 			addManager(attackManager);

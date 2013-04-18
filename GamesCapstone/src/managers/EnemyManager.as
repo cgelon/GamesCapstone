@@ -3,7 +3,7 @@ package managers
 	import org.flixel.FlxGroup;
 	import people.enemies.Enemy;
 	import people.enemies.Jock;
-	import org.flixel.FlxG;
+	import org.flixel.FlxPoint;
 	
 	/**
 	 * Handles all interactions with enemies.
@@ -11,11 +11,11 @@ package managers
 	 * @author Chris Gelon
 	 */
 	public class EnemyManager extends Manager
-	{
-		public function EnemyManager() 
-		{
+	{		
+		public function addEnemy(location : FlxPoint) 
+		{			
 			var jock : Jock = recycle( Jock ) as Jock;
-			jock.initialize(FlxG.width / 2, FlxG.height / 5);
+			jock.initialize(location.x, location.y);
 			add(jock);
 		}
 	}

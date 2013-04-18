@@ -2,7 +2,7 @@ package managers
 {
 	import attacks.Attack;
 	import people.players.Player;
-	import org.flixel.FlxG;
+	import org.flixel.FlxPoint;
 	
 	/**
 	 * Manages all aspects of the player.
@@ -14,10 +14,10 @@ package managers
 		/** The current player. */
 		public var player : Player;
 		
-		public function PlayerManager() 
+		public function PlayerManager(location : FlxPoint) 
 		{
 			player = new Player();
-			player.initialize(FlxG.width / 2, FlxG.height / 5);
+			player.initialize(location.x, location.y);
 			add(player);
 		}
 	}
