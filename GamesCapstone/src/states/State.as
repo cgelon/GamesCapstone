@@ -1,10 +1,12 @@
 package states
 {
 	import attacks.Attack;
+	import attacks.EnemyAttack;
 	import levels.EvilLabVatLevel;
 	import levels.TestLevel;
 	import levels.Level;
-	import managers.AttackManager;
+	import managers.PlayerAttackManager;
+	import managers.EnemyAttackManager;
 	import managers.EnemyManager;
 	import managers.PlayerManager;
 	import org.flixel.FlxCamera;
@@ -31,8 +33,10 @@ package states
 			addManager(enemyManager);
 			var playerManager : PlayerManager = new PlayerManager(_level.playerStart);
 			addManager(playerManager);
-			var attackManager : AttackManager = new AttackManager();
-			addManager(attackManager);
+			var playerAttackManager : PlayerAttackManager = new PlayerAttackManager();
+			addManager(playerAttackManager);
+			var enemyAttackManager : EnemyAttackManager = new EnemyAttackManager();
+			addManager(enemyAttackManager);
 			
 			//	Tell flixel how big our game world is
 			FlxG.worldBounds = new FlxRect(0, 0, _level.width, _level.height);
@@ -49,12 +53,15 @@ package states
 			super.update();
 			FlxG.collide(getManager(PlayerManager), _level);
 			FlxG.collide(getManager(EnemyManager), _level);
-			FlxG.overlap(getManager(EnemyManager), getManager(AttackManager), enemyHit);
+			FlxG.overlap(getManager(EnemyManager), getManager(PlayerAttackManager), enemyHit);
 			
 			// Detect collisions between the player and enemies UNLESS the player is rolling.
 			var player : Player = (getManager(PlayerManager) as PlayerManager).player;
 			if (player.state != ActorState.ROLLING)
+			{
 				FlxG.overlap(getManager(PlayerManager), getManager(EnemyManager), playerHit);
+				FlxG.overlap(getManager(PlayerManager), getManager(EnemyAttackManager), playerAttacked);
+			}
 				
 			for each (var enemy : Enemy in getManager(EnemyManager).members)
 			{
@@ -63,7 +70,28 @@ package states
 		}
 		
 		/**
-		 * Callback function for when the player is hit by an enemy.
+		 * Callback function for when player is hit by an enemy attack
+		 * @param	player
+		 * @param	enemy
+		 */
+		private function playerAttacked(player : Player, attack : EnemyAttack) : void
+		{
+			player.acceleration.x = 0;
+			player.velocity.y = -player.maxVelocity.y / 6;
+			player.velocity.x = ((player.x - attack.x < 0) ? -1 : 1) * player.maxVelocity.x * 2;
+			
+			// If the player is pinned against a wall, make the fly the other direction.
+			if ((player.touching == FlxObject.RIGHT && player.velocity.x > 0)
+				|| (player.touching == FlxObject.LEFT && player.velocity.x < 0))
+			{
+				player.velocity.x = -player.velocity.x;
+			}
+			
+			player.state = ActorState.HURT;
+		}
+		
+		/**
+		 * Callback function for when the player runs into an enemy.
 		 * @param	player	The player in the interaction.
 		 * @param	enemy	The enemy in the interaction.
 		 */

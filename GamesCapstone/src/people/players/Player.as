@@ -1,6 +1,6 @@
 package people.players
 {
-	import managers.AttackManager;
+	import managers.PlayerAttackManager;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxSprite
 	import org.flixel.FlxObject;
@@ -322,9 +322,9 @@ package people.players
 			return !_attackTimer.isRunning && _attackReleased;
 		}
 		
-		public function get attackManager() : AttackManager
+		public function get attackManager() : PlayerAttackManager
 		{
-			return getManager(AttackManager) as AttackManager;
+			return getManager(PlayerAttackManager) as PlayerAttackManager;
 		}
 		
 		override public function destroy() : void

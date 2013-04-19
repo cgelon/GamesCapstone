@@ -9,7 +9,7 @@ package managers
 	 * 
 	 * @author Chris Gelon
 	 */
-	public class AttackManager extends Manager 
+	public class PlayerAttackManager extends Manager 
 	{
 		public function attack(x : Number, y : Number) : void
 		{

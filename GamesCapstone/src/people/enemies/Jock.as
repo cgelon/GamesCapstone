@@ -1,6 +1,7 @@
 package people.enemies 
 {
 	import managers.EnemyManager;
+	import managers.EnemyAttackManager;
 	import org.flixel.FlxSprite;
 	import org.flixel.FlxG;
 	import org.flixel.FlxPoint;
@@ -32,7 +33,7 @@ package people.enemies
 			super();
 			
 			// Load the jock.png into this sprite.
-			loadGraphic(jockPNG, true, true, 64, 64, true);
+			loadGraphic(jockPNG, true, false, 64, 64, true);
 
 			// Set the bounding box for the sprite.
 			width = 20;
@@ -46,6 +47,7 @@ package people.enemies
 			addAnimation("idle", [0], 0, false);
 			addAnimation("drink", [1], 0, false);
 			addAnimation("throw", [4, 5, 6, 7, 7, 7, 7, 0], 10, false);
+			addAnimation("punch", [6, 7, 7, 7, 0], 10, false);
 			addAnimation("die", [8, 9], 10, false);
 			
 			// Set physics constants
@@ -84,7 +86,7 @@ package people.enemies
 						play("idle");
 						break;
 					case ActorState.ATTACKING:
-						play("throw");
+						play("punch");
 						break;
 					case ActorState.HURT:
 						play("die");
@@ -99,6 +101,7 @@ package people.enemies
 		{
 			state = ActorState.ATTACKING;
 			_prevState = ActorState.IDLE;
+			attackManager.attack((facing == FlxObject.LEFT) ? x - 30 : x + width, y);
 			_attackTimer.start();
 		}
 		
@@ -109,6 +112,11 @@ package people.enemies
 				attack();
 			}
 			animate();
+		}
+		
+		public function get attackManager() : EnemyAttackManager
+		{
+			return getManager(EnemyAttackManager) as EnemyAttackManager;
 		}
 	}
 }
