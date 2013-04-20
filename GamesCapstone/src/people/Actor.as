@@ -12,6 +12,8 @@ package people
 	 */
 	public class Actor extends FlxSprite 
 	{
+		public var _health : Number; // The amount of health points the actor has left.
+		
 		/**
 		 * The current state of the actor.
 		 */
@@ -22,10 +24,12 @@ package people
 		 * @param	x	The x coordinate to start the actor at.
 		 * @param	y	The y coordinate to start the actor at.
 		 */
-		public function initialize(x : Number, y : Number) : void
+		public function initialize(x : Number, y : Number, health : Number = 5) : void
 		{
 			this.x = x;
 			this.y = y;
+			
+			_health = health;
 		}
 		
 		/**

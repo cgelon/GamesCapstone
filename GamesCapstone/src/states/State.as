@@ -24,7 +24,10 @@ package states
 		override public function create() : void
 		{
 			super.create();
-			_level = new EvilLabVatLevel();
+			
+			//_level = new EvilLabVatLevel();
+			_level = new TestLevel();
+			
 			add(_level);
 			var enemyManager : EnemyManager = new EnemyManager();
 			for (var i: int = 0; i < _level.enemyStarts.length; i++) {
@@ -57,9 +60,9 @@ package states
 			
 			// Detect collisions between the player and enemies UNLESS the player is rolling.
 			var player : Player = (getManager(PlayerManager) as PlayerManager).player;
-			if (player.state != ActorState.ROLLING)
+			if (!(player.state == ActorState.ROLLING || player.state == ActorState.HURT || player.state == ActorState.DEAD))
 			{
-				FlxG.overlap(getManager(PlayerManager), getManager(EnemyManager), playerHit);
+				//FlxG.overlap(getManager(PlayerManager), getManager(EnemyManager), playerHit);
 				FlxG.overlap(getManager(PlayerManager), getManager(EnemyAttackManager), playerAttacked);
 			}
 				
@@ -77,17 +80,27 @@ package states
 		private function playerAttacked(player : Player, attack : EnemyAttack) : void
 		{
 			player.acceleration.x = 0;
-			player.velocity.y = -player.maxVelocity.y / 6;
+			//player.velocity.y = -player.maxVelocity.y / 6;
 			player.velocity.x = ((player.x - attack.x < 0) ? -1 : 1) * player.maxVelocity.x * 2;
 			
 			// If the player is pinned against a wall, make the fly the other direction.
-			if ((player.touching == FlxObject.RIGHT && player.velocity.x > 0)
-				|| (player.touching == FlxObject.LEFT && player.velocity.x < 0))
+			if ((player.isTouching(FlxObject.RIGHT) && player.velocity.x > 0)
+				|| (player.isTouching(FlxObject.LEFT) && player.velocity.x < 0))
 			{
 				player.velocity.x = -player.velocity.x;
 			}
 			
-			player.state = ActorState.HURT;
+			// Check that the player can be hit, because this function will get called multiple times as the player is
+			// moving out of the attack's hitbox.
+			if (!(player.state == ActorState.ROLLING || player.state == ActorState.HURT || player.state == ActorState.DEAD))
+			{
+				player._health--;
+			}
+			
+			if (player._health == 0)
+				player.state = ActorState.DEAD;
+			else
+				player.state = ActorState.HURT;
 		}
 		
 		/**
@@ -102,8 +115,8 @@ package states
 			player.velocity.x = ((player.x - enemy.x < 0) ? -1 : 1) * player.maxVelocity.x * 2;
 			
 			// If the player is pinned against a wall, make the fly the other direction.
-			if ((player.touching == FlxObject.RIGHT && player.velocity.x > 0)
-				|| (player.touching == FlxObject.LEFT && player.velocity.x < 0))
+			if ((player.isTouching(FlxObject.RIGHT) && player.velocity.x > 0)
+				|| (player.isTouching(FlxObject.LEFT) && player.velocity.x < 0))
 			{
 				player.velocity.x = -player.velocity.x;
 			}

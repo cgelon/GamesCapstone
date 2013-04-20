@@ -15,8 +15,6 @@ package people.players
 	 */
 	public class Player extends Actor
 	{
-		private const ROLLS_PER_ANIMATION : int = 2;
-		
 		/**
 		 * Keep track of our previous state so that we can play animations just once.
 		 */
@@ -84,18 +82,18 @@ package people.players
 			addAnimation("idle", [0], 0, false);
 			addAnimation("walk", [36, 37, 38, 39, 40, 45, 46, 47, 48, 49], 20, true);
 			addAnimation("jump", [21], 0, false);
-			addAnimation("hurt", [18, 22, 23], 10, false);
-			addAnimation("attack", [1, 2, 3], 10, false);
+			addAnimation("basic_attack", [1, 2, 3], 20, false);
+			addAnimation("super_attack", [1, 2, 3, 4], 20, false);
 			addAnimation("roll", [27, 28, 29, 30, 31, 32], 12, true);
+			addAnimation("hurt_flying", [18], 0, false); // Hurt animation as player is flying through air
+			addAnimation("hurt_kneeling", [11, 12], 10, false); // Hurt animation once player hits the ground.
+			addAnimation("die_fall", [18, 22, 23], 3, false);
+			addAnimation("die_flash", [23, 53], 2, true);
 			
 			// Set physic constants.
 			maxVelocity = new FlxPoint(200, 1000);
 			acceleration.y = 1000;
-			facing = FlxObject.RIGHT;
 			drag.x = maxVelocity.x * 4;
-			state = ActorState.IDLE;
-			_jumpReleased = true;
-			_jumpCount = 0;
 			
 			// Set up the attack variables.
 			_attackTimer = new FlxDelay(_attackDelay);
@@ -124,21 +122,35 @@ package people.players
 				state = ActorState.IDLE;
 			};
 			
+			state = ActorState.IDLE;
+			
 			FlxG.watch(this, "_attackCombo", "combo");
-			FlxG.watch(velocity, "x", "xVel");
-			FlxG.watch(velocity, "y", "yVel");
-			FlxG.watch(this.state, "name", "state");
+			FlxG.watch(this, "touching", "touching");
+			FlxG.watch(this, "State", "state");
 			FlxG.watch(this, "_jumpReleased", "jumpReleased");
+			FlxG.watch(this, "_health", "health");
+		}
+		
+		override public function initialize(x : Number, y : Number, health : Number = 2) : void
+		{
+			super.initialize(x, y, health);
+			facing = FlxObject.RIGHT;
+			state = ActorState.IDLE;
+			_jumpReleased = true;
+			_jumpCount = 0;
 		}
 		
 		override public function update():void 
 		{
 			super.update();
 			
-			calculateMovement();
-			if (state != ActorState.HURT) 
+			if (state != ActorState.DEAD)
 			{
-				attack();
+				calculateMovement();
+				if (!(state == ActorState.HURT || state == ActorState.ROLLING)) 
+				{
+					attack();
+				}
 			}
 			animate();
 		}
@@ -194,7 +206,7 @@ package people.players
 				}
 				
 				// Update state based on movement.
-				if (touching == FlxObject.FLOOR && velocity.y == 0)
+				if (isTouching(FlxObject.FLOOR) != 0x0 && velocity.y == 0)
 				{
 					if (_jumpCount > 0)
 						_jumpCount = 0;
@@ -216,22 +228,27 @@ package people.players
 			}
 			else if (state == ActorState.HURT)
 			{
-				if (touching == FlxObject.FLOOR && !_hurtTimer.isRunning)
+				if (isTouching(FlxObject.FLOOR) && !_hurtTimer.isRunning)
 				{
 					_hurtTimer.start();
+					_jumpReleased = true;
+					play("hurt_kneeling");
 				}
 			}
 			else if (state == ActorState.ROLLING)
 			{
 				if (!_rollTimer.isRunning)
+				{
 					_rollTimer.start();
+					_jumpReleased = true;
+				}
 					
 				if (facing == FlxObject.RIGHT)
 					velocity.x = maxVelocity.x;
 				else
 					velocity.x = -maxVelocity.x;
 			}
-			drag.x = (touching == FlxObject.FLOOR || state != ActorState.HURT) ? maxVelocity.x * 4 : maxVelocity.x;
+			drag.x = (isTouching(FlxObject.FLOOR) || state != ActorState.HURT) ? maxVelocity.x * 4 : maxVelocity.x;
 		}
 		
 		private function attack() : void
@@ -240,6 +257,10 @@ package people.players
 			{
 				if (attackReady)
 				{
+					// Reset attackCombo if we finished a combo.
+					if (_attackCombo == 3)
+						_attackCombo = 0;
+					
 					switch(_attackCombo)
 					{
 						case 0:
@@ -250,7 +271,6 @@ package people.players
 							break;
 						case 2:
 							attackManager.superAttack((facing == FlxObject.LEFT) ? x - 40 : x + width, y);
-							_attackCombo = -1;
 							break;
 						default:
 							break;
@@ -258,9 +278,9 @@ package people.players
 					
 					// If the player is on the ground while attacking, make them move forward slightly
 					// with the attack.
-					if (touching == FlxObject.FLOOR)
+					if (isTouching(FlxObject.FLOOR))
 					{
-						velocity.x = (facing == FlxObject.LEFT) ? -maxVelocity.x : maxVelocity.x;
+						//velocity.x = (facing == FlxObject.LEFT) ? -maxVelocity.x : maxVelocity.x;
 						acceleration.x = 0;
 					}
 					state = ActorState.ATTACKING;
@@ -304,14 +324,27 @@ package people.players
 						play("roll");
 						break;
 					case ActorState.ATTACKING:
-						play("attack");
+						if (_attackCombo == 3)
+							play("super_attack");
+						else
+							play("basic_attack");
 						break;
 					case ActorState.HURT:
-						play("hurt");
+						if (touching != FlxObject.FLOOR)
+							play("hurt_flying");
+						break;
+					case ActorState.DEAD:
+						play("die_fall");
+						play("die_flash");
 						break;
 				}
 				_prevState = state;
 			}
+		}
+		
+		public function get State () : String
+		{
+			return state.name;
 		}
 		
 		/**

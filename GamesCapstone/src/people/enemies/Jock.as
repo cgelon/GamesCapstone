@@ -68,9 +68,9 @@ package people.enemies
 			}
 		}
 		
-		override public function initialize(x : Number, y : Number) : void
+		override public function initialize(x : Number, y : Number, health : Number = 6) : void
 		{
-			super.initialize(x, y);
+			super.initialize(x, y, health);
 			state = ActorState.IDLE;
 		}
 		
