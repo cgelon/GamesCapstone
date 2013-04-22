@@ -303,5 +303,10 @@ package org.flixel
 		{
 			return _textField.numLines;
 		}
+		
+		public function set textBoxWidth(width:uint):void
+		{
+			_textField.width = width;
+		}
 	}
 }
