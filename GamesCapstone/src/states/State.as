@@ -9,6 +9,7 @@ package states
 	import managers.EnemyAttackManager;
 	import managers.EnemyManager;
 	import managers.PlayerManager;
+	import managers.UIObjectManager;
 	import org.flixel.FlxCamera;
 	import org.flixel.FlxG;
 	import org.flixel.FlxRect;
@@ -24,13 +25,14 @@ package states
 		public static var playerAttackManager : PlayerAttackManager;
 		public static var enemyManager : EnemyManager;
 		public static var enemyAttackManager : EnemyAttackManager;
+		public static var uiObjectManager : UIObjectManager;
 		
 		override public function create() : void
 		{
 			super.create();
 			
 			//level = new EvilLabVatLevel();
-			level = new TestLevel();
+			level = new EvilLabVatLevel();
 			
 			add(level);
 			enemyManager = new EnemyManager();
@@ -38,12 +40,19 @@ package states
 				enemyManager.addEnemy(level.enemyStarts[i]);
 			}
 			addManager(enemyManager);
+			
 			playerManager = new PlayerManager(level.playerStart);
 			addManager(playerManager);
+			
 			playerAttackManager = new PlayerAttackManager();
 			addManager(playerAttackManager);
+			
 			enemyAttackManager = new EnemyAttackManager();
 			addManager(enemyAttackManager);
+			
+			uiObjectManager = new UIObjectManager();
+			uiObjectManager.addHealthBar((getManager(PlayerManager) as PlayerManager).player, 10, 10, 50, 10);
+			addManager(uiObjectManager);
 			
 			//	Tell flixel how big our game world is
 			FlxG.worldBounds = new FlxRect(0, 0, level.width, level.height);

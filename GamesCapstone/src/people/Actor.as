@@ -100,6 +100,8 @@ package people
 			}
 			else
 			{
+				// If any of the names don't match, it's not the same sequence.
+				// If they all match, then it's the same sequence.
 				for (var i : int = 0; i < names.length; ++i)
 				{
 					if (names[i] != _currentAnimationSequence[i])

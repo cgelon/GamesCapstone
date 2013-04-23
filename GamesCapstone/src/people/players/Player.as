@@ -136,7 +136,7 @@ package people.players
 			FlxG.watch(this, "_health", "health");
 		}
 		
-		override public function initialize(x : Number, y : Number, health : Number = 2) : void
+		override public function initialize(x : Number, y : Number, health : Number = 10) : void
 		{
 			super.initialize(x, y, health);
 			
@@ -181,7 +181,11 @@ package people.players
 				_directionPressed[0] = FlxG.keys.pressed("D");
 				_directionPressed[2] = FlxG.keys.pressed("A");
 				_directionPressed[1] = FlxG.keys.pressed("S");
-				_directionPressed[3] = FlxG.keys.pressed("W");
+				_directionPressed[3] = FlxG.keys.justPressed("W");
+				
+				// Falling off a platform counts as a jump.
+				if (velocity.y > 0 && _jumpCount == 0)
+					_jumpCount++;
 				
 				// If certain directions are being pressed, move.
 				if (_directionPressed[2])
@@ -243,7 +247,6 @@ package people.players
 				if (isTouching(FlxObject.FLOOR) && !_hurtTimer.isRunning)
 				{
 					_hurtTimer.start();
-					_jumpReleased = false; // So that the player can't hold jump while hurt to jump right afterwards.
 					play("hurt_kneeling");
 				}
 			}
@@ -254,7 +257,6 @@ package people.players
 				if (!_rollTimer.isRunning)
 				{
 					_rollTimer.start();
-					_jumpReleased = false; // So that the player can't hold jump during a roll to jump right afterwards.
 				}
 					
 				if (facing == FlxObject.RIGHT)
@@ -302,7 +304,6 @@ package people.players
 					_attackTimer.start();
 					_attackCombo++;
 					_attackComboTimer.start();
-					_jumpReleased = false; // So that the player can't hold jump during an attack to jump right afterwards.
 				}
 				else
 				{
