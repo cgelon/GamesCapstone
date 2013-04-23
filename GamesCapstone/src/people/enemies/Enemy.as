@@ -46,6 +46,19 @@ package people.enemies
 			var player : Player = State.playerManager.player;
 			return player.y;
 		}
+		
+		public function distanceToPlayer() : Number
+		{
+			var player : Player = State.playerManager.player;
+			var deltaX : Number = x - player.x;
+			var deltaY : Number = y - player.y;
+			return Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+		}
+		
+		public function getPlayer() : Player
+		{
+			return State.playerManager.player;
+		}
 	}
 
 }

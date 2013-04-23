@@ -136,7 +136,8 @@ package people.players
 			FlxG.watch(this, "_health", "health");
 		}
 		
-		override public function initialize(x : Number, y : Number, health : Number = 10) : void
+
+		override public function initialize(x : Number, y : Number, health : Number = 100) : void
 		{
 			super.initialize(x, y, health);
 			
