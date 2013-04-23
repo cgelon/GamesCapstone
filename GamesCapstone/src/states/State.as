@@ -19,33 +19,37 @@ package states
 	
 	public class State extends GameState 
 	{
-		private var _level : Level;
+		public static var level : Level;
+		public static var playerManager : PlayerManager;
+		public static var playerAttackManager : PlayerAttackManager;
+		public static var enemyManager : EnemyManager;
+		public static var enemyAttackManager : EnemyAttackManager;
 		
 		override public function create() : void
 		{
 			super.create();
 			
-			//_level = new EvilLabVatLevel();
-			_level = new TestLevel();
+			//level = new EvilLabVatLevel();
+			level = new TestLevel();
 			
-			add(_level);
-			var enemyManager : EnemyManager = new EnemyManager();
-			for (var i: int = 0; i < _level.enemyStarts.length; i++) {
-				enemyManager.addEnemy(_level.enemyStarts[i]);
+			add(level);
+			enemyManager = new EnemyManager();
+			for (var i: int = 0; i < level.enemyStarts.length; i++) {
+				enemyManager.addEnemy(level.enemyStarts[i]);
 			}
 			addManager(enemyManager);
-			var playerManager : PlayerManager = new PlayerManager(_level.playerStart);
+			playerManager = new PlayerManager(level.playerStart);
 			addManager(playerManager);
-			var playerAttackManager : PlayerAttackManager = new PlayerAttackManager();
+			playerAttackManager = new PlayerAttackManager();
 			addManager(playerAttackManager);
-			var enemyAttackManager : EnemyAttackManager = new EnemyAttackManager();
+			enemyAttackManager = new EnemyAttackManager();
 			addManager(enemyAttackManager);
 			
 			//	Tell flixel how big our game world is
-			FlxG.worldBounds = new FlxRect(0, 0, _level.width, _level.height);
+			FlxG.worldBounds = new FlxRect(0, 0, level.width, level.height);
 			
 			//	Don't let the camera wander off the edges of the map
-			FlxG.camera.setBounds(0, 0, _level.width, _level.height);
+			FlxG.camera.setBounds(0, 0, level.width, level.height);
 			
 			//	The camera will follow the player
 			FlxG.camera.follow(playerManager.player, FlxCamera.STYLE_PLATFORMER);
@@ -54,8 +58,8 @@ package states
 		override public function update() : void
 		{
 			super.update();
-			FlxG.collide(getManager(PlayerManager), _level);
-			FlxG.collide(getManager(EnemyManager), _level);
+			FlxG.collide(getManager(PlayerManager), level);
+			FlxG.collide(getManager(EnemyManager), level);
 			FlxG.overlap(getManager(EnemyManager), getManager(PlayerAttackManager), enemyHit);
 			
 			// Detect collisions between the player and enemies UNLESS the player is rolling.
@@ -147,7 +151,7 @@ package states
 		{
 			super.destroy();
 			
-			_level = null;
+			level = null;
 		}
 	}
 }
