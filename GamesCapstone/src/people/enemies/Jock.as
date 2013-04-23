@@ -37,7 +37,7 @@ package people.enemies
 			super();
 			
 			// Load the jock.png into this sprite.
-			loadGraphic(jockPNG, true, false, 64, 64, true);
+			loadGraphic(jockPNG, true, true, 64, 64, true);
 
 			// Set the bounding box for the sprite.
 			width = 20;
@@ -48,15 +48,15 @@ package people.enemies
 			offset.y = 2;
 			
 			// Create the animations we need.
-			addAnimation("idle", [0], 0, false);
+			addAnimation("idle", [3], 0, false);
 			addAnimation("drink", [1], 0, false);
-			addAnimation("throw", [4, 5, 6, 7, 7, 7, 7, 0], 10, false);
-			addAnimation("punch", [7, 7, 7, 0], 10, false);
-			addAnimation("hurt", [8], 10, false);
-			addAnimation("die", [8, 9, 10, 9, 10], 10, true);
+			addAnimation("throw", [7, 6, 5, 4, 4, 4, 4, 3], 10, false);
+			addAnimation("punch", [4, 4, 4, 3], 10, false);
+			addAnimation("hurt", [10], 10, false);
+			addAnimation("die", [10, 11, 9, 11, 9], 10, true);
 			
 			// Set physics constants
-			maxVelocity = new FlxPoint(200, 500);
+			maxVelocity = new FlxPoint(100, 1000);
 			acceleration.y = 500;
 			facing = FlxObject.LEFT;
 			drag.x = maxVelocity.x * 4;
@@ -102,6 +102,9 @@ package people.enemies
 			if (state != _prevState) {
 				switch(state)
 				{
+					case ActorState.MOVING:
+						play("idle");
+						break;
 					case ActorState.IDLE:
 						play("idle");
 						break;
@@ -135,18 +138,39 @@ package people.enemies
 			switch(state)
 			{
 				case ActorState.IDLE:
-					if (!_attackTimer.isRunning)
+					if (distanceToPlayer() <= 30 && !_attackTimer.isRunning)
 						attack();
 					break;
 				case ActorState.HURT:
 					if (!_hurtTimer.isRunning)
 						_hurtTimer.start();
 					break;
+				case ActorState.MOVING:
+					if (distanceToPlayer() <= 30 && !_attackTimer.isRunning)
+						attack();
+					break;
 			}
-			if (state == ActorState.ATTACKING ) {
-				//calculateMovement();
-			}
+			moveToPlayer();
 			animate();
+		}
+		
+		private function moveToPlayer() : void
+		{
+			if (distanceToPlayer() > 30) {
+				var playerX : Number = getPlayerXCoord();
+				if (x - playerX > 0)
+				{
+					acceleration.x = -maxVelocity.x * 6;
+					facing = FlxObject.LEFT;
+				}
+				else
+				{
+					acceleration.x = maxVelocity.x * 6;
+					facing = FlxObject.RIGHT;
+				}
+			} else {
+				acceleration.x = 0;
+			}
 		}
 		
 		public function get attackManager() : EnemyAttackManager
@@ -158,7 +182,7 @@ package people.enemies
 		{
 			return state.name;
 		}
-
+		
 		override public function destroy() : void
 		{
 			kill();
