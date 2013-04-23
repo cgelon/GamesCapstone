@@ -133,6 +133,14 @@ package states
 		{
 			var player : Player = (getManager(PlayerManager) as PlayerManager).player;
 			enemy.velocity.x = ((enemy.x - player.x < 0) ? -1 : 1) * enemy.maxVelocity.x;
+			
+			if (!(enemy.state == ActorState.HURT || enemy.state == ActorState.DEAD))
+				enemy._health--;
+				
+			if (enemy._health == 0)
+				enemy.state = ActorState.DEAD;
+			else
+				enemy.state = ActorState.HURT;
 		}
 		
 		override public function destroy() : void

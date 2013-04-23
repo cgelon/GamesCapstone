@@ -27,6 +27,10 @@ package people.enemies
 		private var _attackDelay : Number = 60 * 50;
 		/** The timer that tracks when the enemy can attack again. */
 		private var _attackTimer : FlxDelay;
+		/** The timer that tracks how long before the enemy can be hurt again */
+		private var _hurtTimer : FlxDelay;
+		/** The timer that delays death so the animation can play */
+		private var _deathTimer : FlxDelay;
 		
 		public function Jock() 
 		{
@@ -47,8 +51,9 @@ package people.enemies
 			addAnimation("idle", [0], 0, false);
 			addAnimation("drink", [1], 0, false);
 			addAnimation("throw", [4, 5, 6, 7, 7, 7, 7, 0], 10, false);
-			addAnimation("punch", [6, 7, 7, 7, 0], 10, false);
-			addAnimation("die", [8, 9], 10, false);
+			addAnimation("punch", [7, 7, 7, 0], 10, false);
+			addAnimation("hurt", [8], 10, false);
+			addAnimation("die", [8, 9, 10, 9, 10], 10, true);
 			
 			// Set physics constants
 			maxVelocity = new FlxPoint(200, 500);
@@ -61,11 +66,26 @@ package people.enemies
 			_attackTimer = new FlxDelay(_attackDelay);
 			_attackTimer.callback = function() : void
 			{
-				if (state == ActorState.ATTACKING) {
+				if (state == ActorState.ATTACKING)
 					state = ActorState.IDLE;
-					_prevState = ActorState.ATTACKING;
-				}
-			}
+			};
+			
+			_hurtTimer = new FlxDelay(200);
+			_hurtTimer.callback = function() : void
+			{
+				if (state == ActorState.HURT)
+					state = ActorState.IDLE;
+			};
+			
+			_deathTimer = new FlxDelay(500);
+			_deathTimer.callback = function() : void
+			{
+				if (state == ActorState.DEAD)
+					kill();
+			};
+			
+			FlxG.watch(this, "_health", "enemyHealth");
+			FlxG.watch(this, "State", "enemystate");
 		}
 		
 		override public function initialize(x : Number, y : Number, health : Number = 6) : void
@@ -89,8 +109,12 @@ package people.enemies
 						play("punch");
 						break;
 					case ActorState.HURT:
+						play("hurt");
+						break;
+					case ActorState.DEAD:
 						play("die");
-						kill();
+						if (!_deathTimer.isRunning)
+							_deathTimer.start();
 						break;
 				}
 			}
@@ -108,8 +132,16 @@ package people.enemies
 		override public function update():void 
 		{
 			super.update();
-			if (state == ActorState.IDLE) {
-				attack();
+			switch(state)
+			{
+				case ActorState.IDLE:
+					if (!_attackTimer.isRunning)
+						attack();
+					break;
+				case ActorState.HURT:
+					if (!_hurtTimer.isRunning)
+						_hurtTimer.start();
+					break;
 			}
 			animate();
 		}
@@ -117,6 +149,29 @@ package people.enemies
 		public function get attackManager() : EnemyAttackManager
 		{
 			return getManager(EnemyAttackManager) as EnemyAttackManager;
+		}
+		
+		public function get State () : String
+		{
+			return state.name;
+		}
+
+		override public function destroy() : void
+		{
+			kill();
+			super.destroy();
+			
+			_prevState = null;
+			_attackDelay = 0;
+			_attackTimer.abort();
+			_attackTimer.callback = null;
+			_attackTimer = null;
+			_hurtTimer.abort();
+			_hurtTimer.callback = null;
+			_hurtTimer = null;
+			_deathTimer.abort();
+			_deathTimer.callback = null;
+			_deathTimer = null;
 		}
 	}
 }
