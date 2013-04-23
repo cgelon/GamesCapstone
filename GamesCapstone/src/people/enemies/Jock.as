@@ -143,6 +143,9 @@ package people.enemies
 						_hurtTimer.start();
 					break;
 			}
+			if (state == ActorState.ATTACKING ) {
+				//calculateMovement();
+			}
 			animate();
 		}
 		

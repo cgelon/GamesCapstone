@@ -5,6 +5,8 @@ package people.enemies
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxObject;
 	import people.Actor;
+	import people.players.Player;
+	import states.State;
 	import util.Color;
 	
 	/**
@@ -31,6 +33,18 @@ package people.enemies
 		{
 			kill();
 			super.destroy();
+		}
+		
+		public function getPlayerXCoord() : Number
+		{
+			var player : Player = State.playerManager.player;
+			return player.x;
+		}
+		
+		public function getPlayerYCoord() : Number
+		{
+			var player : Player = State.playerManager.player;
+			return player.y;
 		}
 	}
 
