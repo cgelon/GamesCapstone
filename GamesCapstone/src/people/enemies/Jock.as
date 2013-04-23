@@ -7,6 +7,7 @@ package people.enemies
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxObject;
 	import org.flixel.plugin.photonstorm.FlxDelay;
+	import org.flixel.plugin.photonstorm.FlxVelocity;
 	import people.Actor;
 	import people.ActorState;
 	import util.Color;
@@ -23,14 +24,21 @@ package people.enemies
 	
 		/** The previous state of the actor */
 		private var _prevState : ActorState;
+		
 		/** The amount of frames inbetween enemy attacks. */
 		private var _attackDelay : Number = 60 * 50;
 		/** The timer that tracks when the enemy can attack again. */
 		private var _attackTimer : FlxDelay;
+		/** The amount of frames the enemy takes to windup. */
+		private var _windupDelay : Number = 60 * 5;
+		/** The timer that handles attack animation windup */
+		private var _windupTimer : FlxDelay;
+		
 		/** The timer that tracks how long before the enemy can be hurt again */
 		private var _hurtTimer : FlxDelay;
 		/** The timer that delays death so the animation can play */
 		private var _deathTimer : FlxDelay;
+		
 		
 		public function Jock() 
 		{
@@ -51,6 +59,7 @@ package people.enemies
 			addAnimation("idle", [3], 0, false);
 			addAnimation("drink", [1], 0, false);
 			addAnimation("throw", [7, 6, 5, 4, 4, 4, 4, 3], 10, false);
+			addAnimation("windup", [5], 0, false);
 			addAnimation("punch", [4, 4, 4, 3], 10, false);
 			addAnimation("hurt", [10], 10, false);
 			addAnimation("die", [10, 11, 9, 11, 9], 10, true);
@@ -70,6 +79,13 @@ package people.enemies
 					state = ActorState.IDLE;
 			};
 			
+			_windupTimer = new FlxDelay(_windupDelay);
+			_windupTimer.callback = function() : void
+			{
+				PlayOnce("punch");
+				attackManager.attack((facing == FlxObject.LEFT) ? x - 30 : x + width, y);
+			};
+			
 			_hurtTimer = new FlxDelay(200);
 			_hurtTimer.callback = function() : void
 			{
@@ -85,7 +101,7 @@ package people.enemies
 			};
 			
 			FlxG.watch(this, "_health", "enemyHealth");
-			FlxG.watch(this, "State", "enemystate");
+			FlxG.watch(this, "State", "enemystate");			
 		}
 		
 		override public function initialize(x : Number, y : Number, health : Number = 6) : void
@@ -109,7 +125,7 @@ package people.enemies
 						play("idle");
 						break;
 					case ActorState.ATTACKING:
-						play("punch");
+						play("windup");
 						break;
 					case ActorState.HURT:
 						play("hurt");
@@ -128,8 +144,8 @@ package people.enemies
 		{
 			state = ActorState.ATTACKING;
 			_prevState = ActorState.IDLE;
-			attackManager.attack((facing == FlxObject.LEFT) ? x - 30 : x + width, y);
 			_attackTimer.start();
+			_windupTimer.start();
 		}
 		
 		override public function update():void 
@@ -138,7 +154,7 @@ package people.enemies
 			switch(state)
 			{
 				case ActorState.IDLE:
-					if (distanceToPlayer() <= 30 && !_attackTimer.isRunning)
+					if (distanceToPlayer() <= 60 && !_attackTimer.isRunning)
 						attack();
 					break;
 				case ActorState.HURT:
@@ -146,7 +162,7 @@ package people.enemies
 						_hurtTimer.start();
 					break;
 				case ActorState.MOVING:
-					if (distanceToPlayer() <= 30 && !_attackTimer.isRunning)
+					if (distanceToPlayer() <= 60 && !_attackTimer.isRunning)
 						attack();
 					break;
 			}
@@ -156,9 +172,10 @@ package people.enemies
 		
 		private function moveToPlayer() : void
 		{
-			if (distanceToPlayer() > 30) {
-				var playerX : Number = getPlayerXCoord();
-				if (x - playerX > 0)
+			var playerX : Number = getPlayerXCoord();
+			if (distanceToPlayer() >= 60) {
+				
+				if (x - playerX >= 0)
 				{
 					acceleration.x = -maxVelocity.x * 6;
 					facing = FlxObject.LEFT;
@@ -170,6 +187,14 @@ package people.enemies
 				}
 			} else {
 				acceleration.x = 0;
+				if (x - playerX >= 0)
+				{
+					facing = FlxObject.LEFT;
+				}
+				else
+				{
+					facing = FlxObject.RIGHT;
+				}
 			}
 		}
 		
@@ -183,6 +208,11 @@ package people.enemies
 			return state.name;
 		}
 		
+		public function get playerDist() : Number
+		{
+			return distanceToPlayer();
+		}
+		
 		override public function destroy() : void
 		{
 			kill();
@@ -190,6 +220,10 @@ package people.enemies
 			
 			_prevState = null;
 			_attackDelay = 0;
+			_windupDelay = 0;
+			_windupTimer.abort();
+			_windupTimer.callback = null;
+			_windupTimer = null;
 			_attackTimer.abort();
 			_attackTimer.callback = null;
 			_attackTimer = null;
