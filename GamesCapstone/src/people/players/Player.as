@@ -52,7 +52,10 @@ package people.players
 		
 		// Number of jumps the player has done in their current state.
 		// 0 on the ground, 1 during jump, and 2 during double jump.
-		public var _jumpCount : int;
+		private var _jumpCount : uint;
+		
+		// The number of frames that have passed in the current state.
+		private var _currentStateFrame : uint;
 		
 		/** The PNG for the player. */
 		[Embed(source = '../../../assets/player.png')] private var playerPNG : Class;
@@ -81,14 +84,15 @@ package people.players
 			// Create the animations we need.
 			addAnimation("idle", [0], 0, false);
 			addAnimation("walk", [36, 37, 38, 39, 40, 45, 46, 47, 48, 49], 20, true);
-			addAnimation("jump", [21], 0, false);
+			addAnimation("jump_rising", [19, 20], 10, false);
+			addAnimation("jump_falling", [21], 0, false);
 			addAnimation("basic_attack", [1, 2, 3], 20, false);
 			addAnimation("super_attack", [1, 2, 3, 4], 20, false);
 			addAnimation("roll", [27, 28, 29, 30, 31, 32], 12, true);
 			addAnimation("hurt_flying", [18], 0, false); // Hurt animation as player is flying through air
-			addAnimation("hurt_kneeling", [11, 12], 10, false); // Hurt animation once player hits the ground.
-			addAnimation("die_fall", [18, 22, 23], 3, false);
-			addAnimation("die_flash", [23, 53], 2, true);
+			addAnimation("hurt_kneeling", [12, 53], 8, true); // Hurt animation once player hits the ground.
+			addAnimation("die_fall", [18, 22, 23], 1, false);
+			addAnimation("die_flash", [23, 53], 8, true);
 			
 			// Set physic constants.
 			maxVelocity = new FlxPoint(200, 1000);
@@ -109,6 +113,7 @@ package people.players
 			{
 				_attackCombo = 0;
 			};
+			
 			_hurtTimer = new FlxDelay(1000);
 			_hurtTimer.callback = function() : void
 			{
@@ -122,7 +127,7 @@ package people.players
 				state = ActorState.IDLE;
 			};
 			
-			state = ActorState.IDLE;
+			//state = ActorState.IDLE;
 			
 			FlxG.watch(this, "_attackCombo", "combo");
 			FlxG.watch(this, "touching", "touching");
@@ -134,6 +139,8 @@ package people.players
 		override public function initialize(x : Number, y : Number, health : Number = 2) : void
 		{
 			super.initialize(x, y, health);
+			
+			_currentStateFrame = 0;
 			facing = FlxObject.RIGHT;
 			state = ActorState.IDLE;
 			_jumpReleased = true;
@@ -160,6 +167,12 @@ package people.players
 		 */
 		private function calculateMovement() : void 
 		{
+			// Keep track of whether or not the jump button has been released.
+			if (FlxG.keys.justReleased("W"))
+			{
+				_jumpReleased = true;
+			}
+			
 			if (state == ActorState.IDLE || 
 					state == ActorState.MOVING || 
 					state == ActorState.JUMPING)
@@ -188,6 +201,7 @@ package people.players
 					acceleration.x = 0;
 				}
 				
+				// If the player is pressing the jump button and still has jumps left, jump.
 				if (_directionPressed[3] && _jumpReleased && _jumpCount < 2)
 				{
 					velocity.y = -maxVelocity.y / 2.5;
@@ -196,13 +210,10 @@ package people.players
 					state = ActorState.JUMPING;
 				}
 				
-				if (FlxG.keys.justReleased("W"))
+				// Allow the player to end their jump early
+				if (FlxG.keys.justReleased("W") && velocity.y < 0)
 				{
-					if (velocity.y < 0)
-					{
-						velocity.y /= 2;
-					}
-					_jumpReleased = true;
+					velocity.y /= 2;
 				}
 				
 				// Update state based on movement.
@@ -228,19 +239,22 @@ package people.players
 			}
 			else if (state == ActorState.HURT)
 			{
+				// Start the hurt timeout once the player hits the floor.
 				if (isTouching(FlxObject.FLOOR) && !_hurtTimer.isRunning)
 				{
 					_hurtTimer.start();
-					_jumpReleased = true;
+					_jumpReleased = false; // So that the player can't hold jump while hurt to jump right afterwards.
 					play("hurt_kneeling");
 				}
 			}
 			else if (state == ActorState.ROLLING)
 			{
+				// If the player has pressed the roll button, roll them
+				// in their current direction for a set duration.
 				if (!_rollTimer.isRunning)
 				{
 					_rollTimer.start();
-					_jumpReleased = true;
+					_jumpReleased = false; // So that the player can't hold jump during a roll to jump right afterwards.
 				}
 					
 				if (facing == FlxObject.RIGHT)
@@ -288,6 +302,7 @@ package people.players
 					_attackTimer.start();
 					_attackCombo++;
 					_attackComboTimer.start();
+					_jumpReleased = false; // So that the player can't hold jump during an attack to jump right afterwards.
 				}
 				else
 				{
@@ -309,36 +324,42 @@ package people.players
 			// is taken care of by play().
 			if (state != _prevState)
 			{
-				switch(state)
-				{
-					case ActorState.IDLE:
-						play("idle");
-						break;
-					case ActorState.MOVING:
-						play("walk");
-						break;
-					case ActorState.JUMPING:
-						play("jump");
-						break;
-					case ActorState.ROLLING:
-						play("roll");
-						break;
-					case ActorState.ATTACKING:
-						if (_attackCombo == 3)
-							play("super_attack");
-						else
-							play("basic_attack");
-						break;
-					case ActorState.HURT:
-						if (touching != FlxObject.FLOOR)
-							play("hurt_flying");
-						break;
-					case ActorState.DEAD:
-						play("die_fall");
-						play("die_flash");
-						break;
-				}
+				_currentStateFrame = 0;
 				_prevState = state;
+			}
+			
+			switch(state)
+			{
+				case ActorState.IDLE:
+					PlayOnce("idle");
+					break;
+				case ActorState.MOVING:
+					PlayOnce("walk");
+					break;
+				case ActorState.JUMPING:
+					if (velocity.y < 0)
+						PlayOnce("jump_rising");
+					else
+						PlayOnce("jump_falling");
+					break;
+				case ActorState.ROLLING:
+					PlayOnce("roll");
+					break;
+				case ActorState.ATTACKING:
+					if (_attackCombo == 3)
+						PlayOnce("super_attack");
+					else
+						PlayOnce("basic_attack");
+					break;
+				case ActorState.HURT:
+					if (touching != FlxObject.FLOOR)
+						PlayOnce("hurt_flying");
+					break;
+				case ActorState.DEAD:
+					PlaySequence(["die_fall", "die_flash"]);
+					//play("die_fall");
+					//play("die_flash");
+					break;
 			}
 		}
 		

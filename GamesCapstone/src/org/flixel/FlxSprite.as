@@ -916,5 +916,25 @@ package org.flixel
 				_callback(((_curAnim != null)?(_curAnim.name):null),_curFrame,_curIndex);
 			dirty = false;
 		}
+		
+		/**
+		 * Returns the animation with the given name if it exists. If the name is invalid,
+		 * returns null.
+		 * 
+		 * @param	name	The name of the animation to get.
+		 * @return	The animation with given name if it exists, null otherwise.
+		 */
+		protected function getAnimation(name : String) : FlxAnim
+		{
+			for each (var anim : FlxAnim in _animations)
+			{
+				if (anim.name == name)
+				{
+					return anim;
+				}
+			}
+			
+			return null;
+		}
 	}
 }
