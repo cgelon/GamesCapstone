@@ -25,12 +25,14 @@ package people.enemies
 		/** The previous state of the actor */
 		private var _prevState : ActorState;
 		
+		/** If the enemy can attack or not */
+		private var _canAttack : Boolean;
 		/** The amount of frames inbetween enemy attacks. */
-		private var _attackDelay : Number = 60 * 50;
+		private var _attackDelay : Number = 60 * 25;
 		/** The timer that tracks when the enemy can attack again. */
 		private var _attackTimer : FlxDelay;
 		/** The amount of frames the enemy takes to windup. */
-		private var _windupDelay : Number = 60 * 5;
+		private var _windupDelay : Number = 60 * 10;
 		/** The timer that handles attack animation windup */
 		private var _windupTimer : FlxDelay;
 		
@@ -60,7 +62,7 @@ package people.enemies
 			addAnimation("drink", [1], 0, false);
 			addAnimation("throw", [7, 6, 5, 4, 4, 4, 4, 3], 10, false);
 			addAnimation("windup", [5], 0, false);
-			addAnimation("punch", [4, 4, 4, 3], 10, false);
+			addAnimation("punch", [4, 4, 3], 10, false);
 			addAnimation("hurt", [10], 10, false);
 			addAnimation("die", [10, 11, 9, 11, 9], 10, true);
 			
@@ -70,20 +72,23 @@ package people.enemies
 			facing = FlxObject.LEFT;
 			drag.x = maxVelocity.x * 4;
 			state = ActorState.IDLE;
+			_canAttack = true;
 			
 			// Set up the attack variables.
 			_attackTimer = new FlxDelay(_attackDelay);
 			_attackTimer.callback = function() : void
 			{
-				if (state == ActorState.ATTACKING)
-					state = ActorState.IDLE;
+				_canAttack = true;
 			};
 			
 			_windupTimer = new FlxDelay(_windupDelay);
 			_windupTimer.callback = function() : void
 			{
-				PlayOnce("punch");
-				attackManager.attack((facing == FlxObject.LEFT) ? x - 30 : x + width, y);
+				if (state == ActorState.ATTACKING) {
+					PlayOnce("punch");
+					attackManager.attack((facing == FlxObject.LEFT) ? x - 30 : x + width, y);
+				}
+				state = ActorState.IDLE;
 			};
 			
 			_hurtTimer = new FlxDelay(200);
@@ -101,7 +106,8 @@ package people.enemies
 			};
 			
 			FlxG.watch(this, "_health", "enemyHealth");
-			FlxG.watch(this, "State", "enemystate");			
+			FlxG.watch(this, "State", "enemystate");
+			FlxG.watch(this, "playerDist", "dist");
 		}
 		
 		override public function initialize(x : Number, y : Number, health : Number = 6) : void
@@ -119,10 +125,12 @@ package people.enemies
 				switch(state)
 				{
 					case ActorState.MOVING:
-						play("idle");
+						if (finished)
+							play("idle");
 						break;
 					case ActorState.IDLE:
-						play("idle");
+						if (finished)
+							play("idle");
 						break;
 					case ActorState.ATTACKING:
 						play("windup");
@@ -142,10 +150,13 @@ package people.enemies
 		
 		private function attack() : void
 		{
-			state = ActorState.ATTACKING;
-			_prevState = ActorState.IDLE;
-			_attackTimer.start();
-			_windupTimer.start();
+			if (_canAttack) {
+				state = ActorState.ATTACKING;
+				_prevState = ActorState.IDLE;
+				_attackTimer.start();
+				_windupTimer.start();
+				_canAttack = false;
+			}
 		}
 		
 		override public function update():void 
@@ -154,7 +165,7 @@ package people.enemies
 			switch(state)
 			{
 				case ActorState.IDLE:
-					if (distanceToPlayer() <= 60 && !_attackTimer.isRunning)
+					if (distanceToPlayer() <= 55 && !_attackTimer.isRunning)
 						attack();
 					break;
 				case ActorState.HURT:
@@ -162,7 +173,7 @@ package people.enemies
 						_hurtTimer.start();
 					break;
 				case ActorState.MOVING:
-					if (distanceToPlayer() <= 60 && !_attackTimer.isRunning)
+					if (distanceToPlayer() <= 55 && !_attackTimer.isRunning)
 						attack();
 					break;
 			}
@@ -173,28 +184,25 @@ package people.enemies
 		private function moveToPlayer() : void
 		{
 			var playerX : Number = getPlayerXCoord();
-			if (distanceToPlayer() >= 60) {
-				
-				if (x - playerX >= 0)
-				{
-					acceleration.x = -maxVelocity.x * 6;
-					facing = FlxObject.LEFT;
-				}
-				else
-				{
-					acceleration.x = maxVelocity.x * 6;
-					facing = FlxObject.RIGHT;
+			if (state != ActorState.ATTACKING) {
+				if (distanceToPlayer() >= 55) {
+					
+					if (x - playerX >= 0) {
+						acceleration.x = -maxVelocity.x * 6;
+						facing = FlxObject.LEFT;
+					} else {
+						acceleration.x = maxVelocity.x * 6;
+						facing = FlxObject.RIGHT;
+					}
+				} else {
+					acceleration.x = 0;
+					if (x - playerX >= 0)
+						facing = FlxObject.LEFT;
+					else
+						facing = FlxObject.RIGHT;
 				}
 			} else {
 				acceleration.x = 0;
-				if (x - playerX >= 0)
-				{
-					facing = FlxObject.LEFT;
-				}
-				else
-				{
-					facing = FlxObject.RIGHT;
-				}
 			}
 		}
 		
