@@ -137,7 +137,7 @@ package people.players
 		}
 		
 
-		override public function initialize(x : Number, y : Number, health : Number = 100) : void
+		override public function initialize(x : Number, y : Number, health : Number = 5) : void
 		{
 			super.initialize(x, y, health);
 			
@@ -222,7 +222,7 @@ package people.players
 				}
 				
 				// Update state based on movement.
-				if (isTouching(FlxObject.FLOOR) != 0x0 && velocity.y == 0)
+				if (isTouching(FlxObject.FLOOR) && velocity.y == 0)
 				{
 					if (_jumpCount > 0)
 						_jumpCount = 0;
@@ -240,7 +240,6 @@ package people.players
 						state = ActorState.IDLE;	
 					}
 				}
-				
 			}
 			else if (state == ActorState.HURT)
 			{
@@ -248,7 +247,6 @@ package people.players
 				if (isTouching(FlxObject.FLOOR) && !_hurtTimer.isRunning)
 				{
 					_hurtTimer.start();
-					play("hurt_kneeling");
 				}
 			}
 			else if (state == ActorState.ROLLING)
@@ -356,6 +354,8 @@ package people.players
 				case ActorState.HURT:
 					if (touching != FlxObject.FLOOR)
 						PlayOnce("hurt_flying");
+					else
+						PlayOnce("hurt_kneeling");
 					break;
 				case ActorState.DEAD:
 					PlaySequence(["die_fall", "die_flash"]);

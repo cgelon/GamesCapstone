@@ -10,6 +10,7 @@ package states
 	import managers.EnemyManager;
 	import managers.PlayerManager;
 	import managers.UIObjectManager;
+	import org.flixel.FlxBasic;
 	import org.flixel.FlxCamera;
 	import org.flixel.FlxG;
 	import org.flixel.FlxRect;
@@ -17,6 +18,7 @@ package states
 	import people.ActorState;
 	import people.enemies.Enemy;
 	import people.players.Player;
+	import people.Actor;
 	
 	public class State extends GameState 
 	{
@@ -32,7 +34,7 @@ package states
 			super.create();
 			
 			//level = new EvilLabVatLevel();
-			level = new EvilLabVatLevel();
+			level = new TestLevel();
 			
 			add(level);
 			enemyManager = new EnemyManager();
@@ -41,8 +43,19 @@ package states
 			}
 			addManager(enemyManager);
 			
+			
+			
 			playerManager = new PlayerManager(level.playerStart);
 			addManager(playerManager);
+			
+			uiObjectManager = new UIObjectManager();
+			uiObjectManager.addHealthBar(playerManager.player, 10, 10, 50, 10, false);
+			for (var j : int = 0; j < enemyManager.members.length; ++j)
+			{
+				if (enemyManager.members[j] != null)
+					uiObjectManager.addHealthBar((enemyManager.members[j] as Actor), 10, 10, 25, 5, true);
+			}
+			addManager(uiObjectManager);
 			
 			playerAttackManager = new PlayerAttackManager();
 			addManager(playerAttackManager);
@@ -50,9 +63,7 @@ package states
 			enemyAttackManager = new EnemyAttackManager();
 			addManager(enemyAttackManager);
 			
-			uiObjectManager = new UIObjectManager();
-			uiObjectManager.addHealthBar((getManager(PlayerManager) as PlayerManager).player, 10, 10, 50, 10);
-			addManager(uiObjectManager);
+			
 			
 			//	Tell flixel how big our game world is
 			FlxG.worldBounds = new FlxRect(0, 0, level.width, level.height);

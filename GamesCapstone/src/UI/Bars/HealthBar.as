@@ -1,6 +1,7 @@
 package UI.Bars 
 {
 	import flash.events.AccelerometerEvent;
+	import org.flixel.plugin.photonstorm.FlxBar;
 	import people.Actor;
 	import UI.UIObject;
 	import org.flixel.FlxG;
@@ -18,6 +19,8 @@ package UI.Bars
 		private var _width : Number;
 		private var _height : Number;
 		
+		private var _healthBar : FlxBar;
+		
 		public function HealthBar(owner : Actor, width : Number, height : Number) 
 		{
 			_owner = owner;
@@ -29,6 +32,8 @@ package UI.Bars
 		{
 			this.x = x;
 			this.y = y;
+			
+			_healthBar = new FlxBar(x, y,
 		}
 		
 		override public function update() : void
@@ -46,7 +51,7 @@ package UI.Bars
 						 0,
 						 (_width * (i / _owner._maxHealth)), 
 						 _height,
-						 Color.BLACK);
+						 Color.GREEN);
 			}
 		}
 		

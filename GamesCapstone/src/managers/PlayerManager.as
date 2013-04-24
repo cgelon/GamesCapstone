@@ -3,7 +3,10 @@ package managers
 	import attacks.Attack;
 	import people.players.Player;
 	import org.flixel.FlxPoint;
-	
+	import managers.UIObjectManager;
+	import org.flixel.FlxG;
+	import states.GameState;
+
 	/**
 	 * Manages all aspects of the player.
 	 * 

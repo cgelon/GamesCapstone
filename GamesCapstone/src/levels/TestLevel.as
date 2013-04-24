@@ -24,6 +24,8 @@ package levels
 			height = map.height;
 			playerStart = new FlxPoint(40, height / 3);
 			enemyStarts[0] = new FlxPoint(width / 3, height / 5);
+			//enemyStarts[1] = new FlxPoint(2 * width / 3, height / 5);
+			//enemyStarts[0] = new FlxPoint(3 * width / 3, height / 5);
 			
 			add(map);
 		}
