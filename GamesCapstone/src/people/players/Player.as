@@ -35,9 +35,12 @@ package people.players
 		 * from the last time they attacked, false otherwise. 
 		 */
 		private var _attackReleased : Boolean;
-		public var _attackCombo : int;
 		private var _attackComboDelay : Number = 1000;
 		private var _attackComboTimer : FlxDelay;
+		
+		/** Keeps track of how far into the combo the player is. 1 = first hit, 0 = second, etc. */
+		private var _attackCombo : int;			
+		public function get attackCombo() : int { return _attackCombo; }
 		
 		private var _hurtTimer : FlxDelay;
 		private var _playedHurtAnimation : Boolean;
@@ -48,13 +51,16 @@ package people.players
 		 * True if the player has released the jump button 
 		 * from the last time they jumped, false otherwise.
 		 */
-		public var _jumpReleased : Boolean;
+		private var _jumpReleased : Boolean; 		
+		public function get jumpReleased() : Boolean { return _jumpReleased; }
 		
-		// Number of jumps the player has done in their current state.
-		// 0 on the ground, 1 during jump, and 2 during double jump.
+		/**
+		 * Number of jumps the player has done in their current state.
+		 * 0 on the ground, 1 during jump, and 2 during double jump.
+		 */
 		private var _jumpCount : uint;
 		
-		// The number of frames that have passed in the current state.
+		/** The number of frames that have passed in the current state. */
 		private var _currentStateFrame : uint;
 		
 		/** The PNG for the player. */
@@ -89,10 +95,11 @@ package people.players
 			addAnimation("basic_attack", [1, 2, 3], 20, false);
 			addAnimation("super_attack", [1, 2, 3, 4], 20, false);
 			addAnimation("roll", [27, 28, 29, 30, 31, 32], 12, true);
-			addAnimation("hurt_flying", [18], 0, false); // Hurt animation as player is flying through air
-			addAnimation("hurt_kneeling", [12, 53], 8, true); // Hurt animation once player hits the ground.
-			addAnimation("die_fall", [18, 22, 23], 1, false);
-			addAnimation("die_flash", [23, 53], 8, true);
+			addAnimation("hurt_flying", [9], 0, false); 
+			addAnimation("hurt_kneeling", [10, 11, 12], 40, false);
+			addAnimation("hurt_flashing", [12, 53], 8, true);
+			addAnimation("die_falling", [18, 22, 23], 2, false);
+			addAnimation("die_flashing", [23, 53], 8, true);
 			
 			// Set physic constants.
 			maxVelocity = new FlxPoint(200, 1000);
@@ -129,11 +136,11 @@ package people.players
 			
 			//state = ActorState.IDLE;
 			
-			FlxG.watch(this, "_attackCombo", "combo");
+			FlxG.watch(this, "attackCombo", "combo");
 			FlxG.watch(this, "touching", "touching");
-			FlxG.watch(this, "State", "state");
-			FlxG.watch(this, "_jumpReleased", "jumpReleased");
-			FlxG.watch(this, "_health", "health");
+			FlxG.watch(this, "stateName", "state");
+			FlxG.watch(this, "jumpReleased", "jumpReleased");
+			FlxG.watch(this, "health", "health");
 		}
 		
 
@@ -257,13 +264,13 @@ package people.players
 				{
 					_rollTimer.start();
 				}
-					
+				
 				if (facing == FlxObject.RIGHT)
 					velocity.x = maxVelocity.x;
 				else
 					velocity.x = -maxVelocity.x;
 			}
-			drag.x = (isTouching(FlxObject.FLOOR) || state != ActorState.HURT) ? maxVelocity.x * 4 : maxVelocity.x;
+			//drag.x = (isTouching(FlxObject.FLOOR) || state != ActorState.HURT) ? maxVelocity.x * 4 : maxVelocity.x;
 		}
 		
 		private function attack() : void
@@ -348,24 +355,22 @@ package people.players
 				case ActorState.ATTACKING:
 					if (_attackCombo == 3)
 						PlayOnce("super_attack");
-					else
+					else if (_attackCombo == 1 || _attackCombo == 2)
 						PlayOnce("basic_attack");
 					break;
 				case ActorState.HURT:
-					if (touching != FlxObject.FLOOR)
+					if (!isTouching(FlxObject.FLOOR))
 						PlayOnce("hurt_flying");
 					else
-						PlayOnce("hurt_kneeling");
+						PlaySequence(["hurt_kneeling", "hurt_flashing"]);
 					break;
 				case ActorState.DEAD:
-					PlaySequence(["die_fall", "die_flash"]);
-					//play("die_fall");
-					//play("die_flash");
+					PlaySequence(["die_falling", "die_flashing"]);
 					break;
 			}
 		}
 		
-		public function get State () : String
+		public function get stateName () : String
 		{
 			return state.name;
 		}

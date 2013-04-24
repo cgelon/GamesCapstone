@@ -5,13 +5,25 @@ package attacks
 	import util.Color;
 	
 	/**
-	 * A standard attack.
+	 * The base class for attacks.
 	 * 
 	 * @author Chris Gelon
 	 */
 	public class Attack extends FlxSprite
 	{
-		private var _counter : Number = 0;
+		/** How many frames the attack has been alive for. */
+		private var _counter : Number;
+		
+		/** How much damage the attack does. */
+		private var _damage : Number;		
+		public function get damage() : Number { return _damage; }
+		
+		public function Attack (attackWidth : Number, attackHeight : Number, damage : Number)
+		{
+			width = attackWidth;
+			height = attackHeight;
+			_damage = damage;
+		}
 		
 		public function initialize(x : Number, y : Number) : void
 		{
@@ -20,7 +32,8 @@ package attacks
 			
 			revive();
 			
-			makeGraphic(20, 40, Color.WHITE, true);
+			_counter = 0;
+			makeGraphic(width, height, Color.WHITE, true);
 			alpha = 0;
 			FlxG.clearBitmapCache();
 		}
@@ -28,6 +41,7 @@ package attacks
 		override public function update() : void 
 		{
 			super.update();
+			
 			if (_counter > 3)
 			{
 				kill();

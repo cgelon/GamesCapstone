@@ -5,17 +5,15 @@ package attacks
 	import util.Color;
 	
 	/**
-	 * A standard enemy attack.
+	 * A basic attack.
 	 * 
 	 * @author Chris Gelon
 	 */
-	public class EnemyAttack extends Attack
+	public class BasicAttack extends Attack
 	{
-		private var _counter : Number = 0;
-		
-		public function EnemyAttack()
+		public function BasicAttack()
 		{
-			super(30, 60, 1);
+			super(20, 40, 1);
 		}
 		
 		override public function initialize(x : Number, y : Number) : void
@@ -26,17 +24,11 @@ package attacks
 		override public function update() : void 
 		{
 			super.update();
-			if (_counter > 3)
-			{
-				kill();
-			}
-			_counter++;
 		}
 		
 		override public function kill() : void
 		{
 			super.kill();
-			_counter = 0;
 		}
 		
 		override public function destroy() : void

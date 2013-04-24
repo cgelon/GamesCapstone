@@ -15,10 +15,9 @@ package managers
 	 */
 	public class UIObjectManager extends Manager
 	{
-		
 		public function addHealthBar(owner : Actor, x : Number, y : Number, width : Number, height : Number, onParent : Boolean) : void
 		{
-			var healthBar : FlxBar = new FlxBar(x, y, FlxBar.FILL_LEFT_TO_RIGHT, width, height, owner, "_health", 0, owner._maxHealth, false);
+			var healthBar : FlxBar = new FlxBar(x, y, FlxBar.FILL_LEFT_TO_RIGHT, width, height, owner, "health", 0, owner._maxHealth, false);
 			
 			if (onParent)
 			{

@@ -105,7 +105,7 @@ package people.enemies
 					kill();
 			};
 			
-			FlxG.watch(this, "_health", "enemyHealth");
+			FlxG.watch(this, "health", "enemyHealth");
 			FlxG.watch(this, "State", "enemystate");
 			FlxG.watch(this, "playerDist", "dist");
 		}
@@ -162,22 +162,25 @@ package people.enemies
 		override public function update():void 
 		{
 			super.update();
-			switch(state)
+			if (state != ActorState.DEAD)
 			{
-				case ActorState.IDLE:
-					if (distanceToPlayer() <= 55 && !_attackTimer.isRunning)
-						attack();
-					break;
-				case ActorState.HURT:
-					if (!_hurtTimer.isRunning)
-						_hurtTimer.start();
-					break;
-				case ActorState.MOVING:
-					if (distanceToPlayer() <= 55 && !_attackTimer.isRunning)
-						attack();
-					break;
+				switch(state)
+				{
+					case ActorState.IDLE:
+						if (distanceToPlayer() <= 55 && !_attackTimer.isRunning)
+							attack();
+						break;
+					case ActorState.HURT:
+						if (!_hurtTimer.isRunning)
+							_hurtTimer.start();
+						break;
+					case ActorState.MOVING:
+						if (distanceToPlayer() <= 55 && !_attackTimer.isRunning)
+							attack();
+						break;
+				}
+				moveToPlayer();
 			}
-			moveToPlayer();
 			animate();
 		}
 		

@@ -38,7 +38,8 @@ package states
 			
 			add(level);
 			enemyManager = new EnemyManager();
-			for (var i: int = 0; i < level.enemyStarts.length; i++) {
+			for (var i: int = 0; i < level.enemyStarts.length; i++) 
+			{
 				enemyManager.addEnemy(level.enemyStarts[i]);
 			}
 			addManager(enemyManager);
@@ -103,28 +104,7 @@ package states
 		 */
 		private function playerAttacked(player : Player, attack : EnemyAttack) : void
 		{
-			player.acceleration.x = 0;
-			//player.velocity.y = -player.maxVelocity.y / 6;
-			player.velocity.x = ((player.x - attack.x < 0) ? -1 : 1) * player.maxVelocity.x * 2;
-			
-			// If the player is pinned against a wall, make the fly the other direction.
-			if ((player.isTouching(FlxObject.RIGHT) && player.velocity.x > 0)
-				|| (player.isTouching(FlxObject.LEFT) && player.velocity.x < 0))
-			{
-				player.velocity.x = -player.velocity.x;
-			}
-			
-			// Check that the player can be hit, because this function will get called multiple times as the player is
-			// moving out of the attack's hitbox.
-			if (!(player.state == ActorState.ROLLING || player.state == ActorState.HURT || player.state == ActorState.DEAD))
-			{
-				player._health--;
-			}
-			
-			if (player._health == 0)
-				player.state = ActorState.DEAD;
-			else
-				player.state = ActorState.HURT;
+			(getManager(PlayerManager) as PlayerManager).HurtPlayer(attack);
 		}
 		
 		/**
@@ -155,16 +135,7 @@ package states
 		 */
 		private function enemyHit(enemy : Enemy, attack : Attack) : void
 		{
-			var player : Player = (getManager(PlayerManager) as PlayerManager).player;
-			enemy.velocity.x = ((enemy.x - player.x < 0) ? -1 : 1) * enemy.maxVelocity.x;
-			
-			if (!(enemy.state == ActorState.HURT || enemy.state == ActorState.DEAD))
-				enemy._health--;
-				
-			if (enemy._health == 0)
-				enemy.state = ActorState.DEAD;
-			else
-				enemy.state = ActorState.HURT;
+			(getManager(EnemyManager) as EnemyManager).HurtEnemy(enemy, attack);
 		}
 		
 		override public function destroy() : void

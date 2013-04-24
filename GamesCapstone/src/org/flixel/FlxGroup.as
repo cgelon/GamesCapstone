@@ -244,7 +244,7 @@ package org.flixel
 		 * 
 		 * @return	A reference to the object that was created.  Don't forget to cast it back to the Class you want (e.g. myObject = myGroup.recycle(myObjectClass) as myObjectClass;).
 		 */
-		public function recycle(ObjectClass:Class=null):FlxBasic
+		public function recycle(ObjectClass:Class=null, ... args):FlxBasic
 		{
 			var basic:FlxBasic;
 			if(_maxSize > 0)
@@ -253,7 +253,6 @@ package org.flixel
 				{
 					if(ObjectClass == null)
 						return null;
-					return add(new ObjectClass() as FlxBasic);
 				}
 				else
 				{
@@ -270,7 +269,34 @@ package org.flixel
 					return basic;
 				if(ObjectClass == null)
 					return null;
-				return add(new ObjectClass() as FlxBasic);
+			}
+			
+			switch (args.length)
+			{
+				case 0:
+					return add(new ObjectClass() as FlxBasic);
+				case 1:
+					return add(new ObjectClass(args[0]) as FlxBasic);
+				case 2:
+					return add(new ObjectClass(args[0], args[1]) as FlxBasic);
+				case 3:
+					return add(new ObjectClass(args[0], args[1], args[2]) as FlxBasic);
+				case 4:
+					return add(new ObjectClass(args[0], args[1], args[2], args[3]) as FlxBasic);
+				case 5:
+					return add(new ObjectClass(args[0], args[1], args[2], args[3], args[4]) as FlxBasic);
+				case 6:
+					return add(new ObjectClass(args[0], args[1], args[2], args[3], args[4], args[5]) as FlxBasic);
+				case 7:
+					return add(new ObjectClass(args[0], args[1], args[2], args[3], args[4], args[5], args[6]) as FlxBasic);
+				case 8:
+					return add(new ObjectClass(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7]) as FlxBasic);
+				case 9:
+					return add(new ObjectClass(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8]) as FlxBasic);
+				case 10:
+					return add(new ObjectClass(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9]) as FlxBasic);
+				default:
+					return null;
 			}
 		}
 		

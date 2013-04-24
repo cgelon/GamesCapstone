@@ -1,6 +1,6 @@
 package managers
 {
-	import attacks.Attack;
+	import attacks.BasicAttack;
 	import attacks.SuperAttack;
 	import org.flixel.FlxGroup;
 	
@@ -13,7 +13,7 @@ package managers
 	{
 		public function attack(x : Number, y : Number) : void
 		{
-			var attack : Attack = recycle( Attack ) as Attack;
+			var attack : BasicAttack = recycle( BasicAttack ) as BasicAttack;
 			attack.initialize(x, y);
 		}
 		

@@ -38,12 +38,13 @@ package people
 		 * @param	x	The x coordinate to start the actor at.
 		 * @param	y	The y coordinate to start the actor at.
 		 */
-		public function initialize(x : Number, y : Number, health : Number = 5) : void
+		public function initialize(x : Number, y : Number, actorHealth : Number = 5) : void
 		{
 			this.x = x;
 			this.y = y;
 			
-			_health = health;
+			_health = actorHealth;
+			health = actorHealth
 			_maxHealth = health;
 			
 			_currentStateFrame = 1;
@@ -147,6 +148,21 @@ package people
 					}
 				}
 			}	
+		}
+		
+		/**
+		 * Hurt the actor for the given amount of damage. 
+		 * If health down to 0, the player dies.
+		 * 
+		 * @param	damage	The amount of damage to deal.
+		 */
+		override public function hurt(damage : Number) : void
+		{
+			health = health - damage;
+			if (health <= 0)
+				state = ActorState.DEAD;
+			else
+				state = ActorState.HURT;
 		}
 		
 		/**
