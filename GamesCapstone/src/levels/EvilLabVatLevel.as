@@ -11,7 +11,7 @@ package levels
 	 */
 	public class EvilLabVatLevel extends Level 
 	{
-		[Embed(source = "../../assets/mapCSV_Group2_Evil_Lab_Lair_-_Vats.csv", mimeType = "application/octet-stream")] public var CSV : Class;
+		[Embed(source = "../../assets/mapCSV_Group2_Vats_-_Pipes_behind(Irregular).csv", mimeType = "application/octet-stream")] public var CSV : Class;
 		[Embed(source = "../../assets/lab tile arrange.png")] public var PNG : Class;
 			
 		
