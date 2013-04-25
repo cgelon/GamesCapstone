@@ -164,31 +164,42 @@ package people.enemies
 		override public function update():void 
 		{
 			super.update();
-			if (state != ActorState.DEAD)
+			switch(state)
 			{
-				switch(state)
-				{
-					case ActorState.IDLE:
-						if (distanceToPlayer() <= 50 && !_attackTimer.isRunning)
-							attack();
-						break;
-					case ActorState.HURT:
-						if (!_hurtTimer.isRunning)
-							_hurtTimer.start();
-						break;
-					case ActorState.MOVING:
-						if (distanceToPlayer() <= 50 && !_attackTimer.isRunning)
-							attack();
-						break;
-				}
-				if (!aboutToFall() && Math.abs(getPlayerYCoord() - y) < 50) {
-					moveToPlayer();
-				} else {
-					acceleration.x = 0;
-					facePlayer();
-				}
+				case ActorState.IDLE:
+					if (distanceToPlayer() <= 50 && !_attackTimer.isRunning) {
+						attack();
+					} else  if (distanceToPlayer() < 100) {
+						state = ActorState.MOVING;
+					}
+					break;
+				case ActorState.HURT:
+					if (!_hurtTimer.isRunning)
+						_hurtTimer.start();
+					break;
+				case ActorState.MOVING:
+					if (distanceToPlayer() <= 50 && !_attackTimer.isRunning)
+						attack();
+					move();
+					if (distanceToPlayer() > 100) {
+						state = ActorState.IDLE;
+					}
+					break;
+				case ActorState.DEAD:
+					_windupTimer.abort();
+					_attackTimer.abort();
 			}
 			animate();
+		}
+		
+		private function move() : void 
+		{
+			if (!aboutToFall() && Math.abs(getPlayerYCoord() - y) < 50) {
+				moveToPlayer();
+			} else {
+				acceleration.x = 0;
+				facePlayer();
+			}
 		}
 		
 		private function facePlayer() : void 
