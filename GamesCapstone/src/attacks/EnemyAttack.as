@@ -11,11 +11,13 @@ package attacks
 	 */
 	public class EnemyAttack extends Attack
 	{
-		private var _counter : Number = 0;
+		private const ENEMY_ATTACK_DAMAGE : Number = 1;
+		private const ENEMY_ATTACK_WIDTH : Number = 30;
+		private const ENEMY_ATTACK_HEIGHT : Number = 60;
 		
 		public function EnemyAttack()
 		{
-			super(30, 60, 1);
+			super(ENEMY_ATTACK_WIDTH, ENEMY_ATTACK_HEIGHT, ENEMY_ATTACK_DAMAGE);
 		}
 		
 		override public function initialize(x : Number, y : Number) : void
@@ -26,17 +28,11 @@ package attacks
 		override public function update() : void 
 		{
 			super.update();
-			if (_counter > 3)
-			{
-				kill();
-			}
-			_counter++;
 		}
 		
 		override public function kill() : void
 		{
 			super.kill();
-			_counter = 0;
 		}
 		
 		override public function destroy() : void

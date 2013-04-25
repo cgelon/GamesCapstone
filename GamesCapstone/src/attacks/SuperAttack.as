@@ -11,9 +11,13 @@ package attacks
 	 */
 	public class SuperAttack extends Attack
 	{
+		private const SUPER_ATTACK_DAMAGE : Number = 2;
+		private const SUPER_ATTACK_WIDTH : Number = 40;
+		private const SUPER_ATTACK_HEIGHT : Number = 40;
+		
 		public function SuperAttack()
 		{
-			super(40, 40, 2);
+			super(SUPER_ATTACK_WIDTH, SUPER_ATTACK_HEIGHT, SUPER_ATTACK_DAMAGE);
 		}
 		
 		override public function initialize(x : Number, y : Number) : void

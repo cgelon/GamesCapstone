@@ -11,9 +11,13 @@ package attacks
 	 */
 	public class BasicAttack extends Attack
 	{
+		private const BASIC_ATTACK_DAMAGE : Number = 1;
+		private const BASIC_ATTACK_WIDTH : Number = 20;
+		private const BASIC_ATTACK_HEIGHT : Number = 40;
+		
 		public function BasicAttack()
 		{
-			super(20, 40, 1);
+			super(BASIC_ATTACK_WIDTH, BASIC_ATTACK_HEIGHT, BASIC_ATTACK_DAMAGE);
 		}
 		
 		override public function initialize(x : Number, y : Number) : void

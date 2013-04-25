@@ -23,7 +23,7 @@ package managers
 		}
 		
 		/**
-		 * Hurts the given enemy for the given amount of damage.
+		 * Hurts an enemy with the given attack.
 		 * 
 		 * @param	damage	The amount of damage to deal to the enemy.
 		 */
