@@ -198,6 +198,7 @@ package people.enemies
 				moveToPlayer();
 			} else {
 				acceleration.x = 0;
+				velocity.x = 0;
 				facePlayer();
 			}
 		}
