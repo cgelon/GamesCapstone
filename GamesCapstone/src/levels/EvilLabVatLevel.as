@@ -11,7 +11,7 @@ package levels
 	 */
 	public class EvilLabVatLevel extends Level 
 	{
-		[Embed(source = "../../assets/mapCSV_Group2_Vats_-_Pipes_behind(Irregular).csv", mimeType = "application/octet-stream")] public var CSV : Class;
+		[Embed(source = "../../assets/mapCSV_Group2_Vats_-_Pipes_behind(Regular).csv", mimeType = "application/octet-stream")] public var CSV : Class;
 		[Embed(source = "../../assets/lab tile arrange.png")] public var PNG : Class;
 			
 		
@@ -23,9 +23,9 @@ package levels
 			
 			width = map.width;
 			height = map.height;
-			playerStart = new FlxPoint(40, height / 5);
-			enemyStarts[0] = new FlxPoint(width / 4, height / 3);
-			enemyStarts[1] = new FlxPoint(3 * width / 4 - 170, height / 3);
+			playerStart = new FlxPoint(40, 120);
+			enemyStarts[0] = new FlxPoint(672, 120);
+			enemyStarts[1] = new FlxPoint(1312, 120);
 			
 			add(map);
 		}
