@@ -43,6 +43,9 @@ package people.enemies
 		/** The timer that delays death so the animation can play */
 		private var _deathTimer : FlxDelay;
 		
+		private var _attackRange : Number = 50;
+		private var _seekRange : Number = 200;
+		
 		
 		public function Jock() 
 		{
@@ -169,9 +172,9 @@ package people.enemies
 				case ActorState.IDLE:
 					acceleration.x = 0;
 					velocity.x = 0;
-					if (distanceToPlayer() <= 50 && !_attackTimer.isRunning) {
+					if (distanceToPlayer() <= _attackRange && !_attackTimer.isRunning) {
 						attack();
-					} else  if (distanceToPlayer() < 100) {
+					} else  if (distanceToPlayer() < _seekRange) {
 						state = ActorState.MOVING;
 					}
 					break;
@@ -180,10 +183,10 @@ package people.enemies
 						_hurtTimer.start();
 					break;
 				case ActorState.MOVING:
-					if (distanceToPlayer() <= 50 && !_attackTimer.isRunning)
+					if (distanceToPlayer() <= _attackRange && !_attackTimer.isRunning)
 						attack();
 					move();
-					if (distanceToPlayer() > 100) {
+					if (distanceToPlayer() > _seekRange) {
 						state = ActorState.IDLE;
 					}
 					break;
@@ -196,12 +199,11 @@ package people.enemies
 		
 		private function move() : void 
 		{
-			if (!aboutToFall() && Math.abs(getPlayerYCoord() - y) < 50) {
+			if (!aboutToFall() && Math.abs(getPlayerYCoord() - y) < 50 && finished) {
 				moveToPlayer();
 			} else {
 				acceleration.x = 0;
 				velocity.x = 0;
-				facePlayer();
 			}
 		}
 		
@@ -218,7 +220,7 @@ package people.enemies
 		{
 			var playerX : Number = getPlayerXCoord();
 			if (state != ActorState.ATTACKING) {
-				if (distanceToPlayer() >= 50) {
+				if (distanceToPlayer() >= _attackRange) {
 					
 					if (x - playerX >= 0) {
 						acceleration.x = -maxVelocity.x * 6;
