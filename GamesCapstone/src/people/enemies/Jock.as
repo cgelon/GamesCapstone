@@ -167,6 +167,8 @@ package people.enemies
 			switch(state)
 			{
 				case ActorState.IDLE:
+					acceleration.x = 0;
+					velocity.x = 0;
 					if (distanceToPlayer() <= 50 && !_attackTimer.isRunning) {
 						attack();
 					} else  if (distanceToPlayer() < 100) {
