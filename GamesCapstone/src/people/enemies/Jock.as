@@ -10,6 +10,8 @@ package people.enemies
 	import org.flixel.plugin.photonstorm.FlxVelocity;
 	import people.Actor;
 	import people.ActorState;
+	import states.State;
+	import levels.Level;
 	import util.Color;
 	
 	/**
@@ -40,6 +42,9 @@ package people.enemies
 		private var _hurtTimer : FlxDelay;
 		/** The timer that delays death so the animation can play */
 		private var _deathTimer : FlxDelay;
+		
+		private var _attackRange : Number = 50;
+		private var _seekRange : Number = 200;
 		
 		
 		public function Jock() 
@@ -106,7 +111,7 @@ package people.enemies
 			};
 			
 			FlxG.watch(this, "health", "enemyHealth");
-			FlxG.watch(this, "State", "enemystate");
+			FlxG.watch(this, "enemyState", "enemystate");
 			FlxG.watch(this, "playerDist", "dist");
 		}
 		
@@ -162,33 +167,60 @@ package people.enemies
 		override public function update():void 
 		{
 			super.update();
-			if (state != ActorState.DEAD)
+			switch(state)
 			{
-				switch(state)
-				{
-					case ActorState.IDLE:
-						if (distanceToPlayer() <= 55 && !_attackTimer.isRunning)
-							attack();
-						break;
-					case ActorState.HURT:
-						if (!_hurtTimer.isRunning)
-							_hurtTimer.start();
-						break;
-					case ActorState.MOVING:
-						if (distanceToPlayer() <= 55 && !_attackTimer.isRunning)
-							attack();
-						break;
-				}
-				moveToPlayer();
+				case ActorState.IDLE:
+					acceleration.x = 0;
+					velocity.x = 0;
+					if (distanceToPlayer() <= _attackRange && !_attackTimer.isRunning) {
+						attack();
+					} else  if (distanceToPlayer() < _seekRange) {
+						state = ActorState.MOVING;
+					}
+					break;
+				case ActorState.HURT:
+					if (!_hurtTimer.isRunning)
+						_hurtTimer.start();
+					break;
+				case ActorState.MOVING:
+					if (distanceToPlayer() <= _attackRange && !_attackTimer.isRunning)
+						attack();
+					move();
+					if (distanceToPlayer() > _seekRange) {
+						state = ActorState.IDLE;
+					}
+					break;
+				case ActorState.DEAD:
+					_windupTimer.abort();
+					_attackTimer.abort();
 			}
 			animate();
+		}
+		
+		private function move() : void 
+		{
+			if (!aboutToFall() && Math.abs(getPlayerYCoord() - y) < 50 && finished) {
+				moveToPlayer();
+			} else {
+				acceleration.x = 0;
+				velocity.x = 0;
+			}
+		}
+		
+		private function facePlayer() : void 
+		{
+			if (x - getPlayerXCoord() >= 0) {
+				facing = FlxObject.LEFT;
+			} else {
+				facing = FlxObject.RIGHT;
+			}
 		}
 		
 		private function moveToPlayer() : void
 		{
 			var playerX : Number = getPlayerXCoord();
 			if (state != ActorState.ATTACKING) {
-				if (distanceToPlayer() >= 55) {
+				if (distanceToPlayer() >= _attackRange) {
 					
 					if (x - playerX >= 0) {
 						acceleration.x = -maxVelocity.x * 6;
@@ -209,12 +241,18 @@ package people.enemies
 			}
 		}
 		
+		private function aboutToFall() : Boolean
+		{
+			var facing_sign : Number = (facing == FlxObject.LEFT) ? -1 : 1;
+			return (!overlapsAt(x + facing_sign * width, y + 1, State.level.map))
+		}
+		
 		public function get attackManager() : EnemyAttackManager
 		{
 			return getManager(EnemyAttackManager) as EnemyAttackManager;
 		}
 		
-		public function get State () : String
+		public function get enemyState() : String
 		{
 			return state.name;
 		}

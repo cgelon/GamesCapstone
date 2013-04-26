@@ -21,7 +21,8 @@ package states
 	import people.Actor;
 	
 	public class State extends GameState 
-	{
+	{	
+		
 		public static var level : Level;
 		public static var playerManager : PlayerManager;
 		public static var playerAttackManager : PlayerAttackManager;
@@ -33,8 +34,8 @@ package states
 		{
 			super.create();
 			
-			//level = new EvilLabVatLevel();
-			level = new TestLevel();
+			level = new EvilLabVatLevel();
+			//level = new TestLevel();
 			
 			add(level);
 			enemyManager = new EnemyManager();
