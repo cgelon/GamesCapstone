@@ -50,11 +50,11 @@ package states
 			addManager(playerManager);
 			
 			uiObjectManager = new UIObjectManager();
-			uiObjectManager.addHealthBar(playerManager.player, 10, 10, 50, 10, false);
+			uiObjectManager.addHealthBar(playerManager.player, 10, 10, 50, 10, false, false);
 			for (var j : int = 0; j < enemyManager.members.length; ++j)
 			{
 				if (enemyManager.members[j] != null)
-					uiObjectManager.addHealthBar((enemyManager.members[j] as Actor), 10, 10, 25, 5, true);
+					uiObjectManager.addHealthBar((enemyManager.members[j] as Actor), 10, 10, 25, 5, true, true);
 			}
 			addManager(uiObjectManager);
 			
@@ -85,11 +85,10 @@ package states
 			
 			// Detect collisions between the player and enemies UNLESS the player is rolling.
 			var player : Player = (getManager(PlayerManager) as PlayerManager).player;
-			if (!(player.state == ActorState.ROLLING || player.state == ActorState.HURT || player.state == ActorState.DEAD))
-			{
+			
 				//FlxG.overlap(getManager(PlayerManager), getManager(EnemyManager), playerHit);
 				FlxG.overlap(getManager(PlayerManager), getManager(EnemyAttackManager), playerAttacked);
-			}
+			
 				
 			for each (var enemy : Enemy in getManager(EnemyManager).members)
 			{

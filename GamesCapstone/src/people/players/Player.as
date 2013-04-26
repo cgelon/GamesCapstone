@@ -14,17 +14,15 @@ package people.players
 	 * Contains all of the information for a player.
 	 */
 	public class Player extends Actor
-	{
-		/**
-		 * Keep track of our previous state so that we can play animations just once.
-		 */
-		private var _prevState : ActorState;
-		
+	{	
 		/** 
 		 * An array that keeps hold of what directions are currently being pressed. 
 		 * 0 = right, 1 = down, 2 = left, 3 = up
 		 */
 		private var _directionPressed : Array;
+		
+		/** All of the weapons/items that the player has collected. **/
+		private var _items : Array;
 		
 		/** The amount of frames inbetween player attacks. */
 		private var _attackDelay : Number = 250;
@@ -326,15 +324,7 @@ package people.players
 		 * Animate the character based on their current state.
 		 */
 		private function animate() : void
-		{
-			// Only animate the player when they change states. Looping
-			// is taken care of by play().
-			if (state != _prevState)
-			{
-				_currentStateFrame = 0;
-				_prevState = state;
-			}
-			
+		{	
 			switch(state)
 			{
 				case ActorState.IDLE:
@@ -393,7 +383,6 @@ package people.players
 			kill();
 			super.destroy();
 			
-			_prevState = null;
 			_directionPressed.length = 0;
 			_directionPressed = null;
 			_attackDelay = 0;

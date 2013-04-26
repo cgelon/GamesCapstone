@@ -13,8 +13,8 @@ package people
 	 */
 	public class Actor extends FlxSprite 
 	{
-		public var _health : Number; // The amount of health points the actor has left.
-		public var _maxHealth : Number; // The maximum possible health of the actor.
+		private var _maxHealth : Number; // The maximum possible health of the actor.
+		public function get maxHealth() : Number { return _maxHealth; }
 		
 		/**
 		 * The current state of the actor.
@@ -43,9 +43,8 @@ package people
 			this.x = x;
 			this.y = y;
 			
-			_health = actorHealth;
 			health = actorHealth
-			_maxHealth = health;
+			_maxHealth = actorHealth;
 			
 			_currentStateFrame = 1;
 			_animationStartFrame = -1; // Make sure that this number is invalid to begin, since we haven't started playing animations.
