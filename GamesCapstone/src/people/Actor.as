@@ -13,7 +13,7 @@ package people
 	 */
 	public class Actor extends FlxSprite 
 	{
-		public var _health : Number; // The amount of health points the actor has left.
+		//public var _health : Number; // The amount of health points the actor has left.
 		public var _maxHealth : Number; // The maximum possible health of the actor.
 		
 		/**
@@ -43,7 +43,7 @@ package people
 			this.x = x;
 			this.y = y;
 			
-			_health = actorHealth;
+			//_health = actorHealth;
 			health = actorHealth
 			_maxHealth = health;
 			
