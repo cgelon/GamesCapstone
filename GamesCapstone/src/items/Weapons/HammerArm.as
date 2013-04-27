@@ -6,12 +6,12 @@ package items.Weapons
 	 * ...
 	 * @author ...
 	 */
-	public class Fists extends WeaponUpgrade
+	public class HammerArm extends WeaponUpgrade
 	{
 		
-		public function Fists() 
+		public function HammerArm() 
 		{
-			super("Fists", 0, 0);
+			super("Hammer Arm", 1, 1);
 		}
 		
 	}

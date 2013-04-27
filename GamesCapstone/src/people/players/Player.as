@@ -1,14 +1,20 @@
 package people.players
 {
+	import items.Item;
+	import items.Weapons.Fists;
+	import items.Weapons.HammerArm;
+	import items.Weapons.WeaponUpgrade;
 	import managers.PlayerAttackManager;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxSprite
 	import org.flixel.FlxObject;
 	import org.flixel.FlxG;
+	import org.flixel.FlxText;
 	import org.flixel.plugin.photonstorm.FlxDelay;
 	import people.Actor;
 	import people.ActorState;
 	import states.GameState;
+	import util.Color;
 	
 	/** 
 	 * Contains all of the information for a player.
@@ -22,7 +28,13 @@ package people.players
 		private var _directionPressed : Array;
 		
 		/** All of the weapons/items that the player has collected. **/
-		private var _items : Array;
+		private var _weapons : Array = new Array(10);
+		
+		private var _weaponText : FlxText;
+		
+		/** Index of the weapon that is currently being used **/
+		private var _currentWeapon : int;
+		public function get currentWeapon() : int { return _currentWeapon; }
 		
 		/** The amount of frames inbetween player attacks. */
 		private var _attackDelay : Number = 250;
@@ -132,13 +144,8 @@ package people.players
 				state = ActorState.IDLE;
 			};
 			
-			//state = ActorState.IDLE;
-			
-			FlxG.watch(this, "attackCombo", "combo");
-			FlxG.watch(this, "touching", "touching");
-			FlxG.watch(this, "stateName", "state");
-			FlxG.watch(this, "jumpReleased", "jumpReleased");
-			FlxG.watch(this, "health", "health");
+			FlxG.watch(this, "currentWeapon", "CurrentWeapon");
+			FlxG.watch(_weapons, "length", "Color");
 		}
 		
 
@@ -148,9 +155,13 @@ package people.players
 			
 			_currentStateFrame = 0;
 			facing = FlxObject.RIGHT;
-			state = ActorState.IDLE;
 			_jumpReleased = true;
+			state = ActorState.IDLE;
 			_jumpCount = 0;
+			
+			acquireWeapon(new Fists());
+			acquireWeapon(new HammerArm());
+			_currentWeapon = 0;
 		}
 		
 		override public function update():void 
@@ -160,11 +171,19 @@ package people.players
 			if (state != ActorState.DEAD)
 			{
 				calculateMovement();
+				switchWeapons();
 				if (!(state == ActorState.HURT || state == ActorState.ROLLING)) 
 				{
 					attack();
 				}
 			}
+			
+			
+			var colors : Array = [0x00FFFFFF, Color.RED, Color.GREEN, Color.ORANGE, Color.BLUE];
+			color = colors[_currentWeapon % colors.length];
+			
+			alpha = 1 - (_currentWeapon / _weapons.length);
+			
 			animate();
 		}
 		
@@ -358,6 +377,48 @@ package people.players
 					PlaySequence(["die_falling", "die_flashing"]);
 					break;
 			}
+		}
+		
+		/**
+		 * Switches weapons based on which of the numeric keyboard keys have been pressed.
+		 */
+		private function switchWeapons() : void
+		{
+			if (FlxG.keys.justPressed("ONE") && _weapons[0] != null)
+			{
+				_currentWeapon = 0;
+			}
+			else if (FlxG.keys.justPressed("TWO") && _weapons[1] != null)
+			{
+				_currentWeapon = 1;
+			}
+			else if (FlxG.keys.justPressed("THREE") && _weapons[2] != null)
+			{
+				_currentWeapon = 2;
+			}
+			else if (FlxG.keys.justPressed("FOUR") && _weapons[3] != null)
+			{
+				_currentWeapon = 3;
+			}
+			else if (FlxG.keys.justPressed("FIVE") && _weapons[4] != null)
+			{
+				_currentWeapon = 4;
+			}
+		}
+		
+		public function getPlayerBonusDamage() : Number
+		{
+			return _weapons[_currentWeapon].damageUp;
+		}
+		
+		/**
+		 * Gives the player the given weaponUpgrade.
+		 * 
+		 * @param	weaponUpgrade	The weapon upgrade to give the player.
+		 */
+		public function acquireWeapon(weaponUpgrade : WeaponUpgrade) : void
+		{
+			_weapons[weaponUpgrade.weaponSlot] = weaponUpgrade;
 		}
 		
 		public function get stateName () : String

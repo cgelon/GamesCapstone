@@ -20,9 +20,9 @@ package attacks
 			super(BASIC_ATTACK_WIDTH, BASIC_ATTACK_HEIGHT, BASIC_ATTACK_DAMAGE);
 		}
 		
-		override public function initialize(x : Number, y : Number) : void
+		override public function initialize(x : Number, y : Number, bonusDamage : Number = 0) : void
 		{
-			super.initialize(x, y);
+			super.initialize(x, y, bonusDamage);
 		}
 		
 		override public function update() : void 

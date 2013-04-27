@@ -922,6 +922,7 @@ package org.flixel
 		 * returns null.
 		 * 
 		 * @param	name	The name of the animation to get.
+		 * 
 		 * @return	The animation with given name if it exists, null otherwise.
 		 */
 		protected function getAnimation(name : String) : FlxAnim

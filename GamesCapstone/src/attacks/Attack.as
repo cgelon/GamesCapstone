@@ -15,23 +15,26 @@ package attacks
 		private var _counter : Number;
 		
 		/** How much damage the attack does. */
-		private var _damage : Number;		
-		public function get damage() : Number { return _damage; }
+		private var _baseDamage : Number;
+		
+		private var _totalDamage : Number = 0;		
+		public function get damage() : Number { return _totalDamage; }
 		
 		public function Attack (attackWidth : Number, attackHeight : Number, damage : Number)
 		{
 			width = attackWidth;
 			height = attackHeight;
-			_damage = damage;
+			_baseDamage = damage;
 		}
 		
-		public function initialize(x : Number, y : Number) : void
+		public function initialize(x : Number, y : Number, bonusDamage : Number = 0) : void
 		{
 			this.x = x;
 			this.y = y;
 			
 			revive();
 			
+			_totalDamage = _baseDamage + bonusDamage;
 			_counter = 0;
 			makeGraphic(width, height, Color.WHITE, true);
 			alpha = 0;
@@ -53,6 +56,7 @@ package attacks
 		{
 			super.kill();
 			_counter = 0;
+			_totalDamage = 0;
 		}
 		
 		override public function destroy() : void

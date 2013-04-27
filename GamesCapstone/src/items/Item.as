@@ -1,5 +1,7 @@
 package items 
 {
+	import org.flixel.FlxSprite;
+	
 	/**
 	 * ...
 	 * @author ...
@@ -7,7 +9,7 @@ package items
 	public class Item extends FlxSprite
 	{
 		private var _name : String;
-		public function get name () { return _name; }
+		public function get name () : String { return _name; }
 		
 		public function Item(name : String) 
 		{

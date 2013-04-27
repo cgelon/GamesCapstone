@@ -2,6 +2,7 @@ package managers
 {
 	import attacks.Attack;
 	import attacks.EnemyAttack;
+	import org.flixel.FlxText;
 	import people.ActorState;
 	import people.players.Player;
 	import org.flixel.FlxPoint;

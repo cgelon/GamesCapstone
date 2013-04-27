@@ -20,7 +20,7 @@ package attacks
 			super(ENEMY_ATTACK_WIDTH, ENEMY_ATTACK_HEIGHT, ENEMY_ATTACK_DAMAGE);
 		}
 		
-		override public function initialize(x : Number, y : Number) : void
+		override public function initialize(x : Number, y : Number, bonusDamage : Number = 0) : void
 		{
 			super.initialize(x, y);
 		}

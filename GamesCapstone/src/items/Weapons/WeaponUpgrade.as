@@ -1,17 +1,26 @@
 package items.Weapons 
 {
+	import items.Item;
+	
 	/**
 	 * ...
 	 * @author ...
 	 */
 	public class WeaponUpgrade extends Item
 	{
-		private var _damage : Number;
+		/** How much damage this weapon upgrade adds */
+		private var _damageUp : Number;
+		public function get damageUp() : Number { return _damageUp; }
 		
-		public function WeaponUpgrade(name : String, damage : Number) 
+		/** Which weapon slot this weapon occupies */
+		private var _weaponSlot : uint;
+		public function get weaponSlot() : uint { return _weaponSlot; }
+		
+		public function WeaponUpgrade(name : String, damageUp : Number, weaponSlot : uint) 
 		{
 			super(name);
-			_damage = damage;
+			_damageUp = damageUp;
+			_weaponSlot = weaponSlot;
 		}
 		
 	}

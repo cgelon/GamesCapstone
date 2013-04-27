@@ -14,13 +14,13 @@ package managers
 		public function attack(x : Number, y : Number) : void
 		{
 			var attack : BasicAttack = recycle( BasicAttack ) as BasicAttack;
-			attack.initialize(x, y);
+			attack.initialize(x, y, (getManager(PlayerManager) as PlayerManager).player.getPlayerBonusDamage());
 		}
 		
 		public function superAttack(x : Number, y : Number) : void
 		{
 			var attack : SuperAttack = recycle( SuperAttack ) as SuperAttack;
-			attack.initialize(x, y);
+			attack.initialize(x, y, (getManager(PlayerManager) as PlayerManager).player.getPlayerBonusDamage());
 		}
 	}
 }
