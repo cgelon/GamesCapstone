@@ -5,6 +5,7 @@ package states
 	import levels.EvilLabVatLevel;
 	import levels.TestLevel;
 	import levels.Level;
+	import managers.ObjectManager;
 	import managers.PlayerAttackManager;
 	import managers.EnemyAttackManager;
 	import managers.EnemyManager;
@@ -13,6 +14,7 @@ package states
 	import org.flixel.FlxBasic;
 	import org.flixel.FlxCamera;
 	import org.flixel.FlxG;
+	import org.flixel.FlxPoint;
 	import org.flixel.FlxRect;
 	import org.flixel.FlxObject;
 	import people.ActorState;
@@ -29,6 +31,7 @@ package states
 		public static var enemyManager : EnemyManager;
 		public static var enemyAttackManager : EnemyAttackManager;
 		public static var uiObjectManager : UIObjectManager;
+		public static var objectManager : ObjectManager;
 		
 		override public function create() : void
 		{
@@ -65,6 +68,13 @@ package states
 			enemyAttackManager = new EnemyAttackManager();
 			addManager(enemyAttackManager);
 			
+			
+			objectManager = new ObjectManager();
+			for (var k : int = 0; k < level.objectStarts.length; k++)
+			{
+				objectManager.addObject(level.objectStarts[k]);
+			}
+			addManager(objectManager);
 			
 			
 			//	Tell flixel how big our game world is
