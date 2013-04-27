@@ -234,6 +234,9 @@ package people.players
 				if (_directionPressed[3] && _jumpReleased && _jumpCount < 2)
 				{
 					velocity.y = -maxVelocity.y / 2.5;
+					
+					//if (velocity.x < 0 && _directionPressed
+					
 					_jumpReleased = false;
 					_jumpCount++;
 					state = ActorState.JUMPING;
@@ -384,25 +387,26 @@ package people.players
 		 */
 		private function switchWeapons() : void
 		{
-			if (FlxG.keys.justPressed("ONE") && _weapons[0] != null)
+			var numbersPressed : Array = new Array(10);
+			numbersPressed[0] = FlxG.keys.justPressed("ONE");
+			numbersPressed[1] = FlxG.keys.justPressed("TWO");
+			numbersPressed[2] = FlxG.keys.justPressed("THREE");
+			numbersPressed[3] = FlxG.keys.justPressed("FOUR");
+			numbersPressed[4] = FlxG.keys.justPressed("FIVE");
+			numbersPressed[5] = FlxG.keys.justPressed("SIX");
+			numbersPressed[6] = FlxG.keys.justPressed("SEVEN");
+			numbersPressed[7] = FlxG.keys.justPressed("EIGHT");
+			numbersPressed[8] = FlxG.keys.justPressed("NINE");
+			numbersPressed[9] = FlxG.keys.justPressed("ZERO");
+			
+			for (var i : uint = 0; i < numbersPressed.length; ++i)
 			{
-				_currentWeapon = 0;
-			}
-			else if (FlxG.keys.justPressed("TWO") && _weapons[1] != null)
-			{
-				_currentWeapon = 1;
-			}
-			else if (FlxG.keys.justPressed("THREE") && _weapons[2] != null)
-			{
-				_currentWeapon = 2;
-			}
-			else if (FlxG.keys.justPressed("FOUR") && _weapons[3] != null)
-			{
-				_currentWeapon = 3;
-			}
-			else if (FlxG.keys.justPressed("FIVE") && _weapons[4] != null)
-			{
-				_currentWeapon = 4;
+				if (numbersPressed[i] && _weapons[i] != null)
+				{
+					_currentWeapon = i;
+					_attackCombo = 0;
+					break;
+				}
 			}
 		}
 		

@@ -13,7 +13,6 @@ package items.Weapons
 		{
 			super("Hammer Arm", 1, 1);
 		}
-		
 	}
 
 }
