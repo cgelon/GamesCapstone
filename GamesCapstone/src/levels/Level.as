@@ -18,7 +18,7 @@ package levels
 		public var playerStart: FlxPoint;
 		public var enemyStarts: Array;
 		public var objectStarts: Array;
-		// public var objectTypes: Array; 	Will probably want this eventually
+		public var objectTypes: Array;
 		
 		public function Level() 
 		{
@@ -27,7 +27,7 @@ package levels
 			map = new FlxTilemap();
 			enemyStarts = new Array();
 			objectStarts = new Array();
-			// objectTypes = new Array();
+			objectTypes = new Array();
 		}
 	}
 }

@@ -20,6 +20,7 @@ package objects
 			addAnimation("slosh", [454, 455], 1, true);
 			
 			immovable = true;
+			allowCollisions = ANY;
 			play("slosh");
 		}
 	}

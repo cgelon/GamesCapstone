@@ -1,8 +1,8 @@
 package managers
 {
-	import objects.Acid;
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxG;
+	import org.flixel.FlxObject;
 	import org.flixel.FlxPoint;
 	import states.GameState;
 	
@@ -13,11 +13,12 @@ package managers
 	public class ObjectManager extends Manager 
 	{
 		
-		public function addObject (location: FlxPoint) : void
+		public function addObject (location: FlxPoint, object:Class) : void
 		{
-			var acid : Acid = new Acid(location.x, location.y);
-			add(acid);
-		
+			var obj : FlxObject = new object(location.x, location.y) as FlxObject;
+			add(obj);
 		}
+		// TODO: differentiate between objects I want the player drawn behind and objects I want the player
+		// drawn in front of
 	}	
 }

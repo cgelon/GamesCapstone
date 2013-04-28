@@ -65,6 +65,16 @@ package people
 			}
 		}
 		
+		public function touchedAcid(): void
+		{
+			_prevState = state;
+			state = ActorState.DEAD;
+			acceleration.x = 0;
+			acceleration.y = 0;
+			velocity.x = 0;
+			velocity.y = 0;
+		}
+		
 		/**
 		 * Play the given animation once, even if this function is called more than
 		 * once. This property holds as long as no other animation is played.

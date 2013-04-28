@@ -11,6 +11,7 @@ package states
 	import managers.EnemyManager;
 	import managers.PlayerManager;
 	import managers.UIObjectManager;
+	import objects.Acid;
 	import org.flixel.FlxBasic;
 	import org.flixel.FlxCamera;
 	import org.flixel.FlxG;
@@ -41,6 +42,15 @@ package states
 			//level = new TestLevel();
 			
 			add(level);
+			
+			objectManager = new ObjectManager();
+			for (var k : int = 0; k < level.objectStarts.length; k++ )
+			{
+				objectManager.addObject(level.objectStarts[k], level.objectTypes[k]);
+			}
+			addManager(objectManager);
+			
+			
 			enemyManager = new EnemyManager();
 			for (var i: int = 0; i < level.enemyStarts.length; i++) 
 			{
@@ -68,15 +78,6 @@ package states
 			enemyAttackManager = new EnemyAttackManager();
 			addManager(enemyAttackManager);
 			
-			
-			objectManager = new ObjectManager();
-			for (var k : int = 0; k < level.objectStarts.length; k++)
-			{
-				objectManager.addObject(level.objectStarts[k]);
-			}
-			addManager(objectManager);
-			
-			
 			//	Tell flixel how big our game world is
 			FlxG.worldBounds = new FlxRect(0, 0, level.width, level.height);
 			
@@ -93,6 +94,8 @@ package states
 			FlxG.collide(getManager(PlayerManager), level);
 			FlxG.collide(getManager(EnemyManager), level);
 			FlxG.overlap(getManager(EnemyManager), getManager(PlayerAttackManager), enemyHit);
+			FlxG.overlap(getManager(PlayerManager), getManager(ObjectManager), touchedSomething);
+			FlxG.overlap(getManager(EnemyManager), getManager(ObjectManager), touchedSomething);
 			
 			// Detect collisions between the player and enemies UNLESS the player is rolling.
 			var player : Player = (getManager(PlayerManager) as PlayerManager).player;
@@ -107,6 +110,23 @@ package states
 			}
 		}
 		
+		private function touchedSomething(person: Actor, obj: FlxObject): void 
+		{
+			if ((obj) as Acid) 
+			{
+				touchedAcid(person);
+			}
+		}
+		
+		/**
+		 * Callback function for when a player or enemy runs into acid
+		 * @param	person
+		 */
+		private function touchedAcid(person: Actor): void
+		{
+			person.touchedAcid();
+		}
+		 
 		/**
 		 * Callback function for when player is hit by an enemy attack
 		 * @param	player

@@ -1,5 +1,7 @@
 package levels
 {
+	import objects.Acid;
+	import objects.Lever;
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxTilemap;
@@ -32,21 +34,33 @@ package levels
 			enemyStarts[1] = new FlxPoint(1312, 120);
 			// Stores the enemy start points
 			
+			var leverLocs : Array = [160, 576, 992, 1408, 1824];
+			for (var i: int = 0; i < leverLocs.length; i++)
+			{
+				objectStarts[i] = new FlxPoint(leverLocs[i], 128);
+				objectTypes[i] = Lever;
+			}
+			// Store the location of the levers
+			
 			var vatLocs : Array = [224, 640, 1056, 1472, 1888];
 			
-			for (var i: int = 0; i < vatLocs.length; i++) 
+			for (var j: int = 0; j < vatLocs.length; j++) 
 			{
-				for (var j: int = 0; j < 5; j++) 
+				for (var k: int = 0; k < 5; k++) 
 				{
-					objectStarts[i * 5 + j] = new FlxPoint(vatLocs[i] + (j * 16), 192);
+					objectStarts[leverLocs.length + j * 5 + k] = new FlxPoint(vatLocs[j] + (k * 16), 192);
+					objectTypes[leverLocs.length + j * 5 + k] = Acid;
 				}
 			}
 			// Stores the acid locations within the vats
 			
-			for (var k: int = 0; k < (width / 16) - 2; k++) 
+			for (var l: int = 0; l < (width / 16) - 2; l++) 
 			{
-				objectStarts[vatLocs.length * 5 + k] = new FlxPoint(16 + (k * 16), height - 16);
+				objectStarts[leverLocs.length + vatLocs.length * 5 + l] = new FlxPoint(16 + (l * 16), height - 16);
+				objectTypes[leverLocs.length + vatLocs.length * 5 + l] = Acid;
 			}
+			// Stores the acid locations for the floor
+			
 			add(map);
 		}
 	}
