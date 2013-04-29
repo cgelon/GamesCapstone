@@ -19,6 +19,7 @@ package levels
 		public var enemyStarts: Array;
 		public var objectStarts: Array;
 		public var objectTypes: Array;
+		public var doorLocs: Array;
 		
 		public function Level() 
 		{
@@ -28,6 +29,7 @@ package levels
 			enemyStarts = new Array();
 			objectStarts = new Array();
 			objectTypes = new Array();
+			doorLocs = new Array();
 		}
 	}
 }

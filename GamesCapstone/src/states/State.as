@@ -12,6 +12,7 @@ package states
 	import managers.PlayerManager;
 	import managers.UIObjectManager;
 	import objects.Acid;
+	import objects.Door;
 	import objects.Lever;
 	import org.flixel.FlxBasic;
 	import org.flixel.FlxCamera;
@@ -48,6 +49,10 @@ package states
 			for (var k : int = 0; k < level.objectStarts.length; k++ )
 			{
 				objectManager.addObject(level.objectStarts[k], level.objectTypes[k]);
+			}
+			for (var l : int = 0; l < level.doorLocs.length; l++)
+			{
+				objectManager.addObject(level.doorLocs[l], Door);
 			}
 			addManager(objectManager);
 			

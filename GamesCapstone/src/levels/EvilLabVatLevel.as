@@ -1,6 +1,7 @@
 package levels
 {
 	import objects.Acid;
+	import objects.Door;
 	import objects.Lever;
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxPoint;
@@ -27,7 +28,7 @@ package levels
 			height = map.height;
 			// Initializes the map
 			
-			playerStart = new FlxPoint(40, 120);
+			playerStart = new FlxPoint(16, 136);
 			// Stores the player start points
 			
 			enemyStarts[0] = new FlxPoint(672, 120);
@@ -60,6 +61,8 @@ package levels
 				objectTypes[leverLocs.length + vatLocs.length * 5 + l] = Acid;
 			}
 			// Stores the acid locations for the floor
+			doorLocs[0] = new FlxPoint(16, 112);
+			doorLocs[1] = new FlxPoint(2112, 48);
 			
 			add(map);
 		}

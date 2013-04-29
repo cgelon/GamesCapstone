@@ -23,6 +23,12 @@ package objects
 			
 		}
 		
+		/**
+		 * When the "E" key is pressed while the player is overlapping with a lever,
+		 * the lever changes positions from up to down, or from down to up
+		 * 
+		 * TODO: have up cause acid to flow
+		 */
 		public function moved() : void
 		{
 			if (_curIndex == 4)
@@ -34,6 +40,5 @@ package objects
 				play("up");
 			}
 		}
-		// TODO: add player interaction
 	}	
 }
