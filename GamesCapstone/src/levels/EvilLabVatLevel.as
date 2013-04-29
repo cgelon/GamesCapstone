@@ -56,7 +56,7 @@ package levels
 			
 			for (var l: int = 0; l < (width / 16) - 2; l++) 
 			{
-				objectStarts[leverLocs.length + vatLocs.length * 5 + l] = new FlxPoint(16 + (l * 16), height - 16);
+				objectStarts[leverLocs.length + vatLocs.length * 5 + l] = new FlxPoint(16 + (l * 16), height - 32);
 				objectTypes[leverLocs.length + vatLocs.length * 5 + l] = Acid;
 			}
 			// Stores the acid locations for the floor
