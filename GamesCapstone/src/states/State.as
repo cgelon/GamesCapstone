@@ -12,6 +12,7 @@ package states
 	import managers.PlayerManager;
 	import managers.UIObjectManager;
 	import objects.Acid;
+	import objects.Lever;
 	import org.flixel.FlxBasic;
 	import org.flixel.FlxCamera;
 	import org.flixel.FlxG;
@@ -115,6 +116,10 @@ package states
 			if ((obj) as Acid) 
 			{
 				touchedAcid(person);
+			}
+			else if (FlxG.keys.justPressed("E") && (obj) as Lever)
+			{
+				((obj) as Lever).moved();
 			}
 		}
 		

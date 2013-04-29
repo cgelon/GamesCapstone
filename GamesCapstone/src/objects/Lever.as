@@ -22,6 +22,18 @@ package objects
 			immovable = true;
 			
 		}
+		
+		public function moved() : void
+		{
+			if (_curIndex == 4)
+			{
+				play("down");
+			}
+			else
+			{
+				play("up");
+			}
+		}
 		// TODO: add player interaction
 	}	
 }
