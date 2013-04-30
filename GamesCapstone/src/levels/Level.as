@@ -7,7 +7,7 @@ package levels
 	
 	/**
 	 * ...
-	 * @author Chris Gelon
+	 * @author Lydia Duncan
 	 */
 	public class Level extends FlxGroup 
 	{
@@ -17,6 +17,9 @@ package levels
 		public var height : int;
 		public var playerStart: FlxPoint;
 		public var enemyStarts: Array;
+		public var objectStarts: Array;
+		public var objectTypes: Array;
+		public var doorLocs: Array;
 		
 		public function Level() 
 		{
@@ -24,7 +27,9 @@ package levels
 			
 			map = new FlxTilemap();
 			enemyStarts = new Array();
-			
+			objectStarts = new Array();
+			objectTypes = new Array();
+			doorLocs = new Array();
 		}
 	}
 }

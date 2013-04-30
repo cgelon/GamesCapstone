@@ -5,14 +5,19 @@ package states
 	import levels.EvilLabVatLevel;
 	import levels.TestLevel;
 	import levels.Level;
+	import managers.ObjectManager;
 	import managers.PlayerAttackManager;
 	import managers.EnemyAttackManager;
 	import managers.EnemyManager;
 	import managers.PlayerManager;
 	import managers.UIObjectManager;
+	import objects.Acid;
+	import objects.Door;
+	import objects.Lever;
 	import org.flixel.FlxBasic;
 	import org.flixel.FlxCamera;
 	import org.flixel.FlxG;
+	import org.flixel.FlxPoint;
 	import org.flixel.FlxRect;
 	import org.flixel.FlxObject;
 	import people.ActorState;
@@ -29,6 +34,7 @@ package states
 		public static var enemyManager : EnemyManager;
 		public static var enemyAttackManager : EnemyAttackManager;
 		public static var uiObjectManager : UIObjectManager;
+		public static var objectManager : ObjectManager;
 		
 		override public function create() : void
 		{
@@ -38,6 +44,19 @@ package states
 			//level = new TestLevel();
 			
 			add(level);
+			
+			objectManager = new ObjectManager();
+			for (var k : int = 0; k < level.objectStarts.length; k++ )
+			{
+				objectManager.addObject(level.objectStarts[k], level.objectTypes[k]);
+			}
+			for (var l : int = 0; l < level.doorLocs.length; l++)
+			{
+				objectManager.addObject(level.doorLocs[l], Door);
+			}
+			addManager(objectManager);
+			
+			
 			enemyManager = new EnemyManager();
 			for (var i: int = 0; i < level.enemyStarts.length; i++) 
 			{
@@ -65,8 +84,6 @@ package states
 			enemyAttackManager = new EnemyAttackManager();
 			addManager(enemyAttackManager);
 			
-			
-			
 			//	Tell flixel how big our game world is
 			FlxG.worldBounds = new FlxRect(0, 0, level.width, level.height);
 			
@@ -83,6 +100,8 @@ package states
 			FlxG.collide(getManager(PlayerManager), level);
 			FlxG.collide(getManager(EnemyManager), level);
 			FlxG.overlap(getManager(EnemyManager), getManager(PlayerAttackManager), enemyHit);
+			FlxG.overlap(getManager(PlayerManager), getManager(ObjectManager), touchedSomething);
+			FlxG.overlap(getManager(EnemyManager), getManager(ObjectManager), touchedSomething);
 			
 			// Detect collisions between the player and enemies UNLESS the player is rolling.
 			var player : Player = (getManager(PlayerManager) as PlayerManager).player;
@@ -97,6 +116,27 @@ package states
 			}
 		}
 		
+		private function touchedSomething(person: Actor, obj: FlxObject): void 
+		{
+			if ((obj) as Acid) 
+			{
+				touchedAcid(person);
+			}
+			else if (FlxG.keys.justPressed("E") && (obj) as Lever)
+			{
+				((obj) as Lever).moved();
+			}
+		}
+		
+		/**
+		 * Callback function for when a player or enemy runs into acid
+		 * @param	person
+		 */
+		private function touchedAcid(person: Actor): void
+		{
+			person.touchedAcid();
+		}
+		 
 		/**
 		 * Callback function for when player is hit by an enemy attack
 		 * @param	player

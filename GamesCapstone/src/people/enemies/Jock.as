@@ -113,12 +113,14 @@ package people.enemies
 			FlxG.watch(this, "health", "enemyHealth");
 			FlxG.watch(this, "enemyState", "enemystate");
 			FlxG.watch(this, "playerDist", "dist");
+			//FlxG.watch(this, "finished", "animationFinished");
 		}
 		
 		override public function initialize(x : Number, y : Number, health : Number = 6) : void
 		{
 			super.initialize(x, y, health);
 			state = ActorState.IDLE;
+			finished = true;
 		}
 		
 		/**
@@ -204,6 +206,8 @@ package people.enemies
 			} else {
 				acceleration.x = 0;
 				velocity.x = 0;
+				if (finished)
+					facePlayer();
 			}
 		}
 		
