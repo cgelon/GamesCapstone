@@ -6,7 +6,6 @@ package levels
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxTilemap;
-	import org.flixel.FlxPoint;
 	
 	/**
 	 * ...
