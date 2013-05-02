@@ -112,6 +112,7 @@ package states
 			FlxG.collide(getManager(PlayerManager), level);
 			FlxG.collide(getManager(EnemyManager), level);
 			FlxG.collide(getManager(ObjectManager), level); // Probably necessary, given these items will be moving
+			FlxG.collide(getManager(ObjectManager), getManager(ObjectManager)); // Means the crates interact with each other
 			FlxG.overlap(getManager(EnemyManager), getManager(PlayerAttackManager), enemyHit);
 			FlxG.overlap(getManager(PlayerManager), getManager(BackgroundManager), touchedSomething);
 			FlxG.overlap(getManager(EnemyManager), getManager(BackgroundManager), touchedSomething);
