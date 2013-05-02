@@ -2,18 +2,21 @@ package states
 {
 	import attacks.Attack;
 	import attacks.EnemyAttack;
+	import items.Environmental.EnvironmentalItem;
 	import levels.EvilLabVatLevel;
+	import levels.StartingEnemiesLevel;
+	import levels.StartingLevel;
 	import levels.TestLevel;
 	import levels.Level;
+	import managers.BackgroundManager;
 	import managers.ObjectManager;
 	import managers.PlayerAttackManager;
 	import managers.EnemyAttackManager;
 	import managers.EnemyManager;
 	import managers.PlayerManager;
 	import managers.UIObjectManager;
-	import objects.Acid;
-	import objects.Door;
-	import objects.Lever;
+	import items.Environmental.Background.Acid;
+	import items.Environmental.Background.Door;
 	import org.flixel.FlxBasic;
 	import org.flixel.FlxCamera;
 	import org.flixel.FlxG;
@@ -34,28 +37,37 @@ package states
 		public static var enemyManager : EnemyManager;
 		public static var enemyAttackManager : EnemyAttackManager;
 		public static var uiObjectManager : UIObjectManager;
+		public static var backgroundManager: BackgroundManager;
 		public static var objectManager : ObjectManager;
 		
 		override public function create() : void
 		{
 			super.create();
 			
-			level = new EvilLabVatLevel();
+			//level = new StartingEnemiesLevel();
+			level = new StartingLevel();
+			//level = new EvilLabVatLevel();
 			//level = new TestLevel();
 			
 			add(level);
 			
-			objectManager = new ObjectManager();
-			for (var k : int = 0; k < level.objectStarts.length; k++ )
+			backgroundManager = new BackgroundManager();
+			for (var k : int = 0; k < level.backgroundStarts.length; k++ )
 			{
-				objectManager.addObject(level.objectStarts[k], level.objectTypes[k]);
+				backgroundManager.addObject(level.backgroundStarts[k], level.backgroundTypes[k]);
 			}
 			for (var l : int = 0; l < level.doorLocs.length; l++)
 			{
-				objectManager.addObject(level.doorLocs[l], Door);
+				backgroundManager.addObject(level.doorLocs[l], Door);
+			}
+			addManager(backgroundManager);
+			
+			objectManager = new ObjectManager();
+			for (var m : int = 0; m < level.objectStarts.length; m++)
+			{
+				objectManager.addObject(level.objectStarts[m], level.objectTypes[m]);
 			}
 			addManager(objectManager);
-			
 			
 			enemyManager = new EnemyManager();
 			for (var i: int = 0; i < level.enemyStarts.length; i++) 
@@ -100,8 +112,10 @@ package states
 			FlxG.collide(getManager(PlayerManager), level);
 			FlxG.collide(getManager(EnemyManager), level);
 			FlxG.overlap(getManager(EnemyManager), getManager(PlayerAttackManager), enemyHit);
-			FlxG.overlap(getManager(PlayerManager), getManager(ObjectManager), touchedSomething);
-			FlxG.overlap(getManager(EnemyManager), getManager(ObjectManager), touchedSomething);
+			FlxG.overlap(getManager(PlayerManager), getManager(BackgroundManager), touchedSomething);
+			FlxG.overlap(getManager(EnemyManager), getManager(BackgroundManager), touchedSomething);
+			FlxG.collide(getManager(PlayerManager), getManager(ObjectManager), touchedSomething);
+			FlxG.collide(getManager(EnemyManager), getManager(ObjectManager), touchedSomething);
 			
 			// Detect collisions between the player and enemies UNLESS the player is rolling.
 			var player : Player = (getManager(PlayerManager) as PlayerManager).player;
@@ -116,26 +130,11 @@ package states
 			}
 		}
 		
-		private function touchedSomething(person: Actor, obj: FlxObject): void 
+		private function touchedSomething(person: Actor, obj: EnvironmentalItem): void 
 		{
-			if ((obj) as Acid) 
-			{
-				touchedAcid(person);
-			}
-			else if (FlxG.keys.justPressed("E") && (obj) as Lever)
-			{
-				((obj) as Lever).moved();
-			}
+			obj.collideWith(person);
 		}
 		
-		/**
-		 * Callback function for when a player or enemy runs into acid
-		 * @param	person
-		 */
-		private function touchedAcid(person: Actor): void
-		{
-			person.touchedAcid();
-		}
 		 
 		/**
 		 * Callback function for when player is hit by an enemy attack

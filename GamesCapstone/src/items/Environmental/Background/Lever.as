@@ -1,19 +1,22 @@
-package objects
+package items.Environmental.Background
 {
 	import managers.ObjectManager;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxSprite;
+	import org.flixel.FlxG;
+	import people.Actor;
 
 	/**
 	 * @author Lydia Duncan
 	 */
-	public class Lever extends FlxSprite 
+	public class Lever extends BackgroundItem 
 	{
-		[Embed(source = '../../assets/switch.png')] private var lever: Class;
+		[Embed(source = '../../../../assets/switch.png')] private var lever: Class;
 		
 		function Lever(X:Number = 0, Y:Number = 0) : void 
 		{
-			super(X, Y);
+			super("lever");
+			initialize(X, Y);
 			loadGraphic(lever, false, false, 32, 32, true);
 			
 			addAnimation("down", [4, 3, 2, 1, 0], 20, false);
@@ -29,15 +32,18 @@ package objects
 		 * 
 		 * TODO: have up cause acid to flow
 		 */
-		public function moved() : void
+		override public function collideWith(actor:Actor) : void 
 		{
-			if (_curIndex == 4)
+			if (FlxG.keys.justPressed("E"))
 			{
-				play("down");
-			}
-			else
-			{
-				play("up");
+				if (_curIndex == 4)
+				{
+					play("down");
+				}
+				else
+				{
+					play("up");
+				}
 			}
 		}
 	}	

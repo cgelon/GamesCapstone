@@ -17,6 +17,8 @@ package levels
 		public var height : int;
 		public var playerStart: FlxPoint;
 		public var enemyStarts: Array;
+		public var backgroundStarts: Array;
+		public var backgroundTypes: Array;
 		public var objectStarts: Array;
 		public var objectTypes: Array;
 		public var doorLocs: Array;
@@ -27,6 +29,8 @@ package levels
 			
 			map = new FlxTilemap();
 			enemyStarts = new Array();
+			backgroundStarts = new Array();
+			backgroundTypes = new Array();
 			objectStarts = new Array();
 			objectTypes = new Array();
 			doorLocs = new Array();
