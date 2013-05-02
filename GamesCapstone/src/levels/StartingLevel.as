@@ -1,5 +1,6 @@
 package levels
 {
+	import items.Environmental.Crate;
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxTilemap;
@@ -29,6 +30,9 @@ package levels
 			// Stores the acid locations for the floor
 			doorLocs[0] = new FlxPoint(16, 176);
 			doorLocs[1] = new FlxPoint(2096, 176);
+			
+			objectStarts[0] = new FlxPoint(448, 208);
+			objectTypes[0] = Crate;
 			
 			add(map);
 		}

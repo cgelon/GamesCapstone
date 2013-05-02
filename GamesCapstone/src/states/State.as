@@ -111,6 +111,7 @@ package states
 			super.update();
 			FlxG.collide(getManager(PlayerManager), level);
 			FlxG.collide(getManager(EnemyManager), level);
+			FlxG.collide(getManager(ObjectManager), level); // Probably necessary, given these items will be moving
 			FlxG.overlap(getManager(EnemyManager), getManager(PlayerAttackManager), enemyHit);
 			FlxG.overlap(getManager(PlayerManager), getManager(BackgroundManager), touchedSomething);
 			FlxG.overlap(getManager(EnemyManager), getManager(BackgroundManager), touchedSomething);
