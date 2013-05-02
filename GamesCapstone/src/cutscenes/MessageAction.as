@@ -22,9 +22,9 @@ package cutscenes
 		
 		public function display(message : String, callback : Function = null) : void
 		{
-			var messageBox = new MessageBox();
+			var messageBox : MessageBox = new MessageBox();
 			add(messageBox);
-			_messageBox.displayText(message, callback);
+			messageBox.displayText(message, callback);
 		}
 		
 		override public function destroy() : void

@@ -47,6 +47,7 @@ package cutscenes
 					add(action);
 					action.run(actionFinished);
 					_index++;
+					nextAction();
 					break;
 			}
 			_index++;

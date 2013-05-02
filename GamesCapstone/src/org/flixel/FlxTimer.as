@@ -102,16 +102,16 @@ package org.flixel
 		 */
 		public function start(Time:Number=1,Loops:uint=1,Callback:Function=null):FlxTimer
 		{
-			var timerManager:TimerManager = manager;
-			if(timerManager != null)
-				timerManager.add(this);
-			
 			if(paused)
 			{
 				paused = false;
 				return this;
 			}
 			
+			var timerManager:TimerManager = manager;
+			if(timerManager != null)
+				timerManager.add(this);
+				
 			paused = false;
 			finished = false;
 			time = Time;
