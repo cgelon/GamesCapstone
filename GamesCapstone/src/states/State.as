@@ -20,6 +20,7 @@ package states
 	import org.flixel.FlxBasic;
 	import org.flixel.FlxCamera;
 	import org.flixel.FlxG;
+	import org.flixel.FlxGroup;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxRect;
 	import org.flixel.FlxObject;
@@ -45,8 +46,8 @@ package states
 			super.create();
 			
 			//level = new StartingEnemiesLevel();
-			level = new StartingLevel();
-			//level = new EvilLabVatLevel();
+			//level = new StartingLevel();
+			level = new EvilLabVatLevel();
 			//level = new TestLevel();
 			
 			add(level);
@@ -134,9 +135,25 @@ package states
 		
 		private function touchedSomething(person: Actor, obj: EnvironmentalItem): void 
 		{
-			obj.collideWith(person);
+			obj.collideWith(person, this);
 		}
 		
+		
+		public function addAcid(group:FlxGroup) : void
+		{
+			for (var i : int = 0; i < group.members.length; i++)
+			{
+				backgroundManager.add(group.members[i]);
+			}
+		}
+		
+		public function removeAcid(group:FlxGroup) : void
+		{
+			for (var i : int = 0; i < group.members.length; i++)
+			{
+				backgroundManager.remove(group.members[i]);
+			}
+		}
 		 
 		/**
 		 * Callback function for when player is hit by an enemy attack
