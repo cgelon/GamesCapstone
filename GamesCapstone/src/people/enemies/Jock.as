@@ -110,9 +110,9 @@ package people.enemies
 					kill();
 			};
 			
-			FlxG.watch(this, "health", "enemyHealth");
-			FlxG.watch(this, "enemyState", "enemystate");
-			FlxG.watch(this, "playerDist", "dist");
+			//FlxG.watch(this, "health", "enemyHealth");
+			//FlxG.watch(this, "enemyState", "enemystate");
+			//FlxG.watch(this, "playerDist", "dist");
 			//FlxG.watch(this, "finished", "animationFinished");
 		}
 		

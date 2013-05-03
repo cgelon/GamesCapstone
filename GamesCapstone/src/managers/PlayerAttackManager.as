@@ -1,7 +1,7 @@
 package managers
 {
-	import attacks.BasicAttack;
-	import attacks.SuperAttack;
+	import attacks.StrongAttack;
+	import attacks.WeakAttack;
 	import org.flixel.FlxGroup;
 	
 	/**
@@ -13,13 +13,13 @@ package managers
 	{
 		public function attack(x : Number, y : Number) : void
 		{
-			var attack : BasicAttack = recycle( BasicAttack ) as BasicAttack;
+			var attack : WeakAttack = recycle( WeakAttack ) as WeakAttack;
 			attack.initialize(x, y, (getManager(PlayerManager) as PlayerManager).player.getPlayerBonusDamage());
 		}
 		
-		public function superAttack(x : Number, y : Number) : void
+		public function strongAttack(x : Number, y : Number) : void
 		{
-			var attack : SuperAttack = recycle( SuperAttack ) as SuperAttack;
+			var attack : StrongAttack = recycle( StrongAttack ) as StrongAttack;
 			attack.initialize(x, y, (getManager(PlayerManager) as PlayerManager).player.getPlayerBonusDamage());
 		}
 	}

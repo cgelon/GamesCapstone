@@ -21,6 +21,12 @@ package people.players
 	 */
 	public class Player extends Actor
 	{	
+		/* How long the windup for strong and weak attacks are (respectively), in frames */
+		private const STRONG_ATTACK_DELAY_FRAMES : Number = 30;
+		private const WEAK_ATTACK_DELAY_FRAMES : Number = 15;
+		private const STRONG_ATTACK_DELAY : Number = STRONG_ATTACK_DELAY_FRAMES * 1000 / 60; /* Get the windup delay in ms */
+		private const WEAK_ATTACK_DELAY : Number = WEAK_ATTACK_DELAY_FRAMES * 1000 / 60;	 /* Get the windup delay in ms */
+		
 		/** 
 		 * An array that keeps hold of what directions are currently being pressed. 
 		 * 0 = right, 1 = down, 2 = left, 3 = up
@@ -36,26 +42,26 @@ package people.players
 		private var _currentWeapon : int;
 		public function get currentWeapon() : int { return _currentWeapon; }
 		
-		/** The amount of frames inbetween player attacks. */
-		private var _attackDelay : Number = 250;
-		/** The timer that tracks when the player can attack again. */
-		private var _attackTimer : FlxDelay;
+		/** The timers that track when the player can attack again. */
+		private var _weakAttackTimer : FlxDelay;
+		private var _strongAttackTimer : FlxDelay;
 		/** 
 		 * True if the player has released the attack button 
 		 * from the last time they attacked, false otherwise. 
 		 */
 		private var _attackReleased : Boolean;
-		private var _attackComboDelay : Number = 1000;
-		private var _attackComboTimer : FlxDelay;
 		
-		/** Keeps track of how far into the combo the player is. 1 = first hit, 0 = second, etc. */
-		private var _attackCombo : int;			
-		public function get attackCombo() : int { return _attackCombo; }
+		/** The attack type of the current attack. 0 for weak attack, 1 for strong attack. */
+		private var _attackType : int;			
+		public function get attackType() : int { return _attackType; }
 		
 		private var _hurtTimer : FlxDelay;
 		private var _playedHurtAnimation : Boolean;
 		
 		private var _rollTimer : FlxDelay;
+		
+		private var _weakWindupTimer : FlxDelay;
+		private var _strongWindupTimer : FlxDelay;
 		
 		/**
 		 * True if the player has released the jump button 
@@ -69,9 +75,6 @@ package people.players
 		 * 0 on the ground, 1 during jump, and 2 during double jump.
 		 */
 		private var _jumpCount : uint;
-		
-		/** The number of frames that have passed in the current state. */
-		private var _currentStateFrame : uint;
 		
 		/** The PNG for the player. */
 		[Embed(source = '../../../assets/player.png')] private var playerPNG : Class;
@@ -90,11 +93,11 @@ package people.players
 			loadGraphic(playerPNG, true, true, 64, 64, true);
 			
 			// Set the bounding box for the sprite.
-			width = 28;
+			width = 24;
 			height = 40;
 			
 			// Offset the sprite image's bounding box.
-			offset.x = 18;
+			offset.x = 20;
 			offset.y = 13;
 			
 			// Create the animations we need.
@@ -102,8 +105,10 @@ package people.players
 			addAnimation("walk", [36, 37, 38, 39, 40, 45, 46, 47, 48, 49], 20, true);
 			addAnimation("jump_rising", [19, 20], 10, false);
 			addAnimation("jump_falling", [21], 0, false);
-			addAnimation("basic_attack", [1, 2, 3], 20, false);
-			addAnimation("super_attack", [1, 2, 3, 4], 20, false);
+			addAnimation("basic_attack_windup", [1, 2, 2], (1000 / WEAK_ATTACK_DELAY) * 3, false);
+			addAnimation("basic_attack_hit", [3], 20, false);
+			addAnimation("super_attack_windup", [1, 2, 2], (1000 / STRONG_ATTACK_DELAY) * 3, false);
+			addAnimation("super_attack_hit", [3, 4, 5, 6], 20, false);
 			addAnimation("roll", [27, 28, 29, 30, 31, 32], 12, true);
 			addAnimation("hurt_flying", [9], 0, false); 
 			addAnimation("hurt_kneeling", [10, 11, 12], 40, false);
@@ -117,24 +122,30 @@ package people.players
 			drag.x = maxVelocity.x * 4;
 			
 			// Set up the attack variables.
-			_attackTimer = new FlxDelay(_attackDelay);
-			_attackTimer.callback = function() : void
+			_weakAttackTimer = new FlxDelay(WEAK_ATTACK_DELAY / 2);
+			_weakAttackTimer.callback = function() : void
 			{
 				if (state == ActorState.ATTACKING) state = ActorState.IDLE;
-			}
+			};
+			
+			_strongAttackTimer = new FlxDelay(STRONG_ATTACK_DELAY / 2);
+			_strongAttackTimer.callback = function() : void
+			{
+				if (state == ActorState.ATTACKING) state = ActorState.IDLE;
+			};
+			
+			
 			_attackReleased = true;
 			
-			_attackCombo = 0;
-			_attackComboTimer = new FlxDelay(_attackComboDelay);
-			_attackComboTimer.callback = function() : void
-			{
-				_attackCombo = 0;
-			};
+			_attackType = 0;
 			
 			_hurtTimer = new FlxDelay(1000);
 			_hurtTimer.callback = function() : void
 			{
-				if (state == ActorState.HURT) state = ActorState.IDLE;
+				if (state == ActorState.HURT)
+				{
+					state = ActorState.IDLE;
+				}
 			};
 			
 			_rollTimer = new FlxDelay(500);
@@ -144,16 +155,35 @@ package people.players
 				state = ActorState.IDLE;
 			};
 			
-			FlxG.watch(this, "currentWeapon", "CurrentWeapon");
-			FlxG.watch(_weapons, "length", "Color");
+			_weakWindupTimer = new FlxDelay(WEAK_ATTACK_DELAY);
+			_weakWindupTimer.callback = function() : void
+			{
+				if (state == ActorState.ATTACKING)
+				{
+					attackManager.attack((facing == FlxObject.LEFT) ? x - 20 : x + width, y);
+					_weakAttackTimer.start();
+				}
+			};
+			
+			_strongWindupTimer = new FlxDelay(STRONG_ATTACK_DELAY);
+			_strongWindupTimer.callback = function() : void
+			{
+				if (state == ActorState.ATTACKING)
+				{
+					attackManager.strongAttack((facing == FlxObject.LEFT) ? x - 40 : x + width, y);
+					_strongAttackTimer.start();
+				}
+			};
+			
+			FlxG.watch(this, "attackType", "AttackType");
+			FlxG.watch(this, "stateName", "State");
+			FlxG.watch(this, "touching", "Touching");
 		}
-		
 
 		override public function initialize(x : Number, y : Number, health : Number = 5) : void
 		{
 			super.initialize(x, y, health);
 			
-			_currentStateFrame = 0;
 			facing = FlxObject.RIGHT;
 			_jumpReleased = true;
 			state = ActorState.IDLE;
@@ -178,11 +208,10 @@ package people.players
 				}
 			}
 			
-			
 			var colors : Array = [0x00FFFFFF, Color.RED, Color.GREEN, Color.ORANGE, Color.BLUE];
 			color = colors[_currentWeapon % colors.length];
 			
-			alpha = 1 - (_currentWeapon / _weapons.length);
+			//alpha = 1 - (_currentWeapon / _weapons.length);
 			
 			animate();
 		}
@@ -290,56 +319,43 @@ package people.players
 				else
 					velocity.x = -maxVelocity.x;
 			}
-			//drag.x = (isTouching(FlxObject.FLOOR) || state != ActorState.HURT) ? maxVelocity.x * 4 : maxVelocity.x;
+			else if (state == ActorState.ATTACKING)
+			{
+				if (isTouching(FlxObject.FLOOR))
+					acceleration.x = 0;
+			}
+			drag.x = (isTouching(FlxObject.FLOOR) || state != ActorState.HURT) ? maxVelocity.x * 4 : maxVelocity.x;
 		}
 		
 		private function attack() : void
 		{
 			if (FlxG.keys.justPressed("J"))
 			{
-				if (attackReady)
+				if (attackReady && !_weakWindupTimer.isRunning)
 				{
-					// Reset attackCombo if we finished a combo.
-					if (_attackCombo == 3)
-						_attackCombo = 0;
-					
-					switch(_attackCombo)
-					{
-						case 0:
-							attackManager.attack((facing == FlxObject.LEFT) ? x - 20 : x + width, y);
-							break;
-						case 1:
-							attackManager.attack((facing == FlxObject.LEFT) ? x - 20 : x + width, y);
-							break;
-						case 2:
-							attackManager.superAttack((facing == FlxObject.LEFT) ? x - 40 : x + width, y);
-							break;
-						default:
-							break;
-					}
-					
-					// If the player is on the ground while attacking, make them move forward slightly
-					// with the attack.
-					if (isTouching(FlxObject.FLOOR))
-					{
-						//velocity.x = (facing == FlxObject.LEFT) ? -maxVelocity.x : maxVelocity.x;
-						acceleration.x = 0;
-					}
+					_weakWindupTimer.start();
 					state = ActorState.ATTACKING;
 					_attackReleased = false;
-					_attackTimer.start();
-					_attackCombo++;
-					_attackComboTimer.start();
-				}
-				else
-				{
-					_attackCombo = 0;
+					_attackType = 0;
 				}
 			}
-			if (FlxG.keys.justReleased("J"))
+			else if (FlxG.keys.justPressed("K"))
 			{
-				_attackReleased = true;
+				if (attackReady && !_strongWindupTimer.isRunning)
+				{
+					_strongWindupTimer.start();
+					state = ActorState.ATTACKING;
+					_attackReleased = false;
+					_attackType = 1;
+				}
 			}
+			
+			if (FlxG.keys.justReleased("J") || FlxG.keys.justReleased("K"))
+			{
+				if (!(FlxG.keys.pressed("J") || FlxG.keys.pressed("K")))
+					_attackReleased = true;
+			}
+			
 		}
 		
 		/**
@@ -365,10 +381,10 @@ package people.players
 					PlayOnce("roll");
 					break;
 				case ActorState.ATTACKING:
-					if (_attackCombo == 3)
-						PlayOnce("super_attack");
-					else if (_attackCombo == 1 || _attackCombo == 2)
-						PlayOnce("basic_attack");
+					if (_attackType == 1)
+						PlaySequence(["super_attack_windup", "super_attack_hit"]);
+					else if (_attackType == 0)
+						PlaySequence(["basic_attack_windup", "basic_attack_hit"]);
 					break;
 				case ActorState.HURT:
 					if (!isTouching(FlxObject.FLOOR))
@@ -404,7 +420,6 @@ package people.players
 				if (numbersPressed[i] && _weapons[i] != null)
 				{
 					_currentWeapon = i;
-					_attackCombo = 0;
 					break;
 				}
 			}
@@ -435,7 +450,7 @@ package people.players
 		 */
 		public function get attackReady() : Boolean
 		{
-			return !_attackTimer.isRunning && _attackReleased;
+			return !(_weakWindupTimer.isRunning || _strongWindupTimer.isRunning || _weakAttackTimer.isRunning || _strongAttackTimer.isRunning) && _attackReleased;
 		}
 		
 		public function get attackManager() : PlayerAttackManager
@@ -450,16 +465,14 @@ package people.players
 			
 			_directionPressed.length = 0;
 			_directionPressed = null;
-			_attackDelay = 0;
-			_attackTimer.abort();
-			_attackTimer.callback = null;
-			_attackTimer = null;
+			_weakAttackTimer.abort();
+			_weakAttackTimer.callback = null;
+			_weakAttackTimer = null;
+			_strongAttackTimer.abort();
+			_strongAttackTimer.callback = null;
+			_strongAttackTimer = null;
 			_attackReleased = false;
-			_attackCombo = 0;
-			_attackComboDelay = 0;
-			_attackComboTimer.abort();
-			_attackComboTimer.callback = null;
-			_attackComboTimer = null;
+			_attackType = 0;
 			_hurtTimer.abort();
 			_hurtTimer.callback = null;
 			_hurtTimer = null;

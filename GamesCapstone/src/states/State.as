@@ -44,8 +44,8 @@ package states
 		{
 			super.create();
 			
-			//level = new StartingEnemiesLevel();
-			level = new StartingLevel();
+			level = new StartingEnemiesLevel();
+			//level = new StartingLevel();
 			//level = new EvilLabVatLevel();
 			//level = new TestLevel();
 			

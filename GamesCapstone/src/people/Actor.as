@@ -70,11 +70,8 @@ package people
 			_prevState = state;
 			state = ActorState.DEAD;
 			health = 0;
-			/*
-			acceleration.x = 0;
-			acceleration.y = 0;
 			velocity.x = 0;
-			velocity.y = 0; */
+			acceleration.x = 0;
 		}
 		
 		/**

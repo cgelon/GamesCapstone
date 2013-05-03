@@ -31,8 +31,11 @@ package levels
 			doorLocs[0] = new FlxPoint(16, 176);
 			doorLocs[1] = new FlxPoint(2096, 176);
 			
-			objectStarts[0] = new FlxPoint(448, 208);
-			objectTypes[0] = Crate;
+			for (var i : uint = 0; i < 5; ++i)
+			{
+				objectStarts[i] = new FlxPoint(50 + 100*i, 208);
+				objectTypes[i] = Crate;
+			}
 			
 			add(map);
 		}
