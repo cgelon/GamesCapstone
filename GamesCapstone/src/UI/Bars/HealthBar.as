@@ -50,7 +50,7 @@ package UI.Bars
 				scrollFactor.y = 0;
 			}
 				
-			createFilledBar(0x7F005100, 0xFF00F400, true); 
+			createFilledBar(0x7F510000, 0xFFF40000, true); 
 			killOnEmpty = true;
 			
 			if (_fadeBar)

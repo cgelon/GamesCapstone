@@ -20,6 +20,7 @@ package states
 	import org.flixel.FlxBasic;
 	import org.flixel.FlxCamera;
 	import org.flixel.FlxG;
+	import org.flixel.FlxGroup;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxRect;
 	import org.flixel.FlxObject;
@@ -40,16 +41,25 @@ package states
 		public static var backgroundManager: BackgroundManager;
 		public static var objectManager : ObjectManager;
 		
+		/* Whether the player has been hit by an attack this frame.
+		 * This is a workaround that is being used because FlxG.overlap
+		 * calls the callback multiple times for a single overlap.
+		 */
+		private var playerHitThisFame : Boolean;
+		
 		override public function create() : void
 		{
 			super.create();
 			
+
 			level = new StartingEnemiesLevel();
 			//level = new StartingLevel();
 			//level = new EvilLabVatLevel();
 			//level = new TestLevel();
 			
 			add(level);
+			
+			playerHitThisFame = false;
 			
 			backgroundManager = new BackgroundManager();
 			for (var k : int = 0; k < level.backgroundStarts.length; k++ )
@@ -83,6 +93,7 @@ package states
 			
 			uiObjectManager = new UIObjectManager();
 			uiObjectManager.addHealthBar(playerManager.player, 10, 10, 50, 10, false, false);
+			uiObjectManager.addStaminaBar(playerManager.player, 10, 25, 50, 10, false);
 			for (var j : int = 0; j < enemyManager.members.length; ++j)
 			{
 				if (enemyManager.members[j] != null)
@@ -109,9 +120,13 @@ package states
 		override public function update() : void
 		{
 			super.update();
+			
+			playerHitThisFame = false;
+			
 			FlxG.collide(getManager(PlayerManager), level);
 			FlxG.collide(getManager(EnemyManager), level);
 			FlxG.collide(getManager(ObjectManager), level); // Probably necessary, given these items will be moving
+			FlxG.collide(getManager(ObjectManager), getManager(ObjectManager)); // Means the crates interact with each other
 			FlxG.overlap(getManager(EnemyManager), getManager(PlayerAttackManager), enemyHit);
 			FlxG.overlap(getManager(PlayerManager), getManager(BackgroundManager), touchedSomething);
 			FlxG.overlap(getManager(EnemyManager), getManager(BackgroundManager), touchedSomething);
@@ -121,8 +136,8 @@ package states
 			// Detect collisions between the player and enemies UNLESS the player is rolling.
 			var player : Player = (getManager(PlayerManager) as PlayerManager).player;
 			
-				//FlxG.overlap(getManager(PlayerManager), getManager(EnemyManager), playerHit);
-				FlxG.overlap(getManager(PlayerManager), getManager(EnemyAttackManager), playerAttacked);
+			//FlxG.overlap(getManager(PlayerManager), getManager(EnemyManager), playerHit);
+			FlxG.overlap(getManager(PlayerManager), getManager(EnemyAttackManager), playerAttacked);
 			
 				
 			for each (var enemy : Enemy in getManager(EnemyManager).members)
@@ -133,9 +148,25 @@ package states
 		
 		private function touchedSomething(person: Actor, obj: EnvironmentalItem): void 
 		{
-			obj.collideWith(person);
+			obj.collideWith(person, this);
 		}
 		
+		
+		public function addAcid(group:FlxGroup) : void
+		{
+			for (var i : int = 0; i < group.members.length; i++)
+			{
+				backgroundManager.add(group.members[i]);
+			}
+		}
+		
+		public function removeAcid(group:FlxGroup) : void
+		{
+			for (var i : int = 0; i < group.members.length; i++)
+			{
+				backgroundManager.remove(group.members[i]);
+			}
+		}
 		 
 		/**
 		 * Callback function for when player is hit by an enemy attack
@@ -144,7 +175,11 @@ package states
 		 */
 		private function playerAttacked(player : Player, attack : EnemyAttack) : void
 		{
-			(getManager(PlayerManager) as PlayerManager).HurtPlayer(attack);
+			if (!playerHitThisFame)
+			{
+				(getManager(PlayerManager) as PlayerManager).HurtPlayer(attack);
+				playerHitThisFame = true;
+			}
 		}
 		
 		/**

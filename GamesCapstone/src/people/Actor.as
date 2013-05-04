@@ -26,6 +26,7 @@ package people
 		
 		// Keeps track of the frame number in the current state.
 		private var _currentStateFrame : uint;
+		public function get currentStateFrame() : uint { return _currentStateFrame; }
 
 		// The frame that the current animation or animation sequence was started at.
 		private var _animationStartFrame : int;

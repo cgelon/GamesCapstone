@@ -50,7 +50,13 @@ package managers
 					player.velocity.x = -player.velocity.x;
 				}
 				
-				player.hurt(attack.damage);
+				if (player.state != ActorState.BLOCKING)
+					player.hurt(attack.damage);
+				else
+				{
+					player.lowerStamina(5);
+					FlxG.log("Stamina lowered!");
+				}
 			}
 		}
 	}

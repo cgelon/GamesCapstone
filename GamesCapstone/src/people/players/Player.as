@@ -11,6 +11,7 @@ package people.players
 	import org.flixel.FlxG;
 	import org.flixel.FlxText;
 	import org.flixel.plugin.photonstorm.FlxDelay;
+	import org.flixel.plugin.photonstorm.FlxBar;
 	import people.Actor;
 	import people.ActorState;
 	import states.GameState;
@@ -26,6 +27,11 @@ package people.players
 		private const WEAK_ATTACK_DELAY_FRAMES : Number = 15;
 		private const STRONG_ATTACK_DELAY : Number = STRONG_ATTACK_DELAY_FRAMES * 1000 / 60; /* Get the windup delay in ms */
 		private const WEAK_ATTACK_DELAY : Number = WEAK_ATTACK_DELAY_FRAMES * 1000 / 60;	 /* Get the windup delay in ms */
+		
+		private const MAX_STAMINA : Number = 100;
+		private const STRONG_ATTACK_STAM_COST : Number = 40;
+		private const WEAK_ATTACK_STAM_COST : Number = 10;
+		private const STAM_REGEN : Number = 0.5;
 		
 		/** 
 		 * An array that keeps hold of what directions are currently being pressed. 
@@ -76,6 +82,12 @@ package people.players
 		 */
 		private var _jumpCount : uint;
 		
+		
+		private var _stamina : Number;
+		public function get stamina() : Number { return _stamina; }
+		public function get maxStamina() : Number { return MAX_STAMINA; }
+		
+		
 		/** The PNG for the player. */
 		[Embed(source = '../../../assets/player.png')] private var playerPNG : Class;
 		
@@ -115,6 +127,7 @@ package people.players
 			addAnimation("hurt_flashing", [12, 53], 8, true);
 			addAnimation("die_falling", [18, 22, 23], 2, false);
 			addAnimation("die_flashing", [23, 53], 8, true);
+			addAnimation("blocking", [7], 0, false);
 			
 			// Set physic constants.
 			maxVelocity = new FlxPoint(200, 1000);
@@ -161,6 +174,7 @@ package people.players
 				if (state == ActorState.ATTACKING)
 				{
 					attackManager.attack((facing == FlxObject.LEFT) ? x - 20 : x + width, y);
+					lowerStamina(WEAK_ATTACK_STAM_COST);
 					_weakAttackTimer.start();
 				}
 			};
@@ -171,6 +185,7 @@ package people.players
 				if (state == ActorState.ATTACKING)
 				{
 					attackManager.strongAttack((facing == FlxObject.LEFT) ? x - 40 : x + width, y);
+					lowerStamina(STRONG_ATTACK_STAM_COST);
 					_strongAttackTimer.start();
 				}
 			};
@@ -178,12 +193,14 @@ package people.players
 			FlxG.watch(this, "attackType", "AttackType");
 			FlxG.watch(this, "stateName", "State");
 			FlxG.watch(this, "touching", "Touching");
+			FlxG.watch(this, "isCountering", "Countering");
 		}
 
 		override public function initialize(x : Number, y : Number, health : Number = 5) : void
 		{
 			super.initialize(x, y, health);
 			
+			_stamina = maxStamina;
 			facing = FlxObject.RIGHT;
 			_jumpReleased = true;
 			state = ActorState.IDLE;
@@ -197,6 +214,11 @@ package people.players
 		override public function update():void 
 		{
 			super.update();
+			
+			if (state == ActorState.BLOCKING)
+				addStamina(-STAM_REGEN);
+			else
+				addStamina(STAM_REGEN);
 			
 			if (state != ActorState.DEAD)
 			{
@@ -283,7 +305,12 @@ package people.players
 					if (_jumpCount > 0)
 						_jumpCount = 0;
 					
-					if (FlxG.keys.pressed("P"))
+					if (FlxG.keys.justPressed("L"))
+					{
+						state = ActorState.BLOCKING;
+						acceleration.x = 0;
+					}
+					else if (FlxG.keys.pressed("P"))
 					{
 						state = ActorState.ROLLING;
 					}
@@ -323,6 +350,13 @@ package people.players
 			{
 				if (isTouching(FlxObject.FLOOR))
 					acceleration.x = 0;
+			}
+			else if (state == ActorState.BLOCKING)
+			{
+				if (FlxG.keys.justReleased("L") || stamina <= 0)
+				{
+					state = ActorState.IDLE;
+				}
 			}
 			drag.x = (isTouching(FlxObject.FLOOR) || state != ActorState.HURT) ? maxVelocity.x * 4 : maxVelocity.x;
 		}
@@ -395,6 +429,8 @@ package people.players
 				case ActorState.DEAD:
 					PlaySequence(["die_falling", "die_flashing"]);
 					break;
+				case ActorState.BLOCKING:
+					PlayOnce("blocking");
 			}
 		}
 		
@@ -428,6 +464,21 @@ package people.players
 		public function getPlayerBonusDamage() : Number
 		{
 			return _weapons[_currentWeapon].damageUp;
+		}
+		
+		public function addStamina(stamUp : Number) : void
+		{
+			_stamina = Math.min(_stamina + stamUp, maxStamina);
+		}
+		
+		public function lowerStamina(stamDown : Number) : void
+		{
+			_stamina = Math.max(_stamina - stamDown, 0);
+		}
+		
+		public function get isCountering() : Boolean
+		{
+			return state == ActorState.BLOCKING && currentStateFrame < 5;
 		}
 		
 		/**

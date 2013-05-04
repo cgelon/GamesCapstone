@@ -14,6 +14,7 @@ package people
 		public static const ATTACKING : ActorState = new ActorState();
 		public static const HURT : ActorState = new ActorState();
 		public static const DEAD : ActorState = new ActorState();
+		public static const BLOCKING : ActorState = new ActorState();
 		
 		public function get name() : String
 		{
@@ -32,6 +33,8 @@ package people
 					return "rolling";
 				case DEAD:
 					return "dead";
+				case BLOCKING:
+					return "blocking";
 			}
 			return null;
 		}

@@ -19,11 +19,11 @@ package cutscenes
 	{
 		/** The FlxTexts that will display the lines. */
 		private var _textLines : Array;
+		/** The FlxText that displays the name. */
+		private var _nameTextLine : FlxText;
 		/** The box behind the text. */
 		private var _box : FlxSprite;
 		
-		/** The amount of time in seconds before each letter is displayed. **/
-		private var _displaySpeed : Number;
 		/** The timer that is used to display text at a certain speed. */
 		private var _timer : FlxTimer;
 		/** The text is displayed up to the current index. */
@@ -42,6 +42,10 @@ package cutscenes
 		private var _size : Number;
 		/** The color of the text. */
 		private var _color : uint;
+		/** The color of the name. */
+		private var _nameColor : uint;
+		/** The alignment of the name in the message box. */
+		private var _nameAlignment : String;
 		/** The number of lines to be displayed at a time. */
 		private var _numLines : int;
 		/** The width of message box. */
@@ -50,6 +54,13 @@ package cutscenes
 		private var _x : Number;
 		/** The y position of the message box. */
 		private var _y : Number;
+		
+		/** True if the box will automatically close when displayed, false otherwise. */
+		private var _auto : Boolean;
+		/** The amount of time, in seconds, before the box closes. */
+		private var _autoCloseTime : Number;
+		/** The timer for automatically closing the message box. */
+		private var _autoTimer : FlxTimer;
 		
 		/** The function to call when the text is done being displayed. */
 		private var _callback : Function;
@@ -66,8 +77,9 @@ package cutscenes
 			_y = 120;
 			setFormat();
 			
-			// Set up the timer for displaying the text.
+			// Set up the timers.
 			_timer = new FlxTimer();
+			_autoTimer = new FlxTimer();
 		}
 		
 		/**
@@ -75,16 +87,21 @@ package cutscenes
 		 * @param	font	The font to be displayed.
 		 * @param	size	The size of the font.
 		 * @param	color	The color of the text.
+		 * @param	nameColor	The color of the name.
 		 * @param	width	The width of the message box.
 		 * @param	numLines	The number of lines to be displayed at one time.
+		 * @param	nameAlignment	Where the name is aligned in the message box.
 		 */
-		public function setFormat(font : String = null, size : Number = 16, color : uint = 0xFFFFFFFF, width : uint = 320, numLines : int = 4) : void
+		public function setFormat(font : String = null, size : Number = 8, color : uint = Color.WHITE, 
+				nameColor : uint = Color.BLUE, width : uint = 320, numLines : int = 3, nameAlignment : String = "left") : void
 		{
 			_font = font;
 			_size = size;
 			_color = color;
+			_nameColor = nameColor;
 			_width = width;
 			_numLines = numLines;
+			_nameAlignment = nameAlignment;
 			
 			recreateLines();
 		}
@@ -116,10 +133,22 @@ package cutscenes
 			// Create a dummy text to gauge where the other texts should be.
 			var dummyText : FlxText = new FlxText(0, 0, _width, " ", true);
 			dummyText.setFormat(_font, _size, _color, "left");
+			
+			// Create the name text.
+			if (_nameTextLine != null)
+			{
+				remove(_nameTextLine, true);
+				_nameTextLine.destroy();
+			}
+			_nameTextLine = new FlxText(_x, _y, _width, "", true);
+			_nameTextLine.setFormat(_font, _size, _nameColor, _nameAlignment);
+			_nameTextLine.scrollFactor = new FlxPoint(0, 0);
+			add(_nameTextLine);
+			
 			// Create the new lines of text!
 			for (var i : int = 0; i < _numLines; i++)
 			{
-				var text : FlxText = new FlxText(_x, _y + i * (dummyText.height - 4), _width, "", true);
+				var text : FlxText = new FlxText(_x, _y + (i + 1) * (dummyText.height - 4), _width, "", true);
 				text.setFormat(_font, _size, _color, "left");
 				text.scrollFactor = new FlxPoint(0, 0);
 				_textLines.push(text);
@@ -127,7 +156,7 @@ package cutscenes
 			}
 			
 			// Draw the box around the text.
-			_box.makeGraphic(_width, (_numLines) * (dummyText.height - 4) + 4, Color.GRAY, true);
+			_box.makeGraphic(_width, (_numLines + 1) * (dummyText.height - 4) + 4, Color.DARK_GRAY, true);
 			_box.x = _x;
 			_box.y = _y;
 			FlxG.clearBitmapCache();
@@ -135,17 +164,24 @@ package cutscenes
 		
 		/**
 		 * Starts displaying the text!
+		 * @param	name	The name of the person talking.
 		 * @param	text	The text to display.
 		 * @param	callback	The function to be called after the text is done being displayed.
 		 * @param	displaySpeed	The amount of time, in seconds, to wait before displaying the next letter.
+		 * @param	auto	If true, the message box will automatically close after a determined time. Player cannot advance text quickly either.
+		 * @param	autoCloseTime	The amount of time, in seconds, after the message is fully displayed to close the box.
 		 */
-		public function displayText(text : String, callback : Function = null, displaySpeed : Number = 0.01) : void
+		public function displayText(name : String, text : String, callback : Function = null, 
+				displaySpeed : Number = 0.005, auto : Boolean = false, autoCloseTime : Number = 2) : void
 		{
 			_lines = divideText(text);
 			_lineIndex = 0;
 			_startLineIndex = 0;
 			_timer.start(displaySpeed, 0, display);
+			_nameTextLine.text = name;
 			_callback = callback;
+			_auto = auto;
+			_autoCloseTime = autoCloseTime;
 		}
 		
 		/**
@@ -198,63 +234,82 @@ package cutscenes
 				{
 					// Stop the timer if there are no more lines.
 					_timer.stop();
+					_autoTimer.start(_autoCloseTime, 1, autoClose);
 				}
 				else if (_lineIndex - _startLineIndex == _numLines)
 				{
-					// If there are already four lines being displayed, wait for user input, 
+					// If there are already the max number of lines being displayed, wait for user input, 
 					// then refresh.
 					_startLineIndex = _lineIndex;
 					_timer.pause();
+					_autoTimer.start(_autoCloseTime, 1, autoClose);
 				}
 			}
+		}
+		
+		/**
+		 * Callback function for when we want to automatically want to close a message box.
+		 */
+		private function autoClose(timer : FlxTimer) : void
+		{
+			lineAdvancement();
 		}
 		
 		override public function update() : void 
 		{
 			super.update();
-			if (FlxG.keys.justPressed("SPACE"))
+			if (FlxG.keys.justPressed("SPACE") && !_auto)
 			{
-				if (_timer.finished)
+				lineAdvancement();
+			}
+		}
+		
+		/**
+		 * Contains logic for when their needs to be a new set of lines.
+		 */
+		private function lineAdvancement() : void
+		{
+			if (_timer.finished)
+			{
+				// If the timer is finished, then the message shouldn't exist anymore.
+				kill();
+				if (_callback != null)
 				{
-					// If the timer is finished, then the message shouldn't exist anymore.
-					kill();
-					if (_callback != null)
+					_callback();
+				}
+			}
+			else if (_timer.paused)
+			{
+				// If the timer is paused, then advance to the next set of lines.
+				for each (var line : FlxText in _textLines)
+				{
+					line.text = "";
+				}
+				_timer.start();
+			}
+			else
+			{
+				// If the player presses space during the text being displayed,
+				// automatically display the text.
+				for (var i : int = 0; i < _numLines; i++)
+				{
+					if (_startLineIndex + i < _lines.length)
 					{
-						_callback();
+						(_textLines[i] as FlxText).text = _lines[_startLineIndex + i];
 					}
 				}
-				else if (_timer.paused)
+				// Advance the line indexes, and then check to see if we should 
+				// stop the timer or just pause it.
+				_startLineIndex += _numLines;
+				_lineIndex = _startLineIndex;
+				_currentIndex = 0;
+				if (_lineIndex >= _lines.length)
 				{
-					// If the timer is paused, then advance to the next set of lines.
-					for each (var line : FlxText in _textLines)
-					{
-						line.text = "";
-					}
-					_timer.start();
+					_timer.stop();
 				}
 				else
 				{
-					// If the player presses space during the text being displayed,
-					// automatically display the text.
-					for (var i : int = 0; i < _numLines; i++)
-					{
-						if (_startLineIndex + i < _lines.length)
-						{
-							(_textLines[i] as FlxText).text = _lines[_startLineIndex + i];
-						}
-					}
-					// Advance the line indexes, and then check to see if we should 
-					// stop the timer or just pause it.
-					_startLineIndex += _numLines;
-					_lineIndex = _startLineIndex;
-					if (_lineIndex >= _lines.length)
-					{
-						_timer.stop();
-					}
-					else
-					{
-						_timer.pause();
-					}
+					_timer.pause();
 				}
 			}
 		}
@@ -270,7 +325,6 @@ package cutscenes
 			_textLines = null;
 			_box = null;
 			
-			_displaySpeed = 0;
 			_timer.destroy();
 			_timer = null;
 			_currentIndex = 0;
@@ -287,12 +341,19 @@ package cutscenes
 			_font = null;
 			_size = 0;
 			_color = 0;
+			_nameColor = 0;
+			_nameAlignment = null;
 			_numLines = 0;
 			_width = 0;
 			_x = 0;
 			_y = 0;
 			
 			_callback = null;
+			
+			_auto = false;
+			_autoCloseTime = 0;
+			_autoTimer.destroy();
+			_autoTimer = null;
 		}
 	}
 }

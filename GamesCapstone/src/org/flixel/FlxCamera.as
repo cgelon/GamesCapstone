@@ -326,8 +326,8 @@ package org.flixel
 				
 				if (zoom > 1)
 				{
-					zoomOffsetWidth = width * (zoom - 1) / (2 * zoom);
-					zoomOffsetHeight = height * (zoom - 1) / (2 * zoom);
+					//zoomOffsetWidth = width * (zoom - 1) / (2 * zoom);
+					//zoomOffsetHeight = height * (zoom - 1) / (2 * zoom);
 				}
 				
 				if(scroll.x < bounds.left - zoomOffsetWidth)

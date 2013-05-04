@@ -9,14 +9,15 @@ package util
 	 */
 	public class Color 
 	{
-		public static const BLACK : int = FlxG.BLACK;
-		public static const GRAY : int = 0xFF808080;
-		public static const WHITE : int = FlxG.WHITE;
-		public static const PURPLE : int = 0xFF7D26CD;
-		public static const YELLOW : int = 0xFFEEEE00;
-		public static const ORANGE : int = 0xFFFF8800;
-		public static const GREEN : int = FlxG.GREEN;
-		public static const RED : int = FlxG.RED;
-		public static const BLUE : int = FlxG.BLUE;
+		static public const BLACK : uint = FlxG.BLACK;
+		static public const GRAY : uint = 0xFF808080;
+		static public const DARK_GRAY : uint = 0xFF404040;
+		static public const WHITE : uint = FlxG.WHITE;
+		static public const PURPLE : uint = 0xFF7D26CD;
+		static public const YELLOW : uint = 0xFFEEEE00;
+		static public const ORANGE : uint = 0xFFFF8800;
+		static public const GREEN : uint = FlxG.GREEN;
+		static public const RED : uint = FlxG.RED;
+		static public const BLUE : uint = FlxG.BLUE;
 	}
 }

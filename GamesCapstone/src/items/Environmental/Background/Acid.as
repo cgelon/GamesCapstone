@@ -5,6 +5,7 @@ package items.Environmental.Background
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxSprite;
 	import people.Actor;
+	import states.State;
 
 	/**
 	 * @author Lydia Duncan
@@ -21,12 +22,14 @@ package items.Environmental.Background
 			loadGraphic(tileset, true, false, 16, 16, false);
 			
 			addAnimation("slosh", [454, 455], 1, true);
+			addAnimation("idle", [390], 1, true);
+			// Need an animation for sideways falling, figure out how to rotate
 			
 			immovable = true;
 			allowCollisions = ANY;
 		}
 		
-		override public function collideWith(actor:Actor):void 
+		override public function collideWith(actor:Actor, state:State = null):void 
 		{
 			actor.touchedAcid();
 		}

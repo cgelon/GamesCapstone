@@ -31,12 +31,19 @@ package levels
 			doorLocs[0] = new FlxPoint(16, 176);
 			doorLocs[1] = new FlxPoint(2096, 176);
 			
-			for (var i : uint = 0; i < 5; ++i)
+
+			var boxLocs : Array = [448, 704, 736, 1104, 1136, 1472, 1504];
+			for (var i : int = 0; i < boxLocs.length; i++)
 			{
-				objectStarts[i] = new FlxPoint(50 + 100*i, 208);
+				objectStarts[i] = new FlxPoint(boxLocs[i], 208);
 				objectTypes[i] = Crate;
 			}
-			
+			var layerTwo : Array = [736, 1104, 1472, 1504];
+			for (var j : int = 0; j < layerTwo.length; j++)
+			{
+				objectStarts[boxLocs.length + j] = new FlxPoint(layerTwo[j], 176);
+				objectTypes[boxLocs.length + j] = Crate;
+			}
 			add(map);
 		}
 	}

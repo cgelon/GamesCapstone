@@ -2,6 +2,7 @@ package items.Environmental
 {
 	import items.Item;
 	import people.Actor;
+	import states.State;
 	
 	/**
 	 * Basis for all level items the player can interact with
@@ -16,7 +17,7 @@ package items.Environmental
 			super(name);
 		}
 		
-		public function collideWith(actor : Actor) : void
+		public function collideWith(actor : Actor, state : State = null) : void
 		{
 			
 		}

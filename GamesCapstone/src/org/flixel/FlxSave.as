@@ -61,30 +61,31 @@ package org.flixel
 			_closeRequested = false;
 		}
 		
-		/**
-		 * Automatically creates or reconnects to locally saved data.
-		 * 
-		 * @param	Name	The name of the object (should be the same each time to access old data).
-		 * 
-		 * @return	Whether or not you successfully connected to the save data.
-		 */
-		public function bind(Name:String):Boolean
-		{
+		/** 
+         * Automatically creates or reconnects to locally saved data.
+         * 
+         * @param   Name    The name of the object (should be the same each time to access old data).
+         * @param    Path    The location of the save file.
+         * 
+         * @return  Whether or not you successfully connected to the save data.
+         */
+        public function bind(Name:String, path:String="/"):Boolean
+        {   
 			destroy();
 			name = Name;
-			try
-			{
-				_sharedObject = SharedObject.getLocal(name);
-			}
+			try 
+			{   
+				_sharedObject = SharedObject.getLocal(name, path);
+			}   
 			catch(e:Error)
-			{
+			{   
 				FlxG.log("ERROR: There was a problem binding to\nthe shared object data from FlxSave.");
 				destroy();
 				return false;
-			}
+			}   
 			data = _sharedObject.data;
 			return true;
-		}
+        }   
 		
 		/**
 		 * A way to safely call <code>flush()</code> and <code>destroy()</code> on your save file.

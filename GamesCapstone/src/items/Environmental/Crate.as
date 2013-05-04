@@ -5,6 +5,7 @@ package items.Environmental
 	import org.flixel.FlxSprite;
 	import org.flixel.FlxG;
 	import people.Actor;
+	import states.State;
 
 	/**
 	 * @author Lydia Duncan
@@ -21,10 +22,11 @@ package items.Environmental
 			loadGraphic(tileset, true, false, 32, 32, false);
 			
 			maxVelocity = new FlxPoint(150, 750);
+			acceleration.y = 1000;
 			drag.x = maxVelocity.x;
 		}
 		
-		override public function collideWith(actor:Actor):void 
+		override public function collideWith(actor:Actor, state:State = null):void 
 		{
 			if (FlxG.keys.justPressed("J"))
 			{
