@@ -128,6 +128,7 @@ package people.players
 			addAnimation("die_falling", [18, 22, 23], 2, false);
 			addAnimation("die_flashing", [23, 53], 8, true);
 			addAnimation("blocking", [7], 0, false);
+			addAnimation("crouching", [13], 0, false);
 			
 			// Set physic constants.
 			maxVelocity = new FlxPoint(200, 1000);
@@ -314,10 +315,16 @@ package people.players
 					{
 						state = ActorState.ROLLING;
 					}
+					else if (FlxG.keys.justPressed("S"))
+					{
+						state = ActorState.CROUCHING;
+						acceleration.x = 0;
+					}
 					else if (velocity.x != 0)
 					{
 						state = ActorState.MOVING;
 					}
+					
 					else
 					{	
 						state = ActorState.IDLE;	
@@ -354,6 +361,13 @@ package people.players
 			else if (state == ActorState.BLOCKING)
 			{
 				if (FlxG.keys.justReleased("L") || stamina <= 0)
+				{
+					state = ActorState.IDLE;
+				}
+			}
+			else if (state == ActorState.CROUCHING)
+			{
+				if (FlxG.keys.justReleased("S"))
 				{
 					state = ActorState.IDLE;
 				}
@@ -431,6 +445,10 @@ package people.players
 					break;
 				case ActorState.BLOCKING:
 					PlayOnce("blocking");
+					break;
+				case ActorState.CROUCHING:
+					PlayOnce("crouching");
+					break;
 			}
 		}
 		
