@@ -1,13 +1,21 @@
 package org.flixel
 {
 	import flash.display.BitmapData;
-  import flash.display.Bitmap;
+	import flash.display.Bitmap;
 	import flash.display.Graphics;
 	import flash.display.Sprite;
 	import flash.display.Stage;
+	import flash.events.Event;
+	import flash.events.HTTPStatusEvent;
+	import flash.events.IOErrorEvent;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import flash.net.FileReference;
+	import flash.net.URLLoader;
+	import flash.net.URLRequest;
+	import flash.net.URLRequestMethod;
+	import flash.net.URLVariables;
 	
 	import org.flixel.plugin.DebugPathDisplay;
 	import org.flixel.plugin.TimerManager;
@@ -472,6 +480,29 @@ package org.flixel
 			if(_game._debugger != null)
 				_game._debugger.vcr.stopped();
 			return _game._replay.save();
+		}
+		
+		static public function startRecording():void
+		{
+			_game._recordingRequested = true;
+		}
+		
+		static public function uploadRecording():void
+		{
+			// Prepare the data to send.
+			var vars : URLVariables = new URLVariables();
+			vars.user = "test";
+			vars.replay = _game._replay.save();
+
+			// Construct the URL request.
+			var request : URLRequest = new URLRequest("saveFile.php");
+			request.method = URLRequestMethod.POST;
+			request.data = vars;
+
+			// open the URL request (you can for example listen to events and
+			// evaluate the script's response data etc)
+			var loader : URLLoader = new URLLoader();
+			loader.load(request);
 		}
 		
 		/**

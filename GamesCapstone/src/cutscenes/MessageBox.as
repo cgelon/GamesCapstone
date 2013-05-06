@@ -132,7 +132,7 @@ package cutscenes
 			
 			// Create a dummy text to gauge where the other texts should be.
 			var dummyText : FlxText = new FlxText(0, 0, _width, " ", true);
-			dummyText.setFormat(_font, _size, _color, "left");
+			dummyText.setFormat(_font, _size, _color, "left", Color.BLACK);
 			
 			// Create the name text.
 			if (_nameTextLine != null)
@@ -141,7 +141,7 @@ package cutscenes
 				_nameTextLine.destroy();
 			}
 			_nameTextLine = new FlxText(_x, _y, _width, "", true);
-			_nameTextLine.setFormat(_font, _size, _nameColor, _nameAlignment);
+			_nameTextLine.setFormat(_font, _size, _nameColor, _nameAlignment, Color.BLACK);
 			_nameTextLine.scrollFactor = new FlxPoint(0, 0);
 			add(_nameTextLine);
 			
@@ -149,7 +149,7 @@ package cutscenes
 			for (var i : int = 0; i < _numLines; i++)
 			{
 				var text : FlxText = new FlxText(_x, _y + (i + 1) * (dummyText.height - 4), _width, "", true);
-				text.setFormat(_font, _size, _color, "left");
+				text.setFormat(_font, _size, _color, "left", Color.BLACK);
 				text.scrollFactor = new FlxPoint(0, 0);
 				_textLines.push(text);
 				add(text);

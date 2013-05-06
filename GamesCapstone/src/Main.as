@@ -11,7 +11,8 @@ package
 		public function Main()
 		{
 			FlxG.debug = true;
-			super( 320, 240, State, 2, 60, 60 );
+			super( 320, 240, State, 2, 30, 30 );
+			//FlxG.startRecording();
 		}
 	}
 }

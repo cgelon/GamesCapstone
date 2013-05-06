@@ -231,6 +231,12 @@ package people.players
 				}
 			}
 			
+			if (FlxG.keys.justPressed("R"))
+			{
+				//FlxG.uploadRecording();
+				//FlxG.log("Saved replay.");
+			}
+			
 			var colors : Array = [0x00FFFFFF, Color.RED, Color.GREEN, Color.ORANGE, Color.BLUE];
 			color = colors[_currentWeapon % colors.length];
 			
