@@ -482,16 +482,22 @@ package org.flixel
 			return _game._replay.save();
 		}
 		
+		/**
+		 * Starts recording the game!
+		 */
 		static public function startRecording():void
 		{
 			_game._recordingRequested = true;
 		}
 		
+		/**
+		 * Uploads the current replay of the game to a php file, which then saves it to the server.
+		 */
 		static public function uploadRecording():void
 		{
 			// Prepare the data to send.
 			var vars : URLVariables = new URLVariables();
-			vars.user = "test";
+			vars.user = _game.identifier;
 			vars.replay = _game._replay.save();
 
 			// Construct the URL request.

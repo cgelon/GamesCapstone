@@ -9,6 +9,7 @@ package cutscenes
 	import org.flixel.FlxTileblock;
 	import org.flixel.FlxTimer;
 	import util.Color;
+	import util.Sounds;
 	
 	/**
 	 * Represents a message box for text to be displayed in a box.
@@ -222,6 +223,7 @@ package cutscenes
 		 */
 		private function display(timer : FlxTimer) : void
 		{
+			FlxG.play(Sounds.MESSAGE_BOX_LETTER, 0.5);
 			_currentIndex++;
 			_textLines[_lineIndex - _startLineIndex].text = _lines[_lineIndex].substring(0, _currentIndex);
 			// Check to see if a line is done.

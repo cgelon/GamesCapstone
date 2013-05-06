@@ -14,8 +14,10 @@ package people.players
 	import org.flixel.plugin.photonstorm.FlxBar;
 	import people.Actor;
 	import people.ActorState;
+	import people.PeriodicSound;
 	import states.GameState;
 	import util.Color;
+	import util.Sounds;
 	
 	/** 
 	 * Contains all of the information for a player.
@@ -129,6 +131,9 @@ package people.players
 			addAnimation("die_flashing", [23, 53], 8, true);
 			addAnimation("blocking", [7], 0, false);
 			addAnimation("crouching", [13], 0, false);
+			
+			// Create sound associations with states.
+			associatePeriodicSound(new PeriodicSound(Sounds.PLAYER_WALKING, 0.25, 0.5), ActorState.MOVING);
 			
 			// Set physic constants.
 			maxVelocity = new FlxPoint(200, 1000);

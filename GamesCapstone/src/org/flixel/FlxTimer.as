@@ -97,10 +97,11 @@ package org.flixel
 		 * @param	Time		How many seconds it takes for the timer to go off.
 		 * @param	Loops		How many times the timer should go off.  Default is 1, or "just count down once."
 		 * @param	Callback	Optional, triggered whenever the time runs out, once for each loop.  Callback should be formed "onTimer(Timer:FlxTimer);"
+		 * @param	ImmediateCallback	Will immediately call the callback before running the timer if true.
 		 * 
 		 * @return	A reference to itself (handy for chaining or whatever).
 		 */
-		public function start(Time:Number=1,Loops:uint=1,Callback:Function=null):FlxTimer
+		public function start(Time:Number=1,Loops:uint=1,Callback:Function=null,ImmediateCallback:Boolean=false):FlxTimer
 		{
 			if(paused)
 			{
@@ -119,6 +120,10 @@ package org.flixel
 			_callback = Callback;
 			_timeCounter = 0;
 			_loopsCounter = 0;
+			if (ImmediateCallback && Callback != null)
+			{
+				Callback(this);
+			}
 			return this;
 		}
 		

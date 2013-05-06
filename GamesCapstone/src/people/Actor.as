@@ -1,8 +1,10 @@
 package people 
 {
+	import flash.utils.Dictionary;
 	import managers.Manager;
 	import org.flixel.FlxG;
 	import org.flixel.FlxSprite;
+	import org.flixel.FlxTimer;
 	import org.flixel.system.FlxAnim;
 	import states.GameState;
 	
@@ -34,6 +36,17 @@ package people
 		// Array of names of the current animations in the current animation sequence.
 		private var _currentAnimationSequence : Array;
 		
+		/** 
+		 * A mapping from ActorState to PeriodicSound, which is used to play a periodic sound 
+		 * whenever an actor is in a certain state.
+		 */
+		private var _periodicSounds : Dictionary;
+		
+		public function Actor() : void
+		{
+			_periodicSounds = new Dictionary();
+		}
+		
 		/**
 		 * Initialize the actor, readying it to enter the game world.
 		 * @param	x	The x coordinate to start the actor at.
@@ -60,6 +73,17 @@ package people
 			// Reset the current state frame number if we changed states.
 			if (state != _prevState)
 			{
+				for (var s : Object in _periodicSounds)
+				{
+					if (s == state)
+					{
+						(_periodicSounds[s] as PeriodicSound).play();
+					}
+					else
+					{
+						(_periodicSounds[s] as PeriodicSound).stop();
+					}
+				}
 				_currentStateFrame = 1;
 				_prevState = state;
 				_currentAnimationSequence = null;
@@ -172,6 +196,18 @@ package people
 				state = ActorState.DEAD;
 			else
 				state = ActorState.HURT;
+		}
+		
+		/**
+		 * Associates a periodic sound with a state.  Whenever the actor is in that state, the 
+		 * sound will play.
+		 * 
+		 * @param	sound	The periodic sound to associate a state with.
+		 * @param	state	The state to trigger this sound in.
+		 */
+		public function associatePeriodicSound(sound : PeriodicSound, state : ActorState) : void
+		{
+			_periodicSounds[state] = sound;
 		}
 		
 		/**

@@ -35,6 +35,12 @@ package org.flixel
 		[Embed(source="data/logo.png")] protected var ImgLogo:Class;
 
 		/**
+		 * Randomly set at the beginning of the game, helps identify which user this is for saving 
+		 * replays on a server.
+		 */
+		public var identifier:int;
+		
+		/**
 		 * Sets 0, -, and + to control the global volume sound volume.
 		 * @default true
 		 */
@@ -210,6 +216,9 @@ package org.flixel
 			_requestedReset = true;
 			_created = false;
 			addEventListener(Event.ENTER_FRAME, create);
+			
+			//set the identifier to a random value
+			identifier = Math.floor(Math.random()*(int.MAX_VALUE));
 		}
 		
 		/**
