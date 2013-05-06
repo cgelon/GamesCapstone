@@ -4,6 +4,7 @@ package states
 	import attacks.EnemyAttack;
 	import items.Environmental.EnvironmentalItem;
 	import levels.EvilLabVatLevel;
+	import levels.PlatformLevel;
 	import levels.StartingEnemiesLevel;
 	import levels.StartingLevel;
 	import levels.TestLevel;
@@ -51,8 +52,8 @@ package states
 		{
 			super.create();
 			
-
-			level = new StartingEnemiesLevel();
+			level = new PlatformLevel();
+			//level = new StartingEnemiesLevel();
 			//level = new StartingLevel();
 			//level = new EvilLabVatLevel();
 			//level = new TestLevel();
