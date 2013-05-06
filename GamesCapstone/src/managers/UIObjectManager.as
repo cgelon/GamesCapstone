@@ -5,6 +5,7 @@ package managers
 	import org.flixel.plugin.photonstorm.FlxBar;
 	import people.players.Player;
 	import UI.Bars.HealthBar;
+	import UI.PlayerHud;
 	import UI.UIObject;
 	import people.Actor;
 	import org.flixel.FlxPoint;
@@ -16,6 +17,12 @@ package managers
 	 */
 	public class UIObjectManager extends Manager
 	{
+		public function createPlayerHud() : void
+		{
+			var hud : PlayerHud = new PlayerHud();
+			add(hud);
+		}
+		
 		/**
 		 * Add a health bar that monitors the health attribute of the given actor.
 		 * 
@@ -52,7 +59,5 @@ package managers
 			
 			add(staminaBar);
 		}
-		
 	}
-
 }

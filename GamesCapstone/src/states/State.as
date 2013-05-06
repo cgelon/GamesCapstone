@@ -93,8 +93,9 @@ package states
 			addManager(playerManager);
 			
 			uiObjectManager = new UIObjectManager();
-			uiObjectManager.addHealthBar(playerManager.player, 10, 10, 50, 10, false, false);
-			uiObjectManager.addStaminaBar(playerManager.player, 10, 25, 50, 10, false);
+			//uiObjectManager.addHealthBar(playerManager.player, 10, 10, 50, 10, false, false);
+			//uiObjectManager.addStaminaBar(playerManager.player, 10, 25, 50, 10, false);
+			uiObjectManager.createPlayerHud();
 			for (var j : int = 0; j < enemyManager.members.length; ++j)
 			{
 				if (enemyManager.members[j] != null)
