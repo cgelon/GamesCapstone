@@ -41,10 +41,16 @@ package people
 		 * whenever an actor is in a certain state.
 		 */
 		private var _periodicSounds : Dictionary;
+		/**
+		 * A mapping from ActorState to Sound, which is used to play a sound whenever an actor 
+		 * switches to a new state.
+		 */
+		private var _sounds : Dictionary;
 		
 		public function Actor() : void
 		{
 			_periodicSounds = new Dictionary();
+			_sounds = new Dictionary();
 		}
 		
 		/**
@@ -70,24 +76,38 @@ package people
 			
 			_currentStateFrame++;
 			
-			// Reset the current state frame number if we changed states.
 			if (state != _prevState)
 			{
-				for (var s : Object in _periodicSounds)
-				{
-					if (s == state)
-					{
-						(_periodicSounds[s] as PeriodicSound).play();
-					}
-					else
-					{
-						(_periodicSounds[s] as PeriodicSound).stop();
-					}
-				}
-				_currentStateFrame = 1;
-				_prevState = state;
-				_currentAnimationSequence = null;
+				stateChange();
 			}
+		}
+		
+		/**
+		 * Called when the state is changed.
+		 */
+		private function stateChange() : void
+		{
+			// Stop the previous periodic sound, if there is one.
+			if (_periodicSounds[_prevState] != null)
+			{
+				(_periodicSounds[_prevState] as PeriodicSound).stop();
+			}
+			// Start the new periodic sound, if there is one.
+			if (_periodicSounds[state] != null)
+			{
+				(_periodicSounds[state] as PeriodicSound).play();
+			}
+			// Play the sound associated with the new state.
+			if (_sounds[state] != null)
+			{
+				(_sounds[state] as SoundEffect).play();
+			}
+			
+			// Reset the current state frame number.
+			_currentStateFrame = 1;
+			// Set the new state.
+			_prevState = state;
+			_currentAnimationSequence = null;
 		}
 		
 		public function touchedAcid(): void
@@ -196,6 +216,18 @@ package people
 				state = ActorState.DEAD;
 			else
 				state = ActorState.HURT;
+		}
+		
+		/**
+		 * Associates a sound with a state.  Whenever the actor is in that state, the 
+		 * sound will play.
+		 * 
+		 * @param	sound	The sound to associate a state with.
+		 * @param	state	The state to trigger this sound in.
+		 */
+		public function associateSound(sound : SoundEffect, state : ActorState) : void
+		{
+			_sounds[state] = sound;
 		}
 		
 		/**

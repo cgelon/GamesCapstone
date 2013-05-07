@@ -15,6 +15,7 @@ package people.players
 	import people.Actor;
 	import people.ActorState;
 	import people.PeriodicSound;
+	import people.SoundEffect;
 	import states.GameState;
 	import util.Color;
 	import util.Sounds;
@@ -134,6 +135,7 @@ package people.players
 			
 			// Create sound associations with states.
 			associatePeriodicSound(new PeriodicSound(Sounds.PLAYER_WALKING, 0.25, 0.5), ActorState.MOVING);
+			associateSound(new SoundEffect(Sounds.PLAYER_JUMP), ActorState.JUMPING);
 			
 			// Set physic constants.
 			maxVelocity = new FlxPoint(200, 1000);
