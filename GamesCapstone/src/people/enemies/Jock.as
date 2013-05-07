@@ -29,12 +29,12 @@ package people.enemies
 		
 		/** If the enemy can attack or not */
 		private var _canAttack : Boolean;
-		/** The amount of frames inbetween enemy attacks. */
-		private var _attackDelay : Number = 60 * 25;
+		/** The amount of milliseconds inbetween enemy attacks. */
+		private var _attackDelay : Number = 35 * 1000 / FlxG.framerate;
 		/** The timer that tracks when the enemy can attack again. */
 		private var _attackTimer : FlxDelay;
-		/** The amount of frames the enemy takes to windup. */
-		private var _windupDelay : Number = 60 * 10;
+		/** The amount of milliseconds the enemy takes to windup. */
+		private var _windupDelay : Number = 20 * 1000 / FlxG.framerate;
 		/** The timer that handles attack animation windup */
 		private var _windupTimer : FlxDelay;
 		
