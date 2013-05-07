@@ -2,7 +2,9 @@ package states
 {
 	import attacks.Attack;
 	import attacks.EnemyAttack;
+	import items.Environmental.Background.AcidFlow;
 	import items.Environmental.EnvironmentalItem;
+	import levels.AcidPlatformLevel;
 	import levels.CrateJumpLevel;
 	import levels.EnemyPlatforms;
 	import levels.EvilLabVatLevel;
@@ -59,9 +61,10 @@ package states
 			//level = new EnemyPlatforms();
 			//level = new CrateJumpLevel();
 			//level = new PlatformLevel();
-			level = new StartingEnemiesLevel();
+			//level = new StartingEnemiesLevel();
 			//level = new StartingLevel();
 			//level = new EvilLabVatLevel();
+			level = new AcidPlatformLevel();
 			//level = new TestLevel();
 			
 			add(level);
@@ -173,19 +176,20 @@ package states
 			obj.collideWith(person, this);
 		}
 		
-		public function addAcid(group:FlxGroup) : void
+		public function addAcid(flow:AcidFlow) : void
 		{
-			for (var i : int = 0; i < group.members.length; i++)
+			for (var i : int = 0; i < flow.myAcid.members.length; i++)
 			{
-				backgroundManager.add(group.members[i]);
+				backgroundManager.add(flow.myAcid.members[i]);
 			}
+			flow.playStart();
 		}
 		
-		public function removeAcid(group:FlxGroup) : void
+		public function removeAcid(flow:AcidFlow) : void
 		{
-			for (var i : int = 0; i < group.members.length; i++)
+			for (var i : int = 0; i < flow.myAcid.members.length; i++)
 			{
-				backgroundManager.remove(group.members[i]);
+				backgroundManager.remove(flow.myAcid.members[i]);
 			}
 		}
 		 

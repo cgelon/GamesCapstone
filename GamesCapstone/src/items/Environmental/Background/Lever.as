@@ -15,7 +15,7 @@ package items.Environmental.Background
 	{
 		[Embed(source = '../../../../assets/switch.png')] private var lever: Class;
 		
-		public var myAcid : FlxGroup;
+		public var myAcid : AcidFlow;
 		
 		function Lever(X:Number = 0, Y:Number = 0) : void 
 		{
@@ -27,36 +27,13 @@ package items.Environmental.Background
 			addAnimation("up", [0, 1, 2, 3, 4], 20, false);
 			
 			immovable = true;
-			myAcid = new FlxGroup();
-			for (var i: int = 0; i < 2; i++)
-			{
-				for (var j: int = 0; j < 4; j++)
-				{
-					myAcid.add(new Acid(X + 96 + 16 * i, Y + 16 * (j + 1)));
-				}
-			}
-			// Keeps track of the acid that will flow when the lever is
-			// activated
+			myAcid = new AcidFlow(X + 96, Y);
 			
-			for (var k: int = 0; k < myAcid.members.length; k++)
-			{
-				// Bit hacky at the moment - TODO: generalize
-				if (k == 0 || k == 4)
-				{
-					myAcid.members[k].play("slosh");
-				}
-				else
-				{
-					myAcid.members[k].play("idle");
-				}
-			}
 		}
 		
 		/**
 		 * When the "E" key is pressed while the player is overlapping with a lever,
 		 * the lever changes positions from up to down, or from down to up
-		 * 
-		 * TODO: have up cause acid to flow
 		 */
 		override public function collideWith(actor:Actor, state:State) : void 
 		{
