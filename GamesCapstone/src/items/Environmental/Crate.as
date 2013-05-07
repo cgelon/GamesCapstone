@@ -1,6 +1,7 @@
 package items.Environmental
 {
 	import managers.ObjectManager;
+	import org.flixel.FlxObject;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxSprite;
 	import org.flixel.FlxG;
@@ -24,14 +25,6 @@ package items.Environmental
 			maxVelocity = new FlxPoint(150, 750);
 			acceleration.y = 1000;
 			drag.x = maxVelocity.x;
-		}
-		
-		override public function collideWith(actor:Actor, state:State = null):void 
-		{
-			if (FlxG.keys.justPressed("J"))
-			{
-				velocity.x = ((x - actor.x < 0) ? -1 : 1) * maxVelocity.x * 4;
-			}
 		}
 	}
 }

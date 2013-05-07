@@ -29,10 +29,11 @@ package items.Environmental.Background
 			allowCollisions = ANY;
 		}
 		
-		override public function collideWith(actor:Actor, state:State = null):void 
+		override public function collideWith(actor:Actor, state:State):void 
 		{
 			actor.touchedAcid();
 		}
+		
 		
 		override public function playStart():void 
 		{

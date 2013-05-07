@@ -58,7 +58,7 @@ package items.Environmental.Background
 		 * 
 		 * TODO: have up cause acid to flow
 		 */
-		override public function collideWith(actor:Actor, state:State = null) : void 
+		override public function collideWith(actor:Actor, state:State) : void 
 		{
 			if (FlxG.keys.justPressed("E"))
 			{

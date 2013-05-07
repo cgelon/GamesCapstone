@@ -5,11 +5,13 @@ package states
 	import items.Environmental.EnvironmentalItem;
 	import levels.EvilLabVatLevel;
 	import levels.PlatformLevel;
+	import levels.StartingAcidLevel;
 	import levels.StartingEnemiesLevel;
 	import levels.StartingLevel;
 	import levels.TestLevel;
 	import levels.Level;
 	import managers.BackgroundManager;
+	import managers.Manager;
 	import managers.ObjectManager;
 	import managers.PlayerAttackManager;
 	import managers.EnemyAttackManager;
@@ -51,10 +53,10 @@ package states
 		override public function create() : void
 		{
 			super.create();
-			
-			level = new PlatformLevel();
+			//level = new PlatformLevel();
+			//level = new StartingAcidLevel();
 			//level = new StartingEnemiesLevel();
-			//level = new StartingLevel();
+			level = new StartingLevel();
 			//level = new EvilLabVatLevel();
 			//level = new TestLevel();
 			
@@ -127,13 +129,12 @@ package states
 			
 			FlxG.collide(getManager(PlayerManager), level);
 			FlxG.collide(getManager(EnemyManager), level);
-			FlxG.collide(getManager(ObjectManager), level); // Probably necessary, given these items will be moving
-			FlxG.collide(getManager(ObjectManager), getManager(ObjectManager)); // Means the crates interact with each other
 			FlxG.overlap(getManager(EnemyManager), getManager(PlayerAttackManager), enemyHit);
-			FlxG.overlap(getManager(PlayerManager), getManager(BackgroundManager), touchedSomething);
-			FlxG.overlap(getManager(EnemyManager), getManager(BackgroundManager), touchedSomething);
-			FlxG.collide(getManager(PlayerManager), getManager(ObjectManager), touchedSomething);
-			FlxG.collide(getManager(EnemyManager), getManager(ObjectManager), touchedSomething);
+			FlxG.overlap(getManager(PlayerManager), getManager(BackgroundManager), itemNotifyCallback);
+			FlxG.overlap(getManager(EnemyManager), getManager(BackgroundManager), itemNotifyCallback);
+			
+			colliding(getManager(PlayerManager));
+			colliding(getManager(EnemyManager));
 			
 			// Detect collisions between the player and enemies UNLESS the player is rolling.
 			var player : Player = (getManager(PlayerManager) as PlayerManager).player;
@@ -148,11 +149,25 @@ package states
 			}
 		}
 		
-		private function touchedSomething(person: Actor, obj: EnvironmentalItem): void 
+		private function colliding(actorManager: Manager) : void
+		{
+			var count : int = 0;
+			while (count < 6) 
+			// This is just enough iteration so that we can't take all 11 boxes and push them until one goes through
+			// the wall
+			{
+				count = count + 1;
+				FlxG.collide(actorManager, getManager(ObjectManager), itemNotifyCallback);
+				FlxG.collide(getManager(ObjectManager), level); // because the items will be moving
+				FlxG.collide(getManager(ObjectManager), getManager(ObjectManager)); // Means the crates interact with each other
+			}
+			
+		}
+		
+		private function itemNotifyCallback(person: Actor, obj: EnvironmentalItem): void 
 		{
 			obj.collideWith(person, this);
 		}
-		
 		
 		public function addAcid(group:FlxGroup) : void
 		{
