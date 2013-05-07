@@ -55,7 +55,6 @@ package managers
 				else
 				{
 					player.lowerStamina(5);
-					FlxG.log("Stamina lowered!");
 				}
 			}
 		}

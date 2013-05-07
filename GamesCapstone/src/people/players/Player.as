@@ -32,6 +32,7 @@ package people.players
 		private const WEAK_ATTACK_DELAY : Number = WEAK_ATTACK_DELAY_FRAMES * 1000 / 60;	 /* Get the windup delay in ms */
 		
 		private const MAX_STAMINA : Number = 100;
+		private const ROLL_STAM_COST : Number = 50;
 		private const STRONG_ATTACK_STAM_COST : Number = 40;
 		private const WEAK_ATTACK_STAM_COST : Number = 10;
 		private const STAM_REGEN : Number = 0.5;
@@ -201,7 +202,7 @@ package people.players
 			FlxG.watch(this, "attackType", "AttackType");
 			FlxG.watch(this, "stateName", "State");
 			FlxG.watch(this, "touching", "Touching");
-			FlxG.watch(this, "isCountering", "Countering");
+			FlxG.watch(this, "stamina", "Stamina");
 		}
 
 		override public function initialize(x : Number, y : Number, health : Number = 5) : void
@@ -324,7 +325,7 @@ package people.players
 						state = ActorState.BLOCKING;
 						acceleration.x = 0;
 					}
-					else if (FlxG.keys.pressed("P"))
+					else if (FlxG.keys.justPressed("P") && _stamina > ROLL_STAM_COST)
 					{
 						state = ActorState.ROLLING;
 					}
@@ -359,6 +360,7 @@ package people.players
 				if (!_rollTimer.isRunning)
 				{
 					_rollTimer.start();
+					lowerStamina(ROLL_STAM_COST);
 				}
 				
 				if (facing == FlxObject.RIGHT)
