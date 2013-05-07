@@ -43,7 +43,7 @@ package people.enemies
 		/** The timer that delays death so the animation can play */
 		private var _deathTimer : FlxDelay;
 		
-		private var _attackRange : Number = 50;
+		private var _attackRange : Number = 40;
 		private var _seekRange : Number = 200;
 		
 		
@@ -91,7 +91,7 @@ package people.enemies
 			{
 				if (state == ActorState.ATTACKING) {
 					PlayOnce("punch");
-					attackManager.attack((facing == FlxObject.LEFT) ? x - 30 : x + width, y);
+					attackManager.attack((facing == FlxObject.LEFT) ? x - 20 : x + width, y);
 				}
 				state = ActorState.IDLE;
 			};

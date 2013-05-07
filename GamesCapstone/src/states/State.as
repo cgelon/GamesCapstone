@@ -56,10 +56,10 @@ package states
 		{
 			super.create();
 
-			level = new EnemyPlatforms();
+			//level = new EnemyPlatforms();
 			//level = new CrateJumpLevel();
 			//level = new PlatformLevel();
-			//level = new StartingEnemiesLevel();
+			level = new StartingEnemiesLevel();
 			//level = new StartingLevel();
 			//level = new EvilLabVatLevel();
 			//level = new TestLevel();

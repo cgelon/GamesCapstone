@@ -12,7 +12,7 @@ package attacks
 	public class EnemyAttack extends Attack
 	{
 		private const ENEMY_ATTACK_DAMAGE : Number = 1;
-		private const ENEMY_ATTACK_WIDTH : Number = 30;
+		private const ENEMY_ATTACK_WIDTH : Number = 20;
 		private const ENEMY_ATTACK_HEIGHT : Number = 60;
 		
 		public function EnemyAttack()
