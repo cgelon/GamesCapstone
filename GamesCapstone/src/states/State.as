@@ -4,6 +4,7 @@ package states
 	import attacks.EnemyAttack;
 	import items.Environmental.EnvironmentalItem;
 	import levels.CrateJumpLevel;
+	import levels.EnemyPlatforms;
 	import levels.EvilLabVatLevel;
 	import levels.PlatformLevel;
 	import levels.StartingAcidLevel;
@@ -55,7 +56,8 @@ package states
 		{
 			super.create();
 
-			level = new CrateJumpLevel();
+			level = new EnemyPlatforms();
+			//level = new CrateJumpLevel();
 			//level = new PlatformLevel();
 			//level = new StartingEnemiesLevel();
 			//level = new StartingLevel();
