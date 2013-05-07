@@ -3,6 +3,7 @@ package states
 	import attacks.Attack;
 	import attacks.EnemyAttack;
 	import items.Environmental.EnvironmentalItem;
+	import levels.CrateJumpLevel;
 	import levels.EvilLabVatLevel;
 	import levels.PlatformLevel;
 	import levels.StartingAcidLevel;
@@ -53,10 +54,11 @@ package states
 		override public function create() : void
 		{
 			super.create();
+
+			level = new CrateJumpLevel();
 			//level = new PlatformLevel();
-			//level = new StartingAcidLevel();
 			//level = new StartingEnemiesLevel();
-			level = new StartingLevel();
+			//level = new StartingLevel();
 			//level = new EvilLabVatLevel();
 			//level = new TestLevel();
 			
