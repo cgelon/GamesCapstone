@@ -4,9 +4,9 @@ package managers
 	import people.enemies.Enemy;
 	import people.enemies.Jock;
 	import people.players.Player;
-	import people.ActorState;
 	import org.flixel.FlxPoint;
 	import attacks.Attack;
+	import people.states.ActorState;
 	
 	/**
 	 * Handles all interactions with enemies.

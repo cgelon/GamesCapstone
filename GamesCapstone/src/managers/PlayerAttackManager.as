@@ -18,14 +18,9 @@ package managers
 			var attack : WeakAttack = recycle( WeakAttack ) as WeakAttack;
 			
 			var player : Player = (getManager(PlayerManager) as PlayerManager).player;
-			var x : Number;
+			var x : Number = facing == FlxObject.LEFT ? player.x - WeakAttack.WEAK_ATTACK_WIDTH + player.width / 2 : player.x + player.width / 2;
 			
-			if (facing == FlxObject.LEFT)
-				x = player.x - 20;
-			else
-				x = player.x + player.width;
-			
-			attack.initialize(x, player.y, (getManager(PlayerManager) as PlayerManager).player.getPlayerBonusDamage());
+			attack.initialize(x, player.y, (getManager(PlayerManager) as PlayerManager).player.damageBonus);
 		}
 		
 		public function strongAttack(facing : uint) : void
@@ -33,14 +28,9 @@ package managers
 			var attack : StrongAttack = recycle( StrongAttack ) as StrongAttack;
 			
 			var player : Player = (getManager(PlayerManager) as PlayerManager).player;
-			var x : Number;
+			var x : Number = facing == FlxObject.LEFT ? player.x - StrongAttack.STRONG_ATTACK_WIDTH + player.width / 2 : player.x + player.width / 2;
 			
-			if (facing == FlxObject.LEFT)
-				x = player.x - 40;
-			else
-				x = player.x + player.width;
-				
-			attack.initialize(x, player.y, (getManager(PlayerManager) as PlayerManager).player.getPlayerBonusDamage());
+			attack.initialize(x, player.y, (getManager(PlayerManager) as PlayerManager).player.damageBonus);
 		}
 	}
 }

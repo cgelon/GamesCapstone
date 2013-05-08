@@ -3,9 +3,13 @@ package people
 	import flash.utils.Dictionary;
 	import managers.Manager;
 	import org.flixel.FlxG;
+	import org.flixel.FlxObject;
 	import org.flixel.FlxSprite;
 	import org.flixel.FlxTimer;
 	import org.flixel.system.FlxAnim;
+	import people.states.ActorAction;
+	import people.states.ActorState;
+	import people.states.ActorStateGroup;
 	import states.GameState;
 	
 	/**
@@ -15,42 +19,58 @@ package people
 	 */
 	public class Actor extends FlxSprite 
 	{
-		private var _maxHealth : Number; // The maximum possible health of the actor.
+		/** The maximum possible health of this actor. */
+		private var _maxHealth : Number;
+		/** The maximum possible health of this actor. */
 		public function get maxHealth() : Number { return _maxHealth; }
 		
-		/**
-		 * The current state of the actor.
-		 */
+		/** The current state of the actor. */
 		public var state : ActorState;
+		/** The last action this actor took. */
+		public var lastAction : ActorAction;
 		
-		// The previous state of the actor.
-		private var _prevState : ActorState;
+		/** True if the actor is on the ground, false otherwise. */
+		public function get onGround() : Boolean
+		{
+			return isTouching(FlxObject.FLOOR) && velocity.y == 0;
+		}
 		
-		// Keeps track of the frame number in the current state.
-		private var _currentStateFrame : uint;
-		public function get currentStateFrame() : uint { return _currentStateFrame; }
-
-		// The frame that the current animation or animation sequence was started at.
-		private var _animationStartFrame : int;
+		/**
+		 * The amount of frames this actor has been in the same state.
+		 */
+		protected var currentStateFrame : int;
 		
-		// Array of names of the current animations in the current animation sequence.
-		private var _currentAnimationSequence : Array;
+		/** The animation that is currently playing. */
+		private var _currentAnimation : Array;
+		/** The index of a sequence of animations that are playing. */
+		private var _currentAnimationIndex : int;
 		
 		/** 
 		 * A mapping from ActorState to PeriodicSound, which is used to play a periodic sound 
 		 * whenever an actor is in a certain state.
 		 */
-		private var _periodicSounds : Dictionary;
+		private var _periodicSoundsToState : Dictionary;
 		/**
 		 * A mapping from ActorState to Sound, which is used to play a sound whenever an actor 
 		 * switches to a new state.
 		 */
-		private var _sounds : Dictionary;
+		private var _soundsToAction : Dictionary;
+		
+		/**
+		 * A mapping from ActorAction to Array to Animation, which is used to play an animation 
+		 * whenever an actor executes a new action.  Each action can have multiple animations 
+		 * associated with it.
+		 */
+		private var _animationsToAction : Dictionary;
+		
+		protected var actionTimer : FlxTimer;
 		
 		public function Actor() : void
 		{
-			_periodicSounds = new Dictionary();
-			_sounds = new Dictionary();
+			_periodicSoundsToState = new Dictionary();
+			_soundsToAction = new Dictionary();
+			_animationsToAction = new Dictionary();
+			actionTimer = new FlxTimer();
 		}
 		
 		/**
@@ -65,142 +85,132 @@ package people
 			
 			health = actorHealth
 			_maxHealth = actorHealth;
-			
-			_currentStateFrame = 1;
-			_animationStartFrame = -1; // Make sure that this number is invalid to begin, since we haven't started playing animations.
+			currentStateFrame = 0;
 		}
 		
-		override public function update() : void
+		override public function update():void 
 		{
 			super.update();
-			
-			_currentStateFrame++;
-			
-			if (state != _prevState)
+			currentStateFrame++;
+		}
+		
+		/**
+		 * Associates a sound with a state.  Whenever the actor is in that state, the 
+		 * sound will play.
+		 * 
+		 * @param	sound	The sound to associate a state with.
+		 * @param	state	The state to trigger this sound in.
+		 */
+		public function associateSound(sound : SoundEffect, state : ActorAction) : void
+		{
+			_soundsToAction[state] = sound;
+		}
+		
+		/**
+		 * Associates a periodic sound with a state.  Whenever the actor is in that state, the 
+		 * sound will play.
+		 * 
+		 * @param	sound	The periodic sound to associate a state with.
+		 * @param	state	The state to trigger this sound.
+		 */
+		public function associatePeriodicSound(sound : PeriodicSound, state : ActorState) : void
+		{
+			_periodicSoundsToState[state] = sound;
+		}
+		
+		/**
+		 * Associates an animation with a state.  Whenever the actor is in that state, the 
+		 * animation will play.  Each action can have several animations, which are displayed 
+		 * based off of an index.
+		 * 
+		 * @param	names	The names of the animations strings to play.
+		 * @param	state	The state to trigger this animation.
+		 * @param	index	The index to associate this animation with inside of the action.
+		 */
+		public function associateAnimation(names : Array, state : ActorAction, index : int = 0) : void
+		{
+			if (_animationsToAction[state] == null)
 			{
-				stateChange();
+				_animationsToAction[state] = new Array();
 			}
+			var animations : Array = _animationsToAction[state];
+			_animationsToAction[state][index] = names;
 		}
 		
 		/**
 		 * Called when the state is changed.
 		 */
-		private function stateChange() : void
+		private function stateChange(oldState : ActorState, newState : ActorState) : void
 		{
 			// Stop the previous periodic sound, if there is one.
-			if (_periodicSounds[_prevState] != null)
+			if (_periodicSoundsToState[oldState] != null)
 			{
-				(_periodicSounds[_prevState] as PeriodicSound).stop();
+				(_periodicSoundsToState[oldState] as PeriodicSound).stop();
 			}
 			// Start the new periodic sound, if there is one.
-			if (_periodicSounds[state] != null)
+			if (_periodicSoundsToState[newState] != null)
 			{
-				(_periodicSounds[state] as PeriodicSound).play();
+				(_periodicSoundsToState[newState] as PeriodicSound).play();
 			}
-			// Play the sound associated with the new state.
-			if (_sounds[state] != null)
-			{
-				(_sounds[state] as SoundEffect).play();
-			}
-			
-			// Reset the current state frame number.
-			_currentStateFrame = 1;
-			// Set the new state.
-			_prevState = state;
-			_currentAnimationSequence = null;
-		}
-		
-		public function touchedAcid(): void
-		{
-			_prevState = state;
-			state = ActorState.DEAD;
-			health = 0;
-			velocity.x = 0;
-			acceleration.x = 0;
+			state = newState;
+			currentStateFrame
 		}
 		
 		/**
-		 * Play the given animation once, even if this function is called more than
-		 * once. This property holds as long as no other animation is played.
-		 * 
-		 * @param 	name	The name of the animation to play.
+		 * Execute an action and change state if necessary.
+		 * @param	action	The action to execute.
+		 * @param	newState	The new state to move into, or null if the state isn't changing.
+		 * @param	index	Specifies which animation to play for the specified action.
 		 */
-		public function PlayOnce(name : String) : void
+		protected function executeAction(action : ActorAction, newState : ActorState = null, index : int = 0) : void
 		{
-			if (_curAnim == null || name != _curAnim.name)
+			// Play the sound associated with the action.
+			if (action != lastAction && _soundsToAction[action] != null)
 			{
-				play(name);
+				(_soundsToAction[action] as SoundEffect).play();
 			}
+			// Play the animation associated with the action.
+			if (_animationsToAction[action] != null)
+			{
+				playSequence(_animationsToAction[action][index]);
+			}
+			lastAction = action;
+			
+			// If we are transitioning to a new state, do so.
+			if (newState != null && newState != state)
+			{
+				stateChange(state, newState);
+			}
+			
+			// Stop the action timer if need be.
+			actionTimer.stop();
 		}
 		
 		/**
-		 * Plays the list of animations in sequence, once each.
-		 * Looping animations have their looping ignored unless
-		 * it is the last animation in the sequence. Animation 
-		 * sequence is broken if state is changed.
-		 * 
-		 * @param	names	An array of names of animations to play.
+		 * Play a sequence of animations.
+		 * @param	names	The names of the animations in the sequence.
 		 */
-		public function PlaySequence(names : Array) : void
+		private function playSequence(names : Array) : void
 		{
-			var sameSequence : Boolean = false; // Are we contiuing playing the same sequence?
-			if (_currentAnimationSequence == null)
+			_currentAnimation = names;
+			_currentAnimationIndex = 0;
+			playAnimation();
+		}
+		
+		/**
+		 * Play the animation based on the current animation sequence an index.
+		 */
+		private function playAnimation() : void
+		{
+			if (_currentAnimationIndex + 1 < _currentAnimation.length)
 			{
-				sameSequence = false;
-			}
-			else if (_currentAnimationSequence.length != names.length)
-			{
-				sameSequence = false;
-			}
-			else
-			{
-				// If any of the names don't match, it's not the same sequence.
-				// If they all match, then it's the same sequence.
-				for (var i : int = 0; i < names.length; ++i)
-				{
-					if (names[i] != _currentAnimationSequence[i])
-					{
-						sameSequence = false;
-						break;
-					}
-				}
-				sameSequence = true;
-			}
-			
-			if (!sameSequence)
-			{
-				_currentAnimationSequence = names;
-				
-				_animationStartFrame = _currentStateFrame;
-				PlayOnce(names[0]);
+				play(_currentAnimation[_currentAnimationIndex], false, playAnimation);
 			}
 			else
 			{
-				var animFrame : uint = _currentStateFrame - _animationStartFrame;
-				var frameSum : uint = 0; // Keep track of sum of frames in animations that we've looped over.
-				
-				// Loop over the animations in this animation sequence, looking for any animation
-				// that needs to be played starting at this frame. If we find one, play it.
-				for each (var animName : String in names)
-				{
-					var anim : FlxAnim = getAnimation(animName);
-					
-					if (anim == null)
-						FlxG.log("ERROR: Invalid animation name: " + animName);
-					
-					// If we found an animation ew need to play, play it.
-					// Otherwise keep looking.
-					if (animFrame == frameSum)
-					{
-						PlayOnce(animName);
-						break;
-					}
-					else
-					{
-						frameSum += anim.frames.length * (FlxG.framerate * anim.delay);
-					}
-				}
-			}	
+				play(_currentAnimation[_currentAnimationIndex], false);
+			}
+			_currentAnimationIndex++;
 		}
 		
 		/**
@@ -213,33 +223,24 @@ package people
 		{
 			health = health - damage;
 			if (health <= 0)
-				state = ActorState.DEAD;
+				executeAction(ActorAction.DIE, ActorState.DEAD);
 			else
-				state = ActorState.HURT;
+				executeAction(ActorAction.HURT, ActorState.HURT);
 		}
 		
 		/**
-		 * Associates a sound with a state.  Whenever the actor is in that state, the 
-		 * sound will play.
-		 * 
-		 * @param	sound	The sound to associate a state with.
-		 * @param	state	The state to trigger this sound in.
+		 * Kills the actor, making them stop moving and their health turn to zero.
 		 */
-		public function associateSound(sound : SoundEffect, state : ActorState) : void
+		public function die() : void
 		{
-			_sounds[state] = sound;
-		}
-		
-		/**
-		 * Associates a periodic sound with a state.  Whenever the actor is in that state, the 
-		 * sound will play.
-		 * 
-		 * @param	sound	The periodic sound to associate a state with.
-		 * @param	state	The state to trigger this sound in.
-		 */
-		public function associatePeriodicSound(sound : PeriodicSound, state : ActorState) : void
-		{
-			_periodicSounds[state] = sound;
+			// Sorry, you aren't a cat, you can't die more than once.
+			if (state != ActorState.DEAD)
+			{
+				executeAction(ActorAction.DIE, ActorState.DEAD);
+				health = 0;
+				velocity.x = 0;
+				acceleration.x = 0;
+			}
 		}
 		
 		/**
@@ -255,6 +256,36 @@ package people
 			super.destroy();
 			
 			state = null;
+			lastAction = null;
+			_currentAnimation = null;
+			
+			for (var state : Object in _periodicSoundsToState)
+			{
+				(_periodicSoundsToState[state] as PeriodicSound).destroy();
+				delete _periodicSoundsToState[state];
+			}
+			_periodicSoundsToState = null;
+			
+			for (var soundAction : Object in _soundsToAction)
+			{
+				(_soundsToAction[soundAction] as SoundEffect).destroy();
+				delete _soundsToAction[soundAction];
+			}
+			_soundsToAction = null;
+			
+			for (var animationAction : Object in _animationsToAction)
+			{
+				for each(var array : Object in _animationsToAction[animationAction])
+				{
+					(array as Array).length = 0;
+				}
+				(_animationsToAction[animationAction] as Array).length = 0;
+				delete _animationsToAction[animationAction];
+			}
+			_animationsToAction = null;
+			
+			actionTimer.destroy();
+			actionTimer = null;
 		}
 	}
 }

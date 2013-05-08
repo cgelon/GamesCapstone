@@ -1,15 +1,16 @@
-package people
+package people.states
 {
 	/**
-	 * The different states an actor can be in.
+	 * The different states an actor is in.
 	 * 
 	 * @author Chris Gelon
 	 */
 	public class ActorState 
 	{
 		public static const IDLE : ActorState = new ActorState();
-		public static const MOVING : ActorState = new ActorState();
+		public static const RUNNING : ActorState = new ActorState();
 		public static const JUMPING : ActorState = new ActorState();
+		public static const FALLING : ActorState = new ActorState();
 		public static const ROLLING : ActorState = new ActorState();
 		public static const ATTACKING : ActorState = new ActorState();
 		public static const HURT : ActorState = new ActorState();
@@ -22,8 +23,8 @@ package people
 			switch(this) {
 				case IDLE:
 					return "idle";
-				case MOVING:
-					return "moving";
+				case RUNNING:
+					return "running";
 				case JUMPING:
 					return "jumping";
 				case ATTACKING:
@@ -38,8 +39,10 @@ package people
 					return "blocking";
 				case CROUCHING:
 					return "crouching";
+				case FALLING:
+					return "falling";
 			}
-			return null;
+			return "NAME THIS FREAKING STATE";
 		}
 	}
 }

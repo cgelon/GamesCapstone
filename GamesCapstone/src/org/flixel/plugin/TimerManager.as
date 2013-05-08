@@ -71,6 +71,22 @@ package org.flixel.plugin
 		}
 		
 		/**
+		 * @param	Timer	The timer to check if it is in the manager.
+		 * @return	True if the timer is currently in the maanger, false otherwise.
+		 */
+		public function contains(Timer:FlxTimer):Boolean
+		{
+			for each(var timer:FlxTimer in _timers)
+			{
+				if (timer == Timer)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+		
+		/**
 		 * Removes all the timers from the timer manager.
 		 */
 		public function clear():void

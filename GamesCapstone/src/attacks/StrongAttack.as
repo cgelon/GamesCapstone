@@ -11,9 +11,9 @@ package attacks
 	 */
 	public class StrongAttack extends Attack
 	{
-		private const STRONG_ATTACK_DAMAGE : Number = 2;
-		private const STRONG_ATTACK_WIDTH : Number = 40;
-		private const STRONG_ATTACK_HEIGHT : Number = 40;
+		public static const STRONG_ATTACK_DAMAGE : Number = 2;
+		public static const STRONG_ATTACK_WIDTH : Number = 40;
+		public static const STRONG_ATTACK_HEIGHT : Number = 20;
 		
 		public function StrongAttack()
 		{

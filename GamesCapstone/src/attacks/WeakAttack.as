@@ -11,9 +11,9 @@ package attacks
 	 */
 	public class WeakAttack extends Attack
 	{
-		private const WEAK_ATTACK_DAMAGE : Number = 1;
-		private const WEAK_ATTACK_WIDTH : Number = 20;
-		private const WEAK_ATTACK_HEIGHT : Number = 40;
+		public static const WEAK_ATTACK_DAMAGE : Number = 1;
+		public static const WEAK_ATTACK_WIDTH : Number = 20;
+		public static const WEAK_ATTACK_HEIGHT : Number = 20;
 		
 		public function WeakAttack()
 		{

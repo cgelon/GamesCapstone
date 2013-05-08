@@ -2,7 +2,9 @@ package states
 {
 	import attacks.Attack;
 	import attacks.EnemyAttack;
+	import items.Environmental.Background.AcidFlow;
 	import items.Environmental.EnvironmentalItem;
+	import levels.AcidPlatformLevel;
 	import levels.CrateJumpLevel;
 	import levels.EnemyPlatforms;
 	import levels.EvilLabVatLevel;
@@ -29,7 +31,7 @@ package states
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxRect;
 	import org.flixel.FlxObject;
-	import people.ActorState;
+	import people.states.ActorState;
 	import people.enemies.Enemy;
 	import people.players.Player;
 	import people.Actor;
@@ -56,11 +58,12 @@ package states
 		{
 			super.create();
 
-			//level = new EnemyPlatforms();
-			level = new CrateJumpLevel();
-			//level = new PlatformLevel();
-			//level = new StartingEnemiesLevel();
 			//level = new StartingLevel();
+			level = new PlatformLevel();
+			//level = new CrateJumpLevel();
+			//level = new AcidPlatformLevel();
+			//level = new StartingEnemiesLevel();
+			//level = new EnemyPlatforms();
 			//level = new EvilLabVatLevel();
 			//level = new TestLevel();
 			
@@ -173,19 +176,20 @@ package states
 			obj.collideWith(person, this);
 		}
 		
-		public function addAcid(group:FlxGroup) : void
+		public function addAcid(flow:AcidFlow) : void
 		{
-			for (var i : int = 0; i < group.members.length; i++)
+			for (var i : int = 0; i < flow.myAcid.members.length; i++)
 			{
-				backgroundManager.add(group.members[i]);
+				backgroundManager.add(flow.myAcid.members[i]);
 			}
+			flow.playStart();
 		}
 		
-		public function removeAcid(group:FlxGroup) : void
+		public function removeAcid(flow:AcidFlow) : void
 		{
-			for (var i : int = 0; i < group.members.length; i++)
+			for (var i : int = 0; i < flow.myAcid.members.length; i++)
 			{
-				backgroundManager.remove(group.members[i]);
+				backgroundManager.remove(flow.myAcid.members[i]);
 			}
 		}
 		 
