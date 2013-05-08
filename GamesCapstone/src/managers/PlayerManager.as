@@ -3,12 +3,12 @@ package managers
 	import attacks.Attack;
 	import attacks.EnemyAttack;
 	import org.flixel.FlxText;
-	import people.ActorState;
 	import people.players.Player;
 	import org.flixel.FlxPoint;
 	import managers.UIObjectManager;
 	import org.flixel.FlxG;
 	import org.flixel.FlxObject;
+	import people.states.ActorState;
 	import states.GameState;
 	
 
@@ -54,7 +54,7 @@ package managers
 					player.hurt(attack.damage);
 				else
 				{
-					player.lowerStamina(5);
+					player.stamina -= 5;
 					FlxG.log("Stamina lowered!");
 				}
 			}

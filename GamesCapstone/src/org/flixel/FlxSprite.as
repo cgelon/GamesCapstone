@@ -110,6 +110,10 @@ package org.flixel
 		 */
 		protected var _callback:Function;
 		/**
+		 * Callback for when the animation finishes.
+		 */
+		protected var _animationFinishedCallback:Function;
+		/**
 		 * Internal tracker for what direction the sprite is currently facing, used with Flash getter/setter.
 		 */
 		protected var _facing:uint;
@@ -192,6 +196,7 @@ package org.flixel
 
 			_matrix = new Matrix();
 			_callback = null;
+			_animationFinishedCallback = null;
 			
 			if(SimpleGraphic == null)
 				SimpleGraphic = ImgDefault;
@@ -227,6 +232,7 @@ package org.flixel
 			_curAnim = null;
 			_matrix = null;
 			_callback = null;
+			_animationFinishedCallback = null;
 			framePixels = null;
 			
 			super.destroy();
@@ -574,6 +580,10 @@ package org.flixel
 						if(_curAnim.looped)
 							_curFrame = 0;
 						finished = true;
+						if (_animationFinishedCallback != null)
+						{
+							_animationFinishedCallback();
+						}
 					}
 					else
 						_curFrame++;
@@ -627,13 +637,15 @@ package org.flixel
 		 * 
 		 * @param	AnimName	The string name of the animation you want to play.
 		 * @param	Force		Whether to force the animation to restart.
+		 * @param	Callback	The function to call once this animation has finished.
 		 */
-		public function play(AnimName:String,Force:Boolean=false):void
+		public function play(AnimName:String,Force:Boolean=false,Callback:Function=null):void
 		{
 			if(!Force && (_curAnim != null) && (AnimName == _curAnim.name) && (_curAnim.looped || !finished)) return;
 			_curFrame = 0;
 			_curIndex = 0;
 			_frameTimer = 0;
+			_animationFinishedCallback = Callback;
 			var i:uint = 0;
 			var l:uint = _animations.length;
 			while(i < l)

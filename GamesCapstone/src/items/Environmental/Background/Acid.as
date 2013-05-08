@@ -5,6 +5,8 @@ package items.Environmental.Background
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxSprite;
 	import people.Actor;
+	import people.states.ActorAction;
+	import people.states.ActorState;
 	import states.State;
 
 	/**
@@ -34,7 +36,7 @@ package items.Environmental.Background
 		
 		override public function collideWith(actor:Actor, state:State):void 
 		{
-			actor.touchedAcid();
+			actor.die();
 		}
 		
 		override public function update():void 

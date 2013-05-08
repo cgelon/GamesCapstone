@@ -31,7 +31,7 @@ package states
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxRect;
 	import org.flixel.FlxObject;
-	import people.ActorState;
+	import people.states.ActorState;
 	import people.enemies.Enemy;
 	import people.players.Player;
 	import people.Actor;
@@ -61,10 +61,10 @@ package states
 			//level = new EnemyPlatforms();
 			//level = new CrateJumpLevel();
 			//level = new PlatformLevel();
-			//level = new StartingEnemiesLevel();
+			level = new StartingEnemiesLevel();
 			//level = new StartingLevel();
 			//level = new EvilLabVatLevel();
-			level = new AcidPlatformLevel();
+			//level = new AcidPlatformLevel();
 			//level = new TestLevel();
 			
 			add(level);

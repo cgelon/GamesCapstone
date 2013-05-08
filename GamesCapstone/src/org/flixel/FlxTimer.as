@@ -44,6 +44,19 @@ package org.flixel
 		protected var _loopsCounter:uint;
 		
 		/**
+		 * True if the timer is currently running, false otherwise.
+		 */
+		public function get running() : Boolean
+		{
+			var timerManager:TimerManager = manager;
+			if (manager != null)
+			{
+				return manager.contains(this);
+			}
+			return false;
+		}
+		
+		/**
 		 * Instantiate the timer.  Does not set or start the timer.
 		 */
 		public function FlxTimer()

@@ -28,33 +28,27 @@ package people
 		{
 			_soundClass = sound;
 			_volume = volume;
+			_sound = FlxG.loadSound(_soundClass, _volume);
 		}
 		
 		/** Starts playing this periodic sound. */
 		public function play() : void
 		{
-			_sound = FlxG.play(_soundClass, _volume);
+			_sound.play(true);
 		}
 		
 		/** Stop the periodic sound. */
 		public function stop() : void
 		{
-			if (_sound != null)
-			{
-				_sound.stop();
-				_sound = null;
-			}
+			_sound.stop();
 		}
 		
 		/** Cleans up memory. */
 		public function destroy() : void
 		{
 			_soundClass = null;
-			if (_sound != null)
-			{
-				_sound.stop();
-				_sound = null;
-			}
+			_sound.destroy();
+			_sound = null;
 		}
 	}
 }

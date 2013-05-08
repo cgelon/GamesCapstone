@@ -43,7 +43,7 @@ package managers
 		
 		public function addStaminaBar(owner : Player, x : Number, y : Number, width : Number, height : Number, onParent : Boolean) : void
 		{
-			var staminaBar : FlxBar = new FlxBar(x, y, FlxBar.FILL_LEFT_TO_RIGHT, width, height, owner, "stamina", 0, owner.maxStamina, false);
+			var staminaBar : FlxBar = new FlxBar(x, y, FlxBar.FILL_LEFT_TO_RIGHT, width, height, owner, "stamina", 0, Player.MAX_STAMINA, false);
 			
 			if (onParent)
 			{
