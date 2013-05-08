@@ -27,9 +27,9 @@ package people.players
 	{	
 		/* How long the windup for strong and weak attacks are (respectively), in frames */
 		private const STRONG_ATTACK_DELAY_FRAMES : Number = 30;
-		private const WEAK_ATTACK_DELAY_FRAMES : Number = 15;
-		private const STRONG_ATTACK_DELAY : Number = STRONG_ATTACK_DELAY_FRAMES * 1000 / 60; /* Get the windup delay in ms */
-		private const WEAK_ATTACK_DELAY : Number = WEAK_ATTACK_DELAY_FRAMES * 1000 / 60;	 /* Get the windup delay in ms */
+		private const WEAK_ATTACK_DELAY_FRAMES : Number = 10;
+		private const STRONG_ATTACK_DELAY : Number = STRONG_ATTACK_DELAY_FRAMES * 1000 / FlxG.framerate; /* Get the windup delay in ms */
+		private const WEAK_ATTACK_DELAY : Number = WEAK_ATTACK_DELAY_FRAMES * 1000 / FlxG.framerate;	 /* Get the windup delay in ms */
 		
 		private const MAX_STAMINA : Number = 100;
 		private const ROLL_STAM_COST : Number = 50;
@@ -144,7 +144,7 @@ package people.players
 			drag.x = maxVelocity.x * 4;
 			
 			// Set up the attack variables.
-			_weakAttackTimer = new FlxDelay(WEAK_ATTACK_DELAY / 2);
+			_weakAttackTimer = new FlxDelay(WEAK_ATTACK_DELAY);
 			_weakAttackTimer.callback = function() : void
 			{
 				if (state == ActorState.ATTACKING) state = ActorState.IDLE;
@@ -182,7 +182,7 @@ package people.players
 			{
 				if (state == ActorState.ATTACKING)
 				{
-					attackManager.attack((facing == FlxObject.LEFT) ? x - 20 : x + width, y);
+					attackManager.attack(facing);
 					lowerStamina(WEAK_ATTACK_STAM_COST);
 					_weakAttackTimer.start();
 				}
@@ -193,7 +193,7 @@ package people.players
 			{
 				if (state == ActorState.ATTACKING)
 				{
-					attackManager.strongAttack((facing == FlxObject.LEFT) ? x - 40 : x + width, y);
+					attackManager.strongAttack(facing);
 					lowerStamina(STRONG_ATTACK_STAM_COST);
 					_strongAttackTimer.start();
 				}
@@ -202,7 +202,7 @@ package people.players
 			FlxG.watch(this, "attackType", "AttackType");
 			FlxG.watch(this, "stateName", "State");
 			FlxG.watch(this, "touching", "Touching");
-			FlxG.watch(this, "stamina", "Stamina");
+			FlxG.watch(this.velocity, "y", "yVel");
 		}
 
 		override public function initialize(x : Number, y : Number, health : Number = 5) : void

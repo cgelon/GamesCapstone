@@ -3,6 +3,7 @@ package attacks
 	import org.flixel.FlxSprite;
 	import org.flixel.FlxG;
 	import util.Color;
+	import attacks.AttackType;
 	
 	/**
 	 * The base class for attacks.
@@ -20,11 +21,16 @@ package attacks
 		private var _totalDamage : Number = 0;		
 		public function get damage() : Number { return _totalDamage; }
 		
-		public function Attack (attackWidth : Number, attackHeight : Number, damage : Number)
+		
+		private var _type : AttackType;
+		public function get type() : AttackType { return _type; }
+		
+		public function Attack (attackWidth : Number, attackHeight : Number, damage : Number, type : AttackType)
 		{
 			width = attackWidth;
 			height = attackHeight;
 			_baseDamage = damage;
+			_type = type;
 		}
 		
 		public function initialize(x : Number, y : Number, bonusDamage : Number = 0) : void

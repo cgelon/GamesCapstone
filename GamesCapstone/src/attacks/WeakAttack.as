@@ -17,7 +17,7 @@ package attacks
 		
 		public function WeakAttack()
 		{
-			super(WEAK_ATTACK_WIDTH, WEAK_ATTACK_HEIGHT, WEAK_ATTACK_DAMAGE);
+			super(WEAK_ATTACK_WIDTH, WEAK_ATTACK_HEIGHT, WEAK_ATTACK_DAMAGE, AttackType.NORMAL);
 		}
 		
 		override public function initialize(x : Number, y : Number, bonusDamage : Number = 0) : void

@@ -17,7 +17,7 @@ package attacks
 		
 		public function StrongAttack()
 		{
-			super(STRONG_ATTACK_WIDTH, STRONG_ATTACK_HEIGHT, STRONG_ATTACK_DAMAGE);
+			super(STRONG_ATTACK_WIDTH, STRONG_ATTACK_HEIGHT, STRONG_ATTACK_DAMAGE, AttackType.NORMAL);
 		}
 		
 		override public function initialize(x : Number, y : Number, bonusDamage : Number = 0) : void

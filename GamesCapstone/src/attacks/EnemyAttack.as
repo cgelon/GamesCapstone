@@ -17,7 +17,7 @@ package attacks
 		
 		public function EnemyAttack()
 		{
-			super(ENEMY_ATTACK_WIDTH, ENEMY_ATTACK_HEIGHT, ENEMY_ATTACK_DAMAGE);
+			super(ENEMY_ATTACK_WIDTH, ENEMY_ATTACK_HEIGHT, ENEMY_ATTACK_DAMAGE, AttackType.NORMAL);
 		}
 		
 		override public function initialize(x : Number, y : Number, bonusDamage : Number = 0) : void

@@ -3,6 +3,8 @@ package managers
 	import attacks.StrongAttack;
 	import attacks.WeakAttack;
 	import org.flixel.FlxGroup;
+	import org.flixel.FlxObject;
+	import people.players.Player;
 	
 	/**
 	 * Manages all of the attacks made by the player.
@@ -11,16 +13,34 @@ package managers
 	 */
 	public class PlayerAttackManager extends Manager 
 	{
-		public function attack(x : Number, y : Number) : void
+		public function attack(facing : uint) : void
 		{
 			var attack : WeakAttack = recycle( WeakAttack ) as WeakAttack;
-			attack.initialize(x, y, (getManager(PlayerManager) as PlayerManager).player.getPlayerBonusDamage());
+			
+			var player : Player = (getManager(PlayerManager) as PlayerManager).player;
+			var x : Number;
+			
+			if (facing == FlxObject.LEFT)
+				x = player.x - 20;
+			else
+				x = player.x + player.width;
+			
+			attack.initialize(x, player.y, (getManager(PlayerManager) as PlayerManager).player.getPlayerBonusDamage());
 		}
 		
-		public function strongAttack(x : Number, y : Number) : void
+		public function strongAttack(facing : uint) : void
 		{
 			var attack : StrongAttack = recycle( StrongAttack ) as StrongAttack;
-			attack.initialize(x, y, (getManager(PlayerManager) as PlayerManager).player.getPlayerBonusDamage());
+			
+			var player : Player = (getManager(PlayerManager) as PlayerManager).player;
+			var x : Number;
+			
+			if (facing == FlxObject.LEFT)
+				x = player.x - 40;
+			else
+				x = player.x + player.width;
+				
+			attack.initialize(x, player.y, (getManager(PlayerManager) as PlayerManager).player.getPlayerBonusDamage());
 		}
 	}
 }
