@@ -471,7 +471,7 @@ package people.players
 		
 		public function get isCountering() : Boolean
 		{
-			return false; // state == ActorState.BLOCKING && currentStateFrame < 5;
+			return state == ActorState.BLOCKING && currentStateFrame < 5;
 		}
 		
 		/**

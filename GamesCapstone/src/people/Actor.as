@@ -35,6 +35,11 @@ package people
 			return isTouching(FlxObject.FLOOR) && velocity.y == 0;
 		}
 		
+		/**
+		 * The amount of frames this actor has been in the same state.
+		 */
+		protected var currentStateFrame : int;
+		
 		/** The animation that is currently playing. */
 		private var _currentAnimation : Array;
 		/** The index of a sequence of animations that are playing. */
@@ -80,6 +85,13 @@ package people
 			
 			health = actorHealth
 			_maxHealth = actorHealth;
+			currentStateFrame = 0;
+		}
+		
+		override public function update():void 
+		{
+			super.update();
+			currentStateFrame++;
 		}
 		
 		/**
@@ -141,6 +153,7 @@ package people
 				(_periodicSoundsToState[newState] as PeriodicSound).play();
 			}
 			state = newState;
+			currentStateFrame
 		}
 		
 		/**
