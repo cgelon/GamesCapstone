@@ -2,6 +2,7 @@ package attacks
 {
 	import org.flixel.FlxSprite;
 	import org.flixel.FlxG;
+	import people.Actor;
 	import util.Color;
 	import attacks.AttackType;
 	

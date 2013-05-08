@@ -1,13 +1,18 @@
 package people.enemies 
 {
+	import attacks.Attack;
+	import attacks.AttackType;
 	import org.flixel.FlxSprite;
 	import org.flixel.FlxG;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxObject;
 	import people.Actor;
+	import people.states.ActorState
 	import people.players.Player;
 	import states.State;
 	import util.Color;
+	
+	
 	
 	/**
 	 * A basic enemy.
@@ -26,7 +31,42 @@ package people.enemies
 			maxVelocity = new FlxPoint(200, 500);
 			acceleration.y = 500;
 			facing = FlxObject.RIGHT;
-			drag.x = maxVelocity.x * 4;
+		}
+		
+		override public function update() : void
+		{
+			if (isTouching(FlxObject.FLOOR))
+			{
+				drag.x = maxVelocity.x * 4;
+			}
+			else
+			{
+				drag.x = 0;
+			}
+		}
+		
+		public function getHit(attack : Attack) : void
+		{
+			if (!(state == ActorState.HURT || state == ActorState.DEAD))
+			{
+				var player : Player = State.playerManager.player;
+				
+				if (attack.type == AttackType.NORMAL)
+				{
+					velocity.x = ((x - player.x < 0) ? -1 : 1) * maxVelocity.x;
+				}
+				else if (attack.type == AttackType.LOW)
+				{
+					velocity.y = -maxVelocity.y / 4;
+				}
+				else if (attack.type == AttackType.AIR)
+				{
+					velocity.y = maxVelocity.y / 4;
+					velocity.x = ((x - player.x < 0) ? -1 : 1) * maxVelocity.x;
+				}
+				
+				hurt(attack.damage);
+			}
 		}
 		
 		override public function destroy() : void

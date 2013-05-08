@@ -59,10 +59,10 @@ package states
 			super.create();
 
 			//level = new StartingLevel();
-			level = new PlatformLevel();
+			//level = new PlatformLevel();
 			//level = new CrateJumpLevel();
 			//level = new AcidPlatformLevel();
-			//level = new StartingEnemiesLevel();
+			level = new StartingEnemiesLevel();
 			//level = new EnemyPlatforms();
 			//level = new EvilLabVatLevel();
 			//level = new TestLevel();
@@ -235,7 +235,7 @@ package states
 		 */
 		private function enemyHit(enemy : Enemy, attack : Attack) : void
 		{
-			(getManager(EnemyManager) as EnemyManager).HurtEnemy(enemy, attack);
+			enemy.getHit(attack);
 		}
 		
 		override public function destroy() : void

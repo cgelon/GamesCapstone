@@ -26,6 +26,8 @@ package people
 		
 		/** The current state of the actor. */
 		public var state : ActorState;
+		/** The previous state of the actor. */
+		public var prevState : ActorState;
 		/** The last action this actor took. */
 		public var lastAction : ActorAction;
 		
@@ -179,6 +181,7 @@ package people
 			// If we are transitioning to a new state, do so.
 			if (newState != null && newState != state)
 			{
+				prevState = state;
 				stateChange(state, newState);
 			}
 			

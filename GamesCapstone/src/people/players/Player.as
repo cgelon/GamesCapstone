@@ -1,5 +1,6 @@
 package people.players
 {
+	import attacks.AttackType;
 	import items.Item;
 	import items.Weapons.Fists;
 	import items.Weapons.HammerArm;
@@ -23,6 +24,8 @@ package people.players
 	import util.Color;
 	import util.Sounds;
 	import util.Convert;
+	
+	
 	
 	/** 
 	 * Contains all of the information for a player.
@@ -240,6 +243,7 @@ package people.players
 					{
 						executeAction(ActorAction.STOP, ActorState.IDLE);
 					}
+					updateAttacking();
 					break;
 				case ActorState.DEAD:
 					break;
@@ -365,7 +369,7 @@ package people.players
 					executeAction(ActorAction.ROLL, ActorState.ROLLING);
 					stamina -= ROLL_STAM_COST;
 				}
-				else if (FlxG.keys.justPressed("S"))
+				else if (FlxG.keys.pressed("S"))
 				{
 					executeAction(ActorAction.CROUCH, ActorState.CROUCHING);
 					acceleration.x = 0;
@@ -390,15 +394,28 @@ package people.players
 		}
 		
 		/**
-		 * Callback for when the weak windup finishes.
+		 * Callback for when the weak attack's windup finishes.
 		 */
 		private function weakWindupCallback(timer : FlxTimer) : void
 		{
 			if (state == ActorState.ATTACKING)
 			{
-				attackManager.attack(facing);
+				if (prevState == ActorState.CROUCHING)
+				{
+					attackManager.weakAttack(facing, AttackType.LOW);
+					executeAction(ActorAction.ATTACK, ActorState.ATTACKING, 0);
+				}
+				else if (prevState == ActorState.JUMPING || prevState == ActorState.FALLING)
+				{
+					attackManager.weakAttack(facing, AttackType.AIR);
+					executeAction(ActorAction.ATTACK, ActorState.ATTACKING, 0);
+				}
+				else
+				{
+					attackManager.weakAttack(facing, AttackType.NORMAL);
+					executeAction(ActorAction.ATTACK, ActorState.ATTACKING, 0);
+				}
 				stamina -= WEAK_ATTACK_STAM_COST;
-				executeAction(ActorAction.ATTACK, ActorState.ATTACKING, 0);
 				actionTimer.start(WEAK_ATTACK_DELAY, 1, attackCallback);
 			}
 		}
@@ -422,7 +439,11 @@ package people.players
 		 */
 		private function attackCallback(timer : FlxTimer) : void
 		{
-			if (state == ActorState.ATTACKING) executeAction(ActorAction.STOP, ActorState.IDLE);
+			if (state == ActorState.ATTACKING)
+			{
+				//if (prevState ==
+				executeAction(ActorAction.STOP, ActorState.IDLE);
+			}
 		}
 		
 		/**
