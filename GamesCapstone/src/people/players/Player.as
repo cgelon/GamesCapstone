@@ -208,6 +208,7 @@ package people.players
 					// Start the hurt timeout once the player hits the floor.
 					if (onGround && !actionTimer.running)
 					{
+						executeAction(ActorAction.HURT, ActorState.HURT, 0);
 						actionTimer.start(1, 1, function(timer : FlxTimer) : void
 						{
 							if (state == ActorState.HURT)
@@ -506,6 +507,15 @@ package people.players
 		private function get attackManager() : PlayerAttackManager
 		{
 			return getManager(PlayerAttackManager) as PlayerAttackManager;
+		}
+		
+		override public function hurt(damage:Number):void 
+		{
+			health = health - damage;
+			if (health <= 0)
+				executeAction(ActorAction.DIE, ActorState.DEAD);
+			else
+				executeAction(ActorAction.HURT, ActorState.HURT, (onGround) ? 0 : 1);
 		}
 		
 		override public function destroy() : void

@@ -165,7 +165,7 @@ package people
 		protected function executeAction(action : ActorAction, newState : ActorState = null, index : int = 0) : void
 		{
 			// Play the sound associated with the action.
-			if (_soundsToAction[action] != null)
+			if (action != lastAction && _soundsToAction[action] != null)
 			{
 				(_soundsToAction[action] as SoundEffect).play();
 			}
@@ -174,7 +174,7 @@ package people
 			{
 				playSequence(_animationsToAction[action][index]);
 			}
-			lastAction == action;
+			lastAction = action;
 			
 			// If we are transitioning to a new state, do so.
 			if (newState != null && newState != state)
