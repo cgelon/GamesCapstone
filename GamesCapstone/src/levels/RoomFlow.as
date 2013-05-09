@@ -1,5 +1,6 @@
 package levels 
 {
+	import flash.utils.getDefinitionByName;
 	/**
 	 * Describes the room flow of the game.
 	 * 
@@ -16,9 +17,9 @@ package levels
 		public function RoomFlow()
 		{
 			_rooms = new Array();
-			_rooms.push(new StartingAcidLevel());
-			_rooms.push(new StartingLevel());
-			_rooms.push(new StartingEnemiesLevel());
+			_rooms.push(StartingAcidLevel);
+			_rooms.push(StartingLevel);
+			_rooms.push(StartingEnemiesLevel);
 		}
 		
 		/**
@@ -26,7 +27,7 @@ package levels
 		 */
 		public function getFirstRoom() : Level
 		{
-			return _rooms[0];
+			return new _rooms[0]();
 		}
 		
 		/**
@@ -40,7 +41,7 @@ package levels
 			var newIndex : int = _rooms.indexOf(room) + 1;
 			if (newIndex < _rooms.length)
 			{
-				return _rooms[newIndex];
+				return new _rooms[newIndex]();
 			}
 			return null;
 		}
@@ -56,7 +57,7 @@ package levels
 			var newIndex : int = _rooms.indexOf(room) - 1;
 			if (newIndex >= 0)
 			{
-				return _rooms[newIndex];
+				return new _rooms[newIndex]();
 			}
 			return null;
 		}
