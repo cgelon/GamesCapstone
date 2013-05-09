@@ -2,6 +2,7 @@ package states
 {
 	import attacks.Attack;
 	import attacks.EnemyAttack;
+	import flash.events.AccelerometerEvent;
 	import items.Environmental.Background.AcidFlow;
 	import items.Environmental.EnvironmentalItem;
 	import levels.AcidPlatformLevel;
@@ -24,6 +25,7 @@ package states
 	import managers.UIObjectManager;
 	import items.Environmental.Background.Acid;
 	import items.Environmental.Background.Door;
+	import items.Environmental.Crate;
 	import org.flixel.FlxBasic;
 	import org.flixel.FlxCamera;
 	import org.flixel.FlxG;
@@ -61,8 +63,8 @@ package states
 			//level = new StartingLevel();
 			//level = new PlatformLevel();
 			//level = new CrateJumpLevel();
-			//level = new AcidPlatformLevel();
-			level = new StartingEnemiesLevel();
+			level = new AcidPlatformLevel();
+			//level = new StartingEnemiesLevel();
 			//level = new EnemyPlatforms();
 			//level = new EvilLabVatLevel();
 			//level = new TestLevel();
@@ -140,8 +142,8 @@ package states
 			FlxG.overlap(getManager(PlayerManager), getManager(BackgroundManager), itemNotifyCallback);
 			FlxG.overlap(getManager(EnemyManager), getManager(BackgroundManager), itemNotifyCallback);
 			
-			colliding(getManager(PlayerManager));
-			colliding(getManager(EnemyManager));
+			collideWithEnvironment(getManager(PlayerManager));
+			collideWithEnvironment(getManager(EnemyManager));
 			
 			// Detect collisions between the player and enemies UNLESS the player is rolling.
 			var player : Player = (getManager(PlayerManager) as PlayerManager).player;
@@ -156,19 +158,30 @@ package states
 			}
 		}
 		
-		private function colliding(actorManager: Manager) : void
+		/**
+		 * Collides all of the actors in the given Manager with the environmental
+		 * objects.
+		 * 
+		 * @param	actorManager	Manager whose actors we want to collide with environment.
+		 */
+		private function collideWithEnvironment(actorManager: Manager) : void
 		{
-			var count : int = 0;
-			while (count < 6) 
-			// This is just enough iteration so that we can't take all 11 boxes and push them until one goes through
-			// the wall
+			var objManager : ObjectManager = (getManager(ObjectManager) as ObjectManager);
+			
+			// Set all environmental objects to be movable so that they can properly collide with the level.
+			(getManager(ObjectManager) as ObjectManager).setImmovable(false, Crate);
+			FlxG.collide(objManager, level); // Collide objects with the level
+			
+			// Perform pre-collisions to make sure that if the player and any objects are touching,
+			// they are fully separated.
+			for each (var actor : Actor in actorManager.members)
 			{
-				count = count + 1;
-				FlxG.collide(actorManager, getManager(ObjectManager), itemNotifyCallback);
-				FlxG.collide(getManager(ObjectManager), level); // because the items will be moving
-				FlxG.collide(getManager(ObjectManager), getManager(ObjectManager)); // Means the crates interact with each other
+				if (actor != null)
+					objManager.preCollide(actor, Crate);
 			}
 			
+			FlxG.collide(getManager(ObjectManager), getManager(ObjectManager)); // Means the crates interact with each other
+			FlxG.collide(actorManager, getManager(ObjectManager), itemNotifyCallback);
 		}
 		
 		private function itemNotifyCallback(person: Actor, obj: EnvironmentalItem): void 

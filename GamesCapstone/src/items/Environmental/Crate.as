@@ -21,10 +21,14 @@ package items.Environmental
 			initialize(X, Y);
 			
 			loadGraphic(tileset, true, false, 32, 32, false);
-			
 			maxVelocity = new FlxPoint(150, 750);
 			acceleration.y = 1000;
 			drag.x = maxVelocity.x;
+		}
+		
+		override public function update() : void
+		{
+			super.update();
 		}
 	}
 }
