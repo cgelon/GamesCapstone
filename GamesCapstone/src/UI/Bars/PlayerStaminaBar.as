@@ -6,6 +6,7 @@ package UI.Bars
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxSprite;
 	import people.players.Player;
+	import people.players.PlayerStats;
 	import states.GameState;
 	
 	/**
@@ -51,7 +52,7 @@ package UI.Bars
 			if (stamina != _previousStamina)
 			{
 				// The stamina bar is the second element in members (0-indexed) because it was added second.
-				var percentage : Number = Math.min(Math.max(1 - stamina / Player.MAX_STAMINA, 0), 1);
+				var percentage : Number = Math.min(Math.max(1 - stamina / PlayerStats.MAX_STAMINA, 0), 1);
 				(members[1] as FlxSprite).x = _initialX - (members[1] as FlxSprite).width * percentage;
 				_previousStamina = stamina;
 			}

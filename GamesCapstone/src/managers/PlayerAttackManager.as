@@ -17,13 +17,6 @@ package managers
 	 */
 	public class PlayerAttackManager extends Manager 
 	{
-		private var player : Player;
-		
-		public function PlayerAttackManager()
-		{
-			player = (getManager(PlayerManager) as PlayerManager).player;
-		}
-		
 		public function weakAttack(facing : uint, type : AttackType) : void
 		{
 			var attack : Attack;
@@ -72,6 +65,11 @@ package managers
 			var x : Number = facing == FlxObject.LEFT ? player.x - StrongAttack.STRONG_ATTACK_WIDTH + player.width / 2 : player.x + player.width / 2;
 			
 			attack.initialize(x, player.y, player.damageBonus);
+		}
+		
+		public function get player() : Player
+		{
+			return (getManager(PlayerManager) as PlayerManager).player;
 		}
 	}
 }

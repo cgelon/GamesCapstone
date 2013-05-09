@@ -100,8 +100,8 @@ package states
 			
 			
 			
-			playerManager = new PlayerManager(level.playerStart);
-			addManager(playerManager);
+			//playerManager = new PlayerManager(level.playerStart);
+			//addManager(playerManager);
 			
 			uiObjectManager = new UIObjectManager();
 			//uiObjectManager.addHealthBar(playerManager.player, 10, 10, 50, 10, false, false);
@@ -189,7 +189,7 @@ package states
 			obj.collideWith(person, this);
 		}
 		
-		public function addAcid(flow:AcidFlow) : void
+		override public function addAcid(flow:AcidFlow) : void
 		{
 			for (var i : int = 0; i < flow.myAcid.members.length; i++)
 			{
@@ -198,7 +198,7 @@ package states
 			flow.playStart();
 		}
 		
-		public function removeAcid(flow:AcidFlow) : void
+		override public function removeAcid(flow:AcidFlow) : void
 		{
 			for (var i : int = 0; i < flow.myAcid.members.length; i++)
 			{
