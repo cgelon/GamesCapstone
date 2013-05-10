@@ -128,6 +128,11 @@ package states
 		override public function update() : void
 		{
 			super.update();
+			if (FlxG.keys.justPressed("ZERO"))
+				moveToNextRoom();
+			else if (FlxG.keys.justPressed("NINE"))
+				moveToPreviousRoom();
+			
 			
 			playerHitThisFrame = false;
 			
@@ -245,7 +250,7 @@ package states
 		
 		protected function moveToNextRoom() : void
 		{
-			var nextRoom : Level = Registry.roomFlow.getNextRoom(_level);
+			var nextRoom : Level = Registry.roomFlow.getNextRoom();
 			if (nextRoom != null)
 			{
 				FlxG.switchState(new GameState(nextRoom));
@@ -254,7 +259,7 @@ package states
 		
 		protected function moveToPreviousRoom() : void
 		{
-			var previousRoom : Level = Registry.roomFlow.getPreviousRoom(_level);
+			var previousRoom : Level = Registry.roomFlow.getPreviousRoom();
 			if (previousRoom != null)
 			{
 				FlxG.switchState(new GameState(previousRoom));

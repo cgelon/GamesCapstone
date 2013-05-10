@@ -1,6 +1,8 @@
 package levels 
 {
 	import flash.utils.getDefinitionByName;
+	import org.flixel.FlxG;
+	
 	/**
 	 * Describes the room flow of the game.
 	 * 
@@ -14,12 +16,16 @@ package levels
 		 */
 		private var _rooms : Array;
 		
+		private var _currentRoomIndex : uint;
+		
 		public function RoomFlow()
 		{
 			_rooms = new Array();
-			//_rooms.push(StartingAcidLevel);
-			//_rooms.push(StartingLevel);
+			_rooms.push(StartingAcidLevel);
+			_rooms.push(StartingLevel);
 			_rooms.push(StartingEnemiesLevel);
+			_rooms.push(EvilLabVatLevel);
+			_rooms.push(AcidSwitches);
 		}
 		
 		/**
@@ -27,6 +33,7 @@ package levels
 		 */
 		public function getFirstRoom() : Level
 		{
+			_currentRoomIndex = 0;
 			return new _rooms[0]();
 		}
 		
@@ -36,11 +43,12 @@ package levels
 		 * @return	The next room that the player will go to.  Will return null if the current room 
 		 * is the last.
 		 */
-		public function getNextRoom(room : Level) : Level
+		public function getNextRoom() : Level
 		{
-			var newIndex : int = _rooms.indexOf(room) + 1;
-			if (newIndex < _rooms.length)
+			var newIndex : int = _currentRoomIndex + 1;
+			if (newIndex != 0 && newIndex < _rooms.length)
 			{
+				_currentRoomIndex = newIndex;
 				return new _rooms[newIndex]();
 			}
 			return null;
@@ -52,11 +60,13 @@ package levels
 		 * @return	The previous room that the player will go to.  Will return null if the current 
 		 * room is the first.
 		 */
-		public function getPreviousRoom(room : Level) : Level
+		public function getPreviousRoom() : Level
 		{
-			var newIndex : int = _rooms.indexOf(room) - 1;
+			var newIndex : int = _currentRoomIndex - 1;
+			FlxG.log("Index: " + newIndex);
 			if (newIndex >= 0)
 			{
+				_currentRoomIndex = newIndex;
 				return new _rooms[newIndex]();
 			}
 			return null;

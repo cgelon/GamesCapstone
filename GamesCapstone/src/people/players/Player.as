@@ -262,10 +262,6 @@ package people.players
 			
 			var colors : Array = [0x00FFFFFF, Color.RED, Color.GREEN, Color.ORANGE, Color.BLUE];
 			color = colors[_currentWeapon % colors.length];
-			
-			
-			if (FlxG.keys.justPressed("W"))
-				FlxG.log("NumJumpps:" + _statManager.getCount(ActorAction.JUMP));
 		}
 		
 		/**
