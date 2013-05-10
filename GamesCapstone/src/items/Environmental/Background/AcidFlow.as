@@ -36,7 +36,8 @@ package items.Environmental.Background
 		}
 		
 		override public function update() : void
-		{
+		{ 
+			
 			if (!overlaps((getManager(LevelManager) as LevelManager).map)) 
 			{
 				for (var i: int = 0; i < 2; i++)
@@ -46,6 +47,7 @@ package items.Environmental.Background
 				acidheight++;
 				playStart();
 			}
+			super.update();
 		}
 		
 		public function overlaps(group:FlxTilemap) : Boolean 
