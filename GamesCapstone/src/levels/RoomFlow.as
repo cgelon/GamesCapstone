@@ -17,7 +17,7 @@ package levels
 		public function RoomFlow()
 		{
 			_rooms = new Array();
-			_rooms.push(StartingAcidLevel);
+			//_rooms.push(StartingAcidLevel);
 			_rooms.push(StartingLevel);
 			_rooms.push(StartingEnemiesLevel);
 		}

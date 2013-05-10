@@ -57,7 +57,9 @@ package items.Environmental
 		// make sure that blocks stop moving when not being pushed or falling
 		public function lock():void
 		{
-			var player : Player = (Manager.getManager(PlayerManager) as PlayerManager).player;
+			var player : Player = (Manager.getManager(PlayerManager) as PlayerManager) != null ? 
+									(Manager.getManager(PlayerManager) as PlayerManager).player : null;
+			
 			// move player out of block if still overlapping
 			// otherwise, player will be able to move "into" the block.
 			if (player != null && overlaps(player))

@@ -65,14 +65,14 @@ package states
 		{
 			super.create();
 
-			level = new StartingLevel();
+			//level = new StartingLevel();
 			//level = new PlatformLevel();
 			//level = new CrateJumpLevel();
 			//level = new AcidPlatformLevel();
 			//level = new StartingEnemiesLevel();
 			//level = new EnemyPlatforms();
 			//level = new EvilLabVatLevel();
-			//level = new TestLevel();
+			level = new TestLevel();
 			
 			add(level);
 			
@@ -89,7 +89,8 @@ package states
 			}
 			addManager(backgroundManager);
 			
-			playerManager = new PlayerManager(level.playerStart);
+			playerManager = new PlayerManager();
+			playerManager.addPlayer(level.playerStart);
 			addManager(playerManager);
 			
 			objectManager = new ObjectManager();
