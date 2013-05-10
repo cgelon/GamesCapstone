@@ -89,7 +89,8 @@ package states
 			}
 			addManager(backgroundManager);
 			
-			playerManager = new PlayerManager(level.playerStart);
+			playerManager = new PlayerManager()
+			playerManager.addPlayer(level.playerStart);
 			addManager(playerManager);
 			
 			objectManager = new ObjectManager();
