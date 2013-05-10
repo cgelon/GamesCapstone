@@ -6,6 +6,7 @@ package items.Environmental.Background
 	import org.flixel.FlxSprite;
 	import org.flixel.FlxG;
 	import people.Actor;
+	import states.GameState;
 	import states.State;
 
 	/**
@@ -16,18 +17,17 @@ package items.Environmental.Background
 		
 		function AcidFlow(X:Number = 0, Y:Number = 0) : void 
 		{
-			super();
+			super(X, Y);
 			
 			for (var j: int = 0; j < 4; j++)
 			{
 				for (var i: int = 0; i < 2; i++)
 				{				
-					members[j * 2 + i] = (new Acid(X + 16 * i, Y + 16 * (j + 1)));
+					add(new Acid(X + 16 * i, Y + 16 * (j + 1)));
 				}
 			}
 			// Keeps track of the acid that will flow when the lever is
 			// activated
-			
 			
 		}
 		
@@ -43,7 +43,5 @@ package items.Environmental.Background
 				members[k].play("idle");
 			}
 		}
-		
-		
 	}	
 }
