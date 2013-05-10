@@ -2,6 +2,8 @@ package people.enemies
 {
 	import attacks.Attack;
 	import attacks.AttackType;
+	import managers.Manager;
+	import managers.PlayerManager;
 	import org.flixel.FlxSprite;
 	import org.flixel.FlxG;
 	import org.flixel.FlxPoint;
@@ -75,29 +77,16 @@ package people.enemies
 			super.destroy();
 		}
 		
-		public function getPlayerXCoord() : Number
-		{
-			var player : Player = State.playerManager.player;
-			return player.x;
-		}
-		
-		public function getPlayerYCoord() : Number
-		{
-			var player : Player = State.playerManager.player;
-			return player.y;
-		}
-		
 		public function distanceToPlayer() : Number
 		{
-			var player : Player = State.playerManager.player;
 			var deltaX : Number = x - player.x;
 			var deltaY : Number = y - player.y;
 			return Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 		}
 		
-		public function getPlayer() : Player
+		public function get player() : Player
 		{
-			return State.playerManager.player;
+			return (getManager(PlayerManager) as PlayerManager).player;
 		}
 	}
 

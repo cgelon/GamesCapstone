@@ -4,6 +4,7 @@ package managers
 	import org.flixel.FlxGroup;
 	import org.flixel.plugin.photonstorm.FlxBar;
 	import people.players.Player;
+	import people.players.PlayerStats;
 	import UI.Bars.HealthBar;
 	import UI.PlayerHud;
 	import UI.UIObject;
@@ -43,7 +44,7 @@ package managers
 		
 		public function addStaminaBar(owner : Player, x : Number, y : Number, width : Number, height : Number, onParent : Boolean) : void
 		{
-			var staminaBar : FlxBar = new FlxBar(x, y, FlxBar.FILL_LEFT_TO_RIGHT, width, height, owner, "stamina", 0, Player.MAX_STAMINA, false);
+			var staminaBar : FlxBar = new FlxBar(x, y, FlxBar.FILL_LEFT_TO_RIGHT, width, height, owner, "stamina", 0, PlayerStats.MAX_STAMINA, false);
 			
 			if (onParent)
 			{

@@ -22,7 +22,7 @@ package managers
 		/** The current player. */
 		public var player : Player;
 		
-		public function PlayerManager(location : FlxPoint) 
+		public function addPlayer(location : FlxPoint) : void
 		{
 			player = new Player();
 			player.initialize(location.x, location.y);

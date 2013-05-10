@@ -3,6 +3,7 @@ package items.Environmental
 	import items.Item;
 	import org.flixel.FlxObject;
 	import people.Actor;
+	import states.GameState;
 	import states.State;
 	
 	/**
@@ -18,7 +19,7 @@ package items.Environmental
 			super(name);
 		}
 		
-		public function collideWith(actor : Actor, state : State) : void
+		public function collideWith(actor : Actor, state : GameState) : void
 		{
 			
 		}

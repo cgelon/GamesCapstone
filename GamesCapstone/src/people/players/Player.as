@@ -45,8 +45,6 @@ package people.players
 		/** How long the player is knocked down when they get hurt, in seconds. */
 		private static const HURT_DURATION : Number = 1;
 		
-		/** The maximum amount of stamina the player can have. */
-		public static const MAX_STAMINA : Number = 100;
 		/** The amount of stamina to regenerate every frame. */
 		private static const STAM_REGEN : Number = 0.5;
 		/** The stamina cost of a strong attack. */
@@ -159,7 +157,6 @@ package people.players
 			_attackReleased = true;
 			_attackType = 0;
 			
-
 			FlxG.watch(this, "stateName", "State");
 			FlxG.watch(this, "stamina", "Stamina");
 			FlxG.watch(this, "touching", "Touching");
@@ -168,9 +165,11 @@ package people.players
 
 		override public function initialize(x : Number, y : Number, health : Number = 5) : void
 		{
-			super.initialize(x, y, health);
+			var stats : PlayerStats = new PlayerStats();
 			
-			_stamina = MAX_STAMINA;
+			super.initialize(x, y, Registry.playerStats.health);
+			
+			_stamina = Registry.playerStats.stamina;
 			facing = FlxObject.RIGHT;
 			_jumpReleased = true;
 			state = ActorState.IDLE;
@@ -483,7 +482,8 @@ package people.players
 		/** The amount of stamina the player currently has. */
 		public function set stamina(value:Number):void 
 		{
-			_stamina = Math.max(Math.min(value, MAX_STAMINA), 0);
+			_stamina = Math.max(Math.min(value, PlayerStats.MAX_STAMINA), 0);
+			Registry.playerStats.stamina = value;
 		}
 		
 		/**
@@ -559,7 +559,8 @@ package people.players
 		
 		override public function hurt(damage:Number):void 
 		{
-			health = health - damage;
+			health -= damage;
+			Registry.playerStats.health = health;
 			if (health <= 0)
 				executeAction(ActorAction.DIE, ActorState.DEAD);
 			else

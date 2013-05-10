@@ -7,6 +7,7 @@ package items.Environmental.Background
 	import people.Actor;
 	import people.states.ActorAction;
 	import people.states.ActorState;
+	import states.GameState;
 	import states.State;
 
 	/**
@@ -34,7 +35,7 @@ package items.Environmental.Background
 			allowCollisions = ANY;
 		}
 		
-		override public function collideWith(actor:Actor, state:State):void 
+		override public function collideWith(actor:Actor, state:GameState):void 
 		{
 			actor.die();
 		}
