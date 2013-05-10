@@ -29,6 +29,26 @@ package items.Environmental
 				members[i].collideWith(actor, state);
 			}
 		}
+		
+		
+		override public function draw():void 
+		{
+			for (var i: int = 0; i < members.length; i++)
+			{
+				(members[i] as EnvironmentalItem).draw();
+			}
+		}
+		
+		override public function update():void 
+		{
+			for (var i: int = 0; i < members.length; i++)
+			{
+				var mem : EnvironmentalItem = members[i] as EnvironmentalItem;
+				mem.preUpdate();
+				mem.update();
+				mem.postUpdate();
+			}
+		}
 	}
 
 }

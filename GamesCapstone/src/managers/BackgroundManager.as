@@ -1,7 +1,6 @@
 package managers
 {
 	
-	import items.Environmental.Background.AcidFlow;
 	import items.Environmental.Background.BackgroundGroup;
 	import items.Environmental.Background.BackgroundItem;
 	import org.flixel.FlxGroup;
@@ -21,6 +20,7 @@ package managers
 			var obj : BackgroundItem = new object(location.x, location.y) as BackgroundItem;
 			if (obj != null)
 			{
+				// If the object provided is a BackgroundItem, add it straight to the level
 				obj.playStart();
 				add(obj);
 			}
@@ -29,12 +29,9 @@ package managers
 				var obj2 : BackgroundGroup = new object(location.x, location.y) as BackgroundGroup;
 				if (obj2 != null)
 				{
+					// If the object provided is a BackgroundGroup, also add it straight to the level
 					obj2.playStart();
-					
-					for (var i : int = 0; i < obj2.members.length; i++)
-					{
-						add(obj2.members[i]);
-					}
+					add(obj2);
 				}
 			}
 		}

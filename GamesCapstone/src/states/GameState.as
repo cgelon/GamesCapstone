@@ -196,19 +196,13 @@ package states
 		
 		public function addAcid(flow:AcidFlow) : void
 		{ 
-			for (var i : int = 0; i < flow.members.length; i++)
-			{
-				getManager(BackgroundManager).add(flow.members[i]);
-			}
+			getManager(BackgroundManager).add(flow);
 			flow.playStart();
 		}
 		
 		public function removeAcid(flow:AcidFlow) : void
 		{ 
-			for (var i : int = 0; i < flow.members.length; i++)
-			{
-				getManager(BackgroundManager).remove(flow.members[i]);
-			}
+			getManager(BackgroundManager).remove(flow);
 		}
 		 
 		/**
