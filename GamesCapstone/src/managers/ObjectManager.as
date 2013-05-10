@@ -6,7 +6,7 @@ package managers
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxObject;
 	import states.GameState;
-
+	import managers.Manager;
 	import people.Actor;
 	import people.players.Player;
 	
@@ -67,24 +67,30 @@ package managers
 					// the actor down so that it will arrive just on top (if the actor hasn't reached
 					// the item yet). Then set the item to immovable so that the actor can stand on
 					// top of the item without having a nonzero collision velocity.
+					
+					/*
 					if (((FlxG.overlap(item, actor) && yDist <= 0 && yDist >= -2) 		 // if actor is "just above" item
 							|| yDist >= 0 && yDist <= FlxG.elapsed * actor.velocity.y)  // if actor will arrive on top within the next frame
 						&& (actor.x + actor.width) > item.x 
 						&& actor.x < (item.x + item.width))
 					{
-						item.immovable = false; // Item must be movable so that it and the player can be separated.
-						FlxObject.separateY(item, actor);
-						item.immovable = true;  // Item must be immovable so that the player can stand on it.
+					*/
+					if (FlxG.overlap(item, actor) && 
+						((item.isTouching(FlxObject.LEFT) && actor.isTouching(FlxObject.RIGHT)) || ((item.isTouching(FlxObject.RIGHT) && actor.isTouching(FlxObject.LEFT)))))
+					{
+						//item.immovable = false; // Item must be movable so that it and the player can be separated.
+						//FlxObject.separateY(item, actor);
+						item.immovable = false;  // Item must be immovable so that the player can stand on it.
 						
 						// If the actor is going to get to *AT LEAST* the top of the item in the next frame,
 						// slow it down so that it reaches *EXACTLY* the top of the item during the next frame.
-						actor.velocity.y *= actor.velocity.y == 0 ? 0 : (item.y - (actor.y + actor.height)) / (FlxG.elapsed * actor.velocity.y);
+						//actor.velocity.y *= actor.velocity.y == 0 ? 0 : (item.y - (actor.y + actor.height)) / (FlxG.elapsed * actor.velocity.y);
 					}
 					else
 					{
 						// Actor isn't going to be trying to stand on the item?
 						// Make sure that the item can move, then.
-						item.immovable = false;
+						item.immovable = true;
 					}
 				}				
 			}

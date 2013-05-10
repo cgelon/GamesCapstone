@@ -17,6 +17,7 @@ package people.states
 		public static const DEAD : ActorState = new ActorState();
 		public static const BLOCKING : ActorState = new ActorState();
 		public static const CROUCHING : ActorState = new ActorState();
+		public static const PUSHING : ActorState = new ActorState();
 		
 		public function get name() : String
 		{
@@ -41,6 +42,8 @@ package people.states
 					return "crouching";
 				case FALLING:
 					return "falling";
+				case PUSHING:
+					return "pushing";
 			}
 			return "NAME THIS FREAKING STATE";
 		}

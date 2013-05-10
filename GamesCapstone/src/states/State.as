@@ -34,9 +34,14 @@ package states
 	import org.flixel.FlxRect;
 	import org.flixel.FlxObject;
 	import people.states.ActorState;
+	import people.states.ActorAction;
 	import people.enemies.Enemy;
 	import people.players.Player;
 	import people.Actor;
+	
+	
+	import org.flixel.FlxSprite;
+	import org.flixel.plugin.photonstorm.FlxCollision;
 	
 	public class State extends GameState 
 	{	
@@ -60,10 +65,10 @@ package states
 		{
 			super.create();
 
-			//level = new StartingLevel();
+			level = new StartingLevel();
 			//level = new PlatformLevel();
 			//level = new CrateJumpLevel();
-			level = new AcidPlatformLevel();
+			//level = new AcidPlatformLevel();
 			//level = new StartingEnemiesLevel();
 			//level = new EnemyPlatforms();
 			//level = new EvilLabVatLevel();
@@ -84,6 +89,9 @@ package states
 			}
 			addManager(backgroundManager);
 			
+			playerManager = new PlayerManager(level.playerStart);
+			addManager(playerManager);
+			
 			objectManager = new ObjectManager();
 			for (var m : int = 0; m < level.objectStarts.length; m++)
 			{
@@ -98,10 +106,6 @@ package states
 			}
 			addManager(enemyManager);
 			
-			
-			
-			playerManager = new PlayerManager(level.playerStart);
-			addManager(playerManager);
 			
 			uiObjectManager = new UIObjectManager();
 			//uiObjectManager.addHealthBar(playerManager.player, 10, 10, 50, 10, false, false);
@@ -168,20 +172,34 @@ package states
 		{
 			var objManager : ObjectManager = (getManager(ObjectManager) as ObjectManager);
 			
-			// Set all environmental objects to be movable so that they can properly collide with the level.
-			(getManager(ObjectManager) as ObjectManager).setImmovable(false, Crate);
+			FlxG.overlap(objManager, actorManager, collideUsingOverlapFix);
+			FlxG.overlap(objManager, objManager, collideUsingOverlapFix);
 			FlxG.collide(objManager, level); // Collide objects with the level
-			
-			// Perform pre-collisions to make sure that if the player and any objects are touching,
-			// they are fully separated.
-			for each (var actor : Actor in actorManager.members)
+		}
+		
+		private function collideUsingOverlapFix(Object1:FlxObject, Object2:FlxObject) : void
+		{
+			if (!((Object1.y + Object1.height - 1 < Object2.y) || (Object2.y + Object2.height - 1 < Object1.y)))
 			{
-				if (actor != null)
-					objManager.preCollide(actor, Crate);
+				if (FlxObject.separateX(Object1, Object2))
+				{
+					if (Object1 is Crate && Object2 is Player)
+					{
+						if ((Object2 as Player).state == ActorState.PUSHING)
+							(Object1 as Crate).beingPushed = true;
+					}
+					else if (Object1 is Crate && Object2 is Crate)
+					{
+						(Object1 as Crate).beingPushed = true;
+						(Object2 as Crate).beingPushed = true;
+					}
+				}
 			}
 			
-			FlxG.collide(getManager(ObjectManager), getManager(ObjectManager)); // Means the crates interact with each other
-			FlxG.collide(actorManager, getManager(ObjectManager), itemNotifyCallback);
+			if (!((Object1.x + Object1.width - 1 < Object2.x) || (Object2.x + Object2.width - 1 < Object1.x)))
+			{
+				FlxObject.separateY(Object1, Object2);
+			}
 		}
 		
 		private function itemNotifyCallback(person: Actor, obj: EnvironmentalItem): void 

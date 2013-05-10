@@ -190,6 +190,7 @@ package people.players
 				case ActorState.RUNNING:
 				case ActorState.JUMPING:
 				case ActorState.FALLING:
+				case ActorState.PUSHING:
 					updateMovement();
 					updateNextState();
 					updateAttacking();
@@ -270,6 +271,13 @@ package people.players
 			if (!_attackReleased && !FlxG.keys.pressed("J") && !FlxG.keys.pressed("K"))
 			{
 				_attackReleased = true;
+			}
+			if (!FlxG.keys.pressed("SPACE") && state == ActorState.PUSHING)
+			{
+				if (velocity.x == 0)
+					executeAction(ActorAction.STOP, ActorState.IDLE);
+				else
+					executeAction(ActorAction.RUN, ActorState.RUNNING);
 			}
 		}
 		
@@ -368,6 +376,11 @@ package people.players
 				{
 					executeAction(ActorAction.ROLL, ActorState.ROLLING);
 					stamina -= ROLL_STAM_COST;
+				}
+				else if (FlxG.keys.pressed("SPACE"))
+				{
+					var action : ActorAction = velocity.x != 0 ? ActorAction.RUN : ActorAction.STOP;
+					executeAction(action, ActorState.PUSHING);
 				}
 				else if (FlxG.keys.pressed("S"))
 				{
