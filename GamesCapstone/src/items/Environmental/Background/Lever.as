@@ -6,6 +6,7 @@ package items.Environmental.Background
 	import org.flixel.FlxSprite;
 	import org.flixel.FlxG;
 	import people.Actor;
+	import states.GameState;
 	import states.State;
 
 	/**
@@ -35,7 +36,7 @@ package items.Environmental.Background
 		 * When the "E" key is pressed while the player is overlapping with a lever,
 		 * the lever changes positions from up to down, or from down to up
 		 */
-		override public function collideWith(actor:Actor, state:State) : void 
+		override public function collideWith(actor:Actor, state:GameState) : void 
 		{
 			if (FlxG.keys.justPressed("E"))
 			{
@@ -51,7 +52,6 @@ package items.Environmental.Background
 				}
 			}
 		}
-		
 		
 	}	
 }
