@@ -18,7 +18,7 @@ package levels
 		{
 			_rooms = new Array();
 			//_rooms.push(StartingAcidLevel);
-			_rooms.push(StartingLevel);
+			//_rooms.push(StartingLevel);
 			_rooms.push(StartingEnemiesLevel);
 		}
 		

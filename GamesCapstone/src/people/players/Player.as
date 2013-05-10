@@ -1,6 +1,7 @@
 package people.players
 {
 	import attacks.AttackType;
+	import flash.events.StatusEvent;
 	import items.Item;
 	import items.Weapons.Fists;
 	import items.Weapons.HammerArm;
@@ -24,6 +25,7 @@ package people.players
 	import util.Color;
 	import util.Sounds;
 	import util.Convert;
+	import util.StatManager;
 	
 	
 	
@@ -82,6 +84,8 @@ package people.players
 		
 		/** Internal tracking for how much stamina the player currently has. */
 		private var _stamina : Number;
+		
+		private var _statManager : StatManager;
 		
 		/** The PNG for the player. */
 		[Embed(source = '../../../assets/player.png')] private var playerPNG : Class;
@@ -156,6 +160,8 @@ package people.players
 
 			_attackReleased = true;
 			_attackType = 0;
+			
+			_statManager = new StatManager();
 			
 			FlxG.watch(this, "stateName", "State");
 			FlxG.watch(this, "stamina", "Stamina");
@@ -256,6 +262,10 @@ package people.players
 			
 			var colors : Array = [0x00FFFFFF, Color.RED, Color.GREEN, Color.ORANGE, Color.BLUE];
 			color = colors[_currentWeapon % colors.length];
+			
+			
+			if (FlxG.keys.justPressed("W"))
+				FlxG.log("NumJumpps:" + _statManager.getCount(ActorAction.JUMP));
 		}
 		
 		/**
@@ -484,6 +494,12 @@ package people.players
 		{
 			_stamina = Math.max(Math.min(value, PlayerStats.MAX_STAMINA), 0);
 			Registry.playerStats.stamina = value;
+		}
+		
+		override protected function executeAction(action : ActorAction, newState : ActorState = null, index : int = 0) : void
+		{
+			super.executeAction(action, newState, index);
+			_statManager.add(action);
 		}
 		
 		/**
