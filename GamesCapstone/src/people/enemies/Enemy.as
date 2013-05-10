@@ -51,8 +51,6 @@ package people.enemies
 		{
 			if (!(state == ActorState.HURT || state == ActorState.DEAD))
 			{
-				var player : Player = State.playerManager.player;
-				
 				if (attack.type == AttackType.NORMAL)
 				{
 					velocity.x = ((x - player.x < 0) ? -1 : 1) * maxVelocity.x;
