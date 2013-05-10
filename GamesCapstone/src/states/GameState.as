@@ -62,6 +62,10 @@ package states
 			{
 				backgroundManager.addObject(_level.doorLocs[i], Door);
 			}
+			for (i = 0; i < _level.circuits.length; i++)
+			{
+				backgroundManager.addCircuit(_level.circuits[i]);
+			}
 			
 			var enemyManager : EnemyManager = new EnemyManager();
 			for (i = 0; i < _level.enemyStarts.length; i++) 
@@ -192,17 +196,6 @@ package states
 		private function itemNotifyCallback(person: Actor, obj: EnvironmentalItem): void 
 		{
 			obj.collideWith(person, this);
-		}
-		
-		public function addAcid(flow:AcidFlow) : void
-		{ 
-			getManager(BackgroundManager).add(flow);
-			flow.playStart();
-		}
-		
-		public function removeAcid(flow:AcidFlow) : void
-		{ 
-			getManager(BackgroundManager).remove(flow);
 		}
 		 
 		/**

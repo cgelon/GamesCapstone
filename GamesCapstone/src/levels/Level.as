@@ -22,6 +22,7 @@ package levels
 		public var objectStarts: Array;
 		public var objectTypes: Array;
 		public var doorLocs: Array;
+		public var circuits: Array;
 		
 		public function Level() 
 		{
@@ -34,6 +35,7 @@ package levels
 			objectStarts = new Array();
 			objectTypes = new Array();
 			doorLocs = new Array();
+			circuits = new Array();
 		}
 	}
 }

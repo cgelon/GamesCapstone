@@ -1,25 +1,30 @@
 package items.Environmental.Background
 {
-	import managers.ObjectManager;
-	import org.flixel.FlxGroup;
-	import org.flixel.FlxPoint;
-	import org.flixel.FlxSprite;
+	import items.Environmental.Background.Circuit.Reactor;
+	import managers.BackgroundManager;
+	import managers.LevelManager;
+	import managers.Manager;
 	import org.flixel.FlxG;
-	import people.Actor;
+	import org.flixel.FlxObject;
+	import org.flixel.FlxTilemap;
 	import states.GameState;
-	import states.State;
-
 	/**
 	 * @author Lydia Duncan
 	 */
-	public class AcidFlow extends BackgroundGroup
+	public class AcidFlow extends Reactor implements BackgroundInterface
 	{
+		private var acidheight : Number;
+		private var X : Number;
+		private var Y : Number;
 		
 		function AcidFlow(X:Number = 0, Y:Number = 0) : void 
-		{
-			super(X, Y);
+		{	
+			super();
 			
-			for (var j: int = 0; j < 4; j++)
+			this.acidheight = 1;
+			this.X = X;
+			this.Y = Y;
+			for (var j: int = 0; j < acidheight; j++)
 			{
 				for (var i: int = 0; i < 2; i++)
 				{				
@@ -27,8 +32,32 @@ package items.Environmental.Background
 				}
 			}
 			// Keeps track of the acid that will flow when the lever is
-			// activated
-			
+			// activated	
+		}
+		
+		override public function update() : void
+		{
+			if (!overlaps((getManager(LevelManager) as LevelManager).map)) 
+			{
+				for (var i: int = 0; i < 2; i++)
+				{				
+					add(new Acid(X + 16 * i, Y + 16 * (acidheight + 1)));
+				}
+				acidheight++;
+				playStart();
+			}
+		}
+		
+		public function overlaps(group:FlxTilemap) : Boolean 
+		{
+			var result : Boolean = false;
+			for (var i:int; i < length; i++) 
+			{
+				if (members[i] != null) {
+					result = result || (members[i].overlaps(group));
+				}
+			}
+			return result;
 		}
 		
 		override public function playStart():void 
@@ -40,8 +69,32 @@ package items.Environmental.Background
 			}
 			for (k = 2; k < members.length; k++)
 			{
-				members[k].play("idle");
+				if (members[k] != null) {
+					members[k].play("idle");
+				}
 			}
+		}
+
+		
+		override public function enable() : void
+		{ 
+			if (getManager(BackgroundManager) != null)
+				getManager(BackgroundManager).add(this);
+			playStart();
+		}
+		
+		override public function disable() : void
+		{ 
+			if (getManager(BackgroundManager) != null)
+				getManager(BackgroundManager).remove(this);
+		}
+		
+		/**
+		 * @return	The manager class specified.  Will return null if no such manager exists.
+		 */
+		public function getManager(c : Class) : Manager
+		{
+			return (FlxG.state as GameState).getManager(c);
 		}
 	}	
 }

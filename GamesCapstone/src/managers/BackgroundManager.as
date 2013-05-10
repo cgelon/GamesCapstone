@@ -1,12 +1,11 @@
 package managers
 {
-	
-	import items.Environmental.Background.BackgroundGroup;
-	import items.Environmental.Background.BackgroundItem;
-	import org.flixel.FlxGroup;
-	import org.flixel.FlxG;
+	import items.Environmental.Background.BackgroundInterface;
+	import items.Environmental.Background.Circuit.Circuit;
+	import items.Environmental.Background.Circuit.Reactor;
+	import items.Environmental.Background.Circuit.Trigger;
+	import org.flixel.FlxBasic;
 	import org.flixel.FlxPoint;
-	import states.GameState;
 	
 	/**
 	 * @author Lydia Duncan
@@ -14,26 +13,38 @@ package managers
 	
 	public class BackgroundManager extends Manager 
 	{
+		public var triggers : Array;
+		public var reactors : Array;
+		private var numCircuits : Number;
+		
+		public function BackgroundManager() {
+			triggers = new Array();
+			reactors = new Array();
+			numCircuits = 0;
+		}
 		
 		public function addObject (location: FlxPoint, object:Class) : void
 		{
-			var obj : BackgroundItem = new object(location.x, location.y) as BackgroundItem;
+			var obj : BackgroundInterface = new object(location.x, location.y) as BackgroundInterface;
 			if (obj != null)
 			{
 				// If the object provided is a BackgroundItem, add it straight to the level
 				obj.playStart();
-				add(obj);
+				obj.track(this);
+				obj.addTo(this);
 			}
-			else 
-			{				
-				var obj2 : BackgroundGroup = new object(location.x, location.y) as BackgroundGroup;
-				if (obj2 != null)
-				{
-					// If the object provided is a BackgroundGroup, also add it straight to the level
-					obj2.playStart();
-					add(obj2);
-				}
+		}
+		
+		public function addCircuit (activated: Boolean) : void
+		{
+			var circuit : Circuit = new Circuit(triggers[numCircuits], reactors[numCircuits], activated);
+			add(circuit);
+			if (activated) {
+				add(reactors[numCircuits]);
+			} else {
+				remove(reactors[numCircuits]);
 			}
+			numCircuits++;
 		}
 	}	
 }

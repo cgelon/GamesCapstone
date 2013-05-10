@@ -13,7 +13,7 @@ package items.Environmental.Background
 	/**
 	 * @author Lydia Duncan
 	 */
-	public class Acid extends BackgroundItem
+	public class Acid extends BackgroundItem implements BackgroundInterface
 	{
 		[Embed(source = '../../../../assets/lab tile arrange.png')] private var tileset: Class;
 		

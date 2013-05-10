@@ -8,7 +8,7 @@ package items.Environmental.Background
 	/**
 	 * @author Lydia Duncan
 	 */
-	public class Door extends BackgroundItem 
+	public class Door extends BackgroundItem implements BackgroundInterface
 	{
 		[Embed(source = '../../../../assets/door.png')] private var tileset: Class;
 		

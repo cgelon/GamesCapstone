@@ -1,6 +1,8 @@
 package items.Environmental.Background
 {
 	import items.Environmental.EnvironmentalGroup;
+	import managers.BackgroundManager;
+	import org.flixel.FlxBasic;
 	
 	/**
 	 * Provides the playStart function, a function only background group items utilize
@@ -8,7 +10,7 @@ package items.Environmental.Background
 	 * Intended only to store BackgroundItems
 	 * @author Lydia Duncan
 	 */
-	public class BackgroundGroup extends EnvironmentalGroup
+	public class BackgroundGroup extends EnvironmentalGroup implements BackgroundInterface
 	{
 		
 		
@@ -23,6 +25,14 @@ package items.Environmental.Background
 			{
 				members[i].playStart();
 			}
+		}
+		
+		public function track(manager: BackgroundManager) : void {
+			
+		}
+		
+		public function addTo(manager: BackgroundManager) : void {
+			manager.add(this);
 		}
 	}
 

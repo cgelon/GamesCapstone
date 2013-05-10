@@ -1,5 +1,7 @@
 package items.Environmental.Background
 {
+	import items.Environmental.Background.Circuit.Trigger;
+	import managers.BackgroundManager;
 	import managers.ObjectManager;
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxPoint;
@@ -12,11 +14,9 @@ package items.Environmental.Background
 	/**
 	 * @author Lydia Duncan
 	 */
-	public class Lever extends BackgroundItem 
+	public class Lever extends Trigger implements BackgroundInterface
 	{
 		[Embed(source = '../../../../assets/switch.png')] private var lever: Class;
-		
-		public var myAcid : AcidFlow;
 		
 		function Lever(X:Number = 0, Y:Number = 0) : void 
 		{
@@ -28,8 +28,6 @@ package items.Environmental.Background
 			addAnimation("up", [0, 1, 2, 3, 4], 20, false);
 			
 			immovable = true;
-			myAcid = new AcidFlow(X + 96, Y);
-			
 		}
 		
 		/**
@@ -42,16 +40,23 @@ package items.Environmental.Background
 			{
 				if (_curIndex == 4)
 				{
-					play("down");
-					state.removeAcid(myAcid);
+					disable();
 				}
 				else
 				{
-					play("up");
-					state.addAcid(myAcid);
+					enable();
 				}
 			}
 		}
 		
+		override public function enable() : void {
+			play("up");
+			super.enable();
+		}
+		
+		override public function disable() : void {
+			play("down");
+			super.disable();
+		}
 	}	
 }

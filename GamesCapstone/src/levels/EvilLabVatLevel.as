@@ -1,6 +1,7 @@
 package levels
 {
 	import items.Environmental.Background.Acid;
+	import items.Environmental.Background.AcidFlow;
 	import items.Environmental.Background.Lever;
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxPoint;
@@ -34,10 +35,16 @@ package levels
 			// Stores the enemy start points
 			
 			var leverLocs : Array = [160, 576, 992, 1408, 1824];
-			for (var i: int = 0; i < leverLocs.length; i++)
-			{
-				backgroundStarts[i] = new FlxPoint(leverLocs[i], 128);
-				backgroundTypes[i] = Lever;
+			var acidFlowLocs : Array = [256, 672, 1088, 1504, 1920];
+			for (var i: int = 0; i < leverLocs.length; i++) {
+				backgroundStarts[2 * i] = new FlxPoint(leverLocs[i], 128);
+				backgroundTypes[2 * i] = Lever;
+				backgroundStarts[2 * i + 1] = new FlxPoint(acidFlowLocs[i], 129);
+				backgroundTypes[2 * i + 1] = AcidFlow;
+			}
+			
+			for (i = 0; i < leverLocs.length; i++) {
+				circuits.push(false);
 			}
 			// Store the location of the levers
 			
@@ -47,16 +54,16 @@ package levels
 			{
 				for (var k: int = 0; k < 5; k++) 
 				{
-					backgroundStarts[leverLocs.length + j * 5 + k] = new FlxPoint(vatLocs[j] + (k * 16), 192);
-					backgroundTypes[leverLocs.length + j * 5 + k] = Acid;
+					backgroundStarts[circuits.length * 2 + j * 5 + k] = new FlxPoint(vatLocs[j] + (k * 16), 192);
+					backgroundTypes[circuits.length * 2 + j * 5 + k] = Acid;
 				}
 			}
 			// Stores the acid locations within the vats
 			
 			for (var l: int = 0; l < (width / 16) - 2; l++) 
 			{
-				backgroundStarts[leverLocs.length + vatLocs.length * 5 + l] = new FlxPoint(16 + (l * 16), height - 32);
-				backgroundTypes[leverLocs.length + vatLocs.length * 5 + l] = Acid;
+				backgroundStarts[circuits.length * 2 + vatLocs.length * 5 + l] = new FlxPoint(16 + (l * 16), height - 32);
+				backgroundTypes[circuits.length * 2 + vatLocs.length * 5 + l] = Acid;
 			}
 			// Stores the acid locations for the floor
 			doorLocs[0] = new FlxPoint(16, 112);
