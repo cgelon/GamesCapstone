@@ -142,6 +142,9 @@ package states
 			FlxG.overlap(getManager(PlayerManager), getManager(BackgroundManager), itemNotifyCallback);
 			FlxG.overlap(getManager(EnemyManager), getManager(BackgroundManager), itemNotifyCallback);
 			
+			if ((getManager(PlayerManager) as PlayerManager).player.state != ActorState.ROLLING)
+				FlxG.overlap(getManager(PlayerManager), getManager(EnemyManager), FlxObject.separateX);
+			
 			collideWithEnvironment(getManager(PlayerManager));
 			collideWithEnvironment(getManager(EnemyManager));
 			

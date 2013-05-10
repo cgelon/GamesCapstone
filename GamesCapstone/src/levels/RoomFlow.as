@@ -63,7 +63,6 @@ package levels
 		public function getPreviousRoom() : Level
 		{
 			var newIndex : int = _currentRoomIndex - 1;
-			FlxG.log("Index: " + newIndex);
 			if (newIndex >= 0)
 			{
 				_currentRoomIndex = newIndex;
