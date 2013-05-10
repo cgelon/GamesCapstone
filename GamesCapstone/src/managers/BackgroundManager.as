@@ -2,6 +2,7 @@ package managers
 {
 	
 	import items.Environmental.Background.AcidFlow;
+	import items.Environmental.Background.BackgroundGroup;
 	import items.Environmental.Background.BackgroundItem;
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxG;
@@ -18,18 +19,23 @@ package managers
 		public function addObject (location: FlxPoint, object:Class) : void
 		{
 			var obj : BackgroundItem = new object(location.x, location.y) as BackgroundItem;
-			obj.playStart();
-			if ((obj) as AcidFlow)
+			if (obj != null)
 			{
-				var flow : AcidFlow = (obj) as AcidFlow;
-				for (var i: int = 0; i < flow.myAcid.members.length; i++)
-				{
-					add(flow.myAcid.members[i]);
-				}
-			}
-			else
-			{
+				obj.playStart();
 				add(obj);
+			}
+			else 
+			{				
+				var obj2 : BackgroundGroup = new object(location.x, location.y) as BackgroundGroup;
+				if (obj2 != null)
+				{
+					obj2.playStart();
+					
+					for (var i : int = 0; i < obj2.members.length; i++)
+					{
+						add(obj2.members[i]);
+					}
+				}
 			}
 		}
 	}	

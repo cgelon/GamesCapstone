@@ -208,22 +208,6 @@ package states
 			obj.collideWith(person, this);
 		}
 		
-		override public function addAcid(flow:AcidFlow) : void
-		{
-			for (var i : int = 0; i < flow.myAcid.members.length; i++)
-			{
-				backgroundManager.add(flow.myAcid.members[i]);
-			}
-			flow.playStart();
-		}
-		
-		override public function removeAcid(flow:AcidFlow) : void
-		{
-			for (var i : int = 0; i < flow.myAcid.members.length; i++)
-			{
-				backgroundManager.remove(flow.myAcid.members[i]);
-			}
-		}
 		 
 		/**
 		 * Callback function for when player is hit by an enemy attack
