@@ -1,5 +1,6 @@
 package 
 {
+	import cutscenes.TheInformant;
 	import levels.RoomFlow;
 	import people.players.PlayerStats;
 	/**
@@ -16,10 +17,11 @@ package
 		/** The flow of rooms in the game. */
 		private var _roomFlow : RoomFlow;
 		
+		
 		public function Registry()
 		{
 			_playerStats = new PlayerStats();
-			_roomFlow = new RoomFlow();
+			_roomFlow = new RoomFlow();		
 		}
 		
 		/**

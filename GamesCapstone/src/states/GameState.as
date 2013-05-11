@@ -2,6 +2,7 @@ package states
 {
 	import attacks.Attack;
 	import attacks.EnemyAttack;
+	import cutscenes.TheInformant;
 	import items.Environmental.Background.AcidFlow;
 	import items.Environmental.Background.Door;
 	import items.Environmental.Crate;
@@ -38,6 +39,9 @@ package states
 		 * calls the callback multiple times for a single overlap.
 		 */
 		private var playerHitThisFrame : Boolean;
+		
+		/** Whether the player has switched rooms this frame. */
+		private var movedRoomsThisFrame : Boolean;
 		
 		/** The level that is displayed in this state. */
 		private var _level : Level;
@@ -95,6 +99,8 @@ package states
 			var enemyAttackManager : EnemyAttackManager = new EnemyAttackManager();
 			var playerAttackManager : PlayerAttackManager = new PlayerAttackManager();
 			
+			var informant : TheInformant = new TheInformant();
+			
 			// Add the managers in this order:
 			//	level
 			//	background
@@ -113,7 +119,10 @@ package states
 			addManager(uiObjectManager);
 			addManager(enemyAttackManager);
 			addManager(playerAttackManager);
+			addManager(informant);
 			active = true;
+			
+			(Manager.getManager(TheInformant) as TheInformant).talk(_level.loadMessage);
 			
 			//	Tell flixel how big our game world is
 			FlxG.worldBounds = new FlxRect(0, 0, _level.width, _level.height);
@@ -128,13 +137,14 @@ package states
 		override public function update() : void
 		{
 			super.update();
-			if (FlxG.keys.justPressed("ZERO"))
-				moveToNextRoom();
-			else if (FlxG.keys.justPressed("NINE"))
-				moveToPreviousRoom();
 			
+			if (FlxG.keys.justPressed("NINE"))
+				moveToPreviousRoom();
+			else if (FlxG.keys.justPressed("ZERO"))
+				moveToNextRoom();
 			
 			playerHitThisFrame = false;
+			movedRoomsThisFrame = false;
 			
 			FlxG.collide(getManager(PlayerManager), getManager(LevelManager));
 			FlxG.collide(getManager(EnemyManager), getManager(LevelManager));
@@ -148,17 +158,9 @@ package states
 			collideWithEnvironment(getManager(PlayerManager));
 			collideWithEnvironment(getManager(EnemyManager));
 			
-			// Detect collisions between the player and enemies UNLESS the player is rolling.
-			var player : Player = (getManager(PlayerManager) as PlayerManager).player;
-			
 			//FlxG.overlap(getManager(PlayerManager), getManager(EnemyManager), playerHit);
 			FlxG.overlap(getManager(PlayerManager), getManager(EnemyAttackManager), playerAttacked);
 			
-				
-			for each (var enemy : Enemy in getManager(EnemyManager).members)
-			{
-				//enemy.velocity.x = (enemy.x - player.x < 0) ? enemy.maxVelocity.x / 2 : -enemy.maxVelocity.x / 2;
-			}
 		}
 		
 		/**
@@ -204,6 +206,19 @@ package states
 		private function itemNotifyCallback(person: Actor, obj: EnvironmentalItem): void 
 		{
 			obj.collideWith(person, this);
+			if (obj is Door && FlxG.keys.justPressed("W") && !movedRoomsThisFrame)
+			{
+				if (person.x < _level.width / 2)
+				{					
+					movedRoomsThisFrame = true;
+					moveToPreviousRoom();
+				}
+				else
+				{
+					movedRoomsThisFrame = true;
+					moveToNextRoom();
+				}
+			}
 		}
 		 
 		/**

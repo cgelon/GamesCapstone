@@ -1,9 +1,12 @@
 package levels
 {
+	import cutscenes.VelocityAction;
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxTilemap;
 	import org.flixel.FlxPoint;
+	import managers.Manager;
+	import cutscenes.TheInformant;
 	
 	/**
 	 * ...
@@ -24,6 +27,8 @@ package levels
 		public var doorLocs: Array;
 		public var circuits: Array;
 		
+		public var loadMessage : String;
+		
 		public function Level() 
 		{
 			super();
@@ -36,6 +41,8 @@ package levels
 			objectTypes = new Array();
 			doorLocs = new Array();
 			circuits = new Array();
+			
+			loadMessage = "You've entered a new level!";
 		}
 	}
 }

@@ -1,11 +1,12 @@
 package items.Environmental.Background.Circuit 
 {
 	import org.flixel.FlxBasic;
+	import org.flixel.FlxObject;
 	/**
 	 * A circuit connecting two background objects
 	 * @author Michael Zhou
 	 */
-	public class Circuit extends FlxBasic
+	public class Circuit extends FlxObject
 	{
 		public var trigger : Trigger;
 		public var reactor : Reactor;
