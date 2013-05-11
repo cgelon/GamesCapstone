@@ -37,16 +37,12 @@ package levels
 			var leverLocs : Array = [new FlxPoint(144, 271), new FlxPoint(624, 161)];
 			var acidFlowLocs : Array = [new FlxPoint(240, 226), new FlxPoint(720, 141)];
 			for (var i: int = 0; i < leverLocs.length; i++) {
+				circuits.push(true);
 				backgroundStarts[2 * i] = leverLocs[i];
 				backgroundTypes[2 * i] = Lever;
 				backgroundStarts[2 * i + 1] = acidFlowLocs[i];
 				backgroundTypes[2 * i + 1] = AcidFlow;
 			}
-			
-			for (i = 0; i < leverLocs.length; i++) {
-				circuits.push(true);
-			}
-			
 			var acidLocs : Array = [new FlxPoint(208, 6), new FlxPoint(592, 18)];
 			var sum : int = 0;
 			for (i = 0; i < acidLocs.length; i++)
