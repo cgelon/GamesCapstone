@@ -71,8 +71,6 @@ package people.enemies
 			facing = FlxObject.LEFT;
 			drag.x = maxVelocity.x * 4;
 			state = ActorState.IDLE;
-			
-			FlxG.watch(this, "stateName", "State");
 		}
 		
 		public function get stateName() : String

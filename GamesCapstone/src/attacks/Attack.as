@@ -5,6 +5,8 @@ package attacks
 	import people.Actor;
 	import util.Color;
 	import attacks.AttackType;
+	import managers.Manager;
+	import managers.LevelManager;
 	
 	/**
 	 * The base class for attacks.
@@ -13,13 +15,16 @@ package attacks
 	 */
 	public class Attack extends FlxSprite
 	{
+		public static const PROJECTILE_DURATION : int = -1;
+		
 		/** How many frames the attack has been alive for. */
-		private var _counter : Number;
-		
+		protected var _counter : uint;
+		/** How many frames the attack should be alive for. */
+		protected var _duration : uint;
 		/** How much damage the attack does. */
-		private var _baseDamage : Number;
+		protected var _baseDamage : Number;
 		
-		private var _totalDamage : Number = 0;		
+		protected var _totalDamage : Number = 0;		
 		public function get damage() : Number { return _totalDamage; }
 		
 		
@@ -34,17 +39,19 @@ package attacks
 			_type = type;
 		}
 		
-		public function initialize(x : Number, y : Number, bonusDamage : Number = 0) : void
+		public function initialize(x : Number, y : Number, bonusDamage : Number = 0, duration : int = 3) : void
 		{
 			this.x = x;
 			this.y = y;
 			
 			revive();
 			
+			_duration = duration;
 			_totalDamage = _baseDamage + bonusDamage;
 			_counter = 0;
 			makeGraphic(width, height, Color.WHITE, true);
 			alpha = 0;
+			//visible = false;
 			FlxG.clearBitmapCache();
 		}
 		
@@ -52,7 +59,7 @@ package attacks
 		{
 			super.update();
 			
-			if (_counter > 3)
+			if (type != AttackType.PROJECTILE && _counter > _duration)
 			{
 				kill();
 			}
@@ -64,6 +71,7 @@ package attacks
 			super.kill();
 			_counter = 0;
 			_totalDamage = 0;
+			_duration = 0;
 		}
 		
 		override public function destroy() : void

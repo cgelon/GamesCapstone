@@ -36,6 +36,7 @@ package items.Environmental
 			loadGraphic(tileset, true, false, 32, 32, false);
 			drag.x = maxVelocity.x / 10;
 			lock();
+			color = 0x77FFFFFF;
 		}
 		
 		override public function update():void
@@ -78,7 +79,6 @@ package items.Environmental
 			isLocked = true;
 			immovable = true;
 			moves = false;
-			color = 0x33FF7777;
 			velocity.x = 0;
 			velocity.y = 0;
 			acceleration.y = 0;
@@ -90,7 +90,6 @@ package items.Environmental
 			isLocked = false;
 			immovable = false;
 			moves = true;
-			color = 0x77FFFFFF;
 			acceleration.y = GRAVITY;
 		}
 	}

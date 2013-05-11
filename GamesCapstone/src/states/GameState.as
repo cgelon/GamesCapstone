@@ -2,6 +2,7 @@ package states
 {
 	import attacks.Attack;
 	import attacks.EnemyAttack;
+	import attacks.AttackType;
 	import cutscenes.TheInformant;
 	import items.Environmental.Background.AcidFlow;
 	import items.Environmental.Background.Door;
@@ -22,6 +23,7 @@ package states
 	import org.flixel.FlxObject;
 	import org.flixel.FlxRect;
 	import org.flixel.FlxState;
+	import org.flixel.FlxTilemap;
 	import people.Actor;
 	import people.enemies.Enemy;
 	import people.players.Player;
@@ -45,6 +47,7 @@ package states
 		
 		/** The level that is displayed in this state. */
 		private var _level : Level;
+		public function get level() : Level { return _level; }
 		
 		public function GameState(level : Level = null)
 		{
@@ -148,6 +151,8 @@ package states
 			
 			FlxG.collide(getManager(PlayerManager), getManager(LevelManager));
 			FlxG.collide(getManager(EnemyManager), getManager(LevelManager));
+			FlxG.collide(getManager(PlayerAttackManager), getManager(LevelManager), attackHitLevel);
+			FlxG.collide(getManager(EnemyAttackManager), getManager(LevelManager), attackHitLevel);
 			FlxG.overlap(getManager(EnemyManager), getManager(PlayerAttackManager), enemyHit);
 			FlxG.overlap(getManager(PlayerManager), getManager(BackgroundManager), itemNotifyCallback);
 			FlxG.overlap(getManager(EnemyManager), getManager(BackgroundManager), itemNotifyCallback);
@@ -234,6 +239,7 @@ package states
 			{
 				(getManager(PlayerManager) as PlayerManager).HurtPlayer(attack);
 				playerHitThisFrame = true;
+				attack.kill();
 			}
 		}
 		
@@ -266,6 +272,7 @@ package states
 		private function enemyHit(enemy : Enemy, attack : Attack) : void
 		{
 			enemy.getHit(attack);
+			attack.kill();
 		}
 		
 		protected function moveToNextRoom() : void
@@ -283,6 +290,14 @@ package states
 			if (previousRoom != null)
 			{
 				FlxG.switchState(new GameState(previousRoom));
+			}
+		}
+		
+		public function attackHitLevel(attack : Attack, level : FlxTilemap) : void
+		{
+			if (attack.type == AttackType.PROJECTILE)
+			{
+				attack.kill();
 			}
 		}
 		

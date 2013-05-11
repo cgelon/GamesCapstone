@@ -2,12 +2,14 @@ package managers
 {
 	import attacks.Attack;
 	import attacks.AttackType;
+	import attacks.ProjectileAttack;
 	import attacks.StrongAttack;
 	import attacks.WeakAttack;
 	import attacks.WeakLowAttack;
 	import attacks.WeakAirAttack;
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxObject;
+	import org.flixel.FlxPoint;
 	import people.players.Player;
 	
 	/**
@@ -41,30 +43,23 @@ package managers
 				x = facing == FlxObject.LEFT ? player.x - WeakAirAttack.WEAK_AIR_ATTACK_WIDTH + player.width / 2 : player.x + player.width / 2;
 			}
 			
-			
-			
 			attack.initialize(x, y, player.damageBonus);
 		}
-		
-		public function weakLowAttack(facing : uint) : void
-		{
-			var attack : WeakLowAttack = recycle( WeakLowAttack ) as WeakLowAttack;
-			
-			var x : Number = facing == FlxObject.LEFT ? player.x - WeakLowAttack.WEAK_LOW_ATTACK_WIDTH + player.width / 2 : player.x + player.width / 2;
-			var y : Number = player.y + player.height - WeakLowAttack.WEAK_LOW_ATTACK_HEIGHT;
-			
-			attack.initialize(x, y, player.damageBonus);
-		}
-		
-		//public function weakAirAttack(
 		
 		public function strongAttack(facing : uint) : void
 		{
+			/*
 			var attack : StrongAttack = recycle( StrongAttack ) as StrongAttack;
 			
 			var x : Number = facing == FlxObject.LEFT ? player.x - StrongAttack.STRONG_ATTACK_WIDTH + player.width / 2 : player.x + player.width / 2;
 			
 			attack.initialize(x, player.y, player.damageBonus);
+			*/
+			
+			var x : Number = facing == FlxObject.LEFT ? player.x - StrongAttack.STRONG_ATTACK_WIDTH + player.width / 2 : player.x + player.width / 2;
+			var attack : ProjectileAttack = new ProjectileAttack(5, 5, 1, new FlxPoint(0, -100));
+			attack.initialize(x, player.y, 0, Attack.PROJECTILE_DURATION);
+			add(attack);
 		}
 		
 		public function get player() : Player

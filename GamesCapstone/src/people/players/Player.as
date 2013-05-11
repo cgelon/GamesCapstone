@@ -46,7 +46,7 @@ package people.players
 		private static const ROLL_DURATION : Number = .5;
 		/** How long the player is knocked down when they get hurt, in seconds. */
 		private static const HURT_DURATION : Number = 1;
-		/** How long after the player had died before the level resets. */
+		/** How long (in seconds) after the player had died before the level resets. */
 		private static const RESET_TIME : Number = 5;
 		
 		/** The amount of stamina to regenerate every frame. */

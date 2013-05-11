@@ -18,11 +18,6 @@ package attacks
 			super(WEAK_LOW_ATTACK_WIDTH, WEAK_LOW_ATTACK_HEIGHT, WEAK_LOW_ATTACK_DAMAGE, AttackType.LOW);
 		}
 		
-		override public function initialize(x : Number, y : Number, bonusDamage : Number = 0) : void
-		{
-			super.initialize(x, y, bonusDamage);
-		}
-		
 		override public function update() : void 
 		{
 			super.update();
