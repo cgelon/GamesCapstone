@@ -157,6 +157,8 @@ package items.Environmental.Background
 				currentAcid = members[i];
 				currentAcid.exists = true;
 			}
+			if (getManager(BackgroundManager) != null)
+				getManager(BackgroundManager).add(this);
 		}
 		
 		override public function disable() : void
