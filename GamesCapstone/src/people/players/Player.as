@@ -46,6 +46,8 @@ package people.players
 		private static const ROLL_DURATION : Number = .5;
 		/** How long the player is knocked down when they get hurt, in seconds. */
 		private static const HURT_DURATION : Number = 1;
+		/** How long after the player had died before the level resets. */
+		private static const RESET_TIME : Number = 5;
 		
 		/** The amount of stamina to regenerate every frame. */
 		private static const STAM_REGEN : Number = 0.5;
@@ -86,6 +88,9 @@ package people.players
 		private var _stamina : Number;
 		
 		private var _statManager : StatManager;
+		
+		/** Whether or not the player has been dead long enough that the level should reset. */
+		public var readyToReset : Boolean;
 		
 		/** The PNG for the player. */
 		[Embed(source = '../../../assets/player.png')] private var playerPNG : Class;
@@ -181,6 +186,8 @@ package people.players
 			state = ActorState.IDLE;
 			_jumpCount = 0;
 			
+			readyToReset = false;
+			
 			acquireWeapon(new Fists());
 			acquireWeapon(new HammerArm());
 			_currentWeapon = 0;
@@ -252,6 +259,10 @@ package people.players
 					updateAttacking();
 					break;
 				case ActorState.DEAD:
+					actionTimer.start(RESET_TIME, 1, function(timer : FlxTimer) : void
+					{
+						readyToReset = true;
+					});
 					break;
 			}
 			

@@ -26,6 +26,8 @@ package levels
 			_rooms.push(StartingEnemiesLevel);
 			_rooms.push(EvilLabVatLevel);
 			_rooms.push(AcidSwitches);
+			
+			_currentRoomIndex = 0;
 		}
 		
 		/**
@@ -69,6 +71,14 @@ package levels
 				return new _rooms[newIndex]();
 			}
 			return null;
+		}
+		
+		/**
+		 * @return	A copy of the current room that the player is in.
+		 */
+		public function getCurrentRoom() : Level
+		{
+			return new _rooms[_currentRoomIndex]();
 		}
 		
 		/**

@@ -161,6 +161,8 @@ package states
 			//FlxG.overlap(getManager(PlayerManager), getManager(EnemyManager), playerHit);
 			FlxG.overlap(getManager(PlayerManager), getManager(EnemyAttackManager), playerAttacked);
 			
+			if ((getManager(PlayerManager) as PlayerManager).player.readyToReset)
+				resetRoom();
 		}
 		
 		/**
@@ -282,6 +284,11 @@ package states
 			{
 				FlxG.switchState(new GameState(previousRoom));
 			}
+		}
+		
+		protected function resetRoom() : void
+		{
+			FlxG.switchState(new GameState(Registry.roomFlow.getCurrentRoom()));
 		}
 		
 		/**
