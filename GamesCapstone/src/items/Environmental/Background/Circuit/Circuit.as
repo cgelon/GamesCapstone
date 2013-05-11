@@ -10,12 +10,14 @@ package items.Environmental.Background.Circuit
 	{
 		public var trigger : Trigger;
 		public var reactor : Reactor;
+		public var enabled : Boolean;
 		
 		public function Circuit(trigger:Trigger, reactor:Reactor, activated:Boolean) 
 		{
 			this.trigger = trigger;
 			this.trigger.circuit_callback = callback;
 			this.reactor = reactor;
+			this.enabled = activated;
 			if (activated) {
 				trigger.enable();
 			} else {
@@ -25,6 +27,7 @@ package items.Environmental.Background.Circuit
 		
 		public function callback(enabled : Boolean) : void
 		{
+			this.enabled = enabled;
 			if (enabled) {
 				this.reactor.enable();
 			} else {

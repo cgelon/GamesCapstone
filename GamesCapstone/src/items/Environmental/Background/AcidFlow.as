@@ -1,78 +1,149 @@
 package items.Environmental.Background
 {
 	import items.Environmental.Background.Circuit.Reactor;
+	import items.Environmental.Crate;
 	import managers.BackgroundManager;
 	import managers.LevelManager;
 	import managers.Manager;
+	import managers.ObjectManager;
 	import org.flixel.FlxG;
+	import org.flixel.FlxGroup;
 	import org.flixel.FlxObject;
 	import org.flixel.FlxTilemap;
+	import org.flixel.system.FlxTile;
 	import states.GameState;
 	/**
 	 * @author Lydia Duncan
 	 */
 	public class AcidFlow extends Reactor implements BackgroundInterface
 	{
-		private var acidheight : Number;
 		private var X : Number;
 		private var Y : Number;
+		private var counter : Number;
 		
 		function AcidFlow(X:Number = 0, Y:Number = 0) : void 
 		{	
 			super();
 			
-			this.acidheight = 1;
 			this.X = X;
 			this.Y = Y;
-			for (var j: int = 0; j < acidheight; j++)
+			this.counter = 0;
+			for (var j: int = 0; j < 1; j++)
 			{
 				for (var i: int = 0; i < 2; i++)
 				{				
 					add(new Acid(X + 16 * i, Y + 16 * (j + 1)));
 				}
 			}
+			
 			// Keeps track of the acid that will flow when the lever is
 			// activated	
 		}
 		
+		public function addAcid(X:Number, Y:Number)  : void
+		{
+			var acid : Acid = recycle( Acid ) as Acid;
+			acid.initialize(X, Y);
+			add(acid);
+			acid.acceleration.y = 1000;
+		}
+		
 		override public function update() : void
-		{ 
-			
-			if (!overlaps((getManager(LevelManager) as LevelManager).map)) 
+		{
+			counter += FlxG.elapsed;
+			if (counter >= 0.25)
 			{
-				for (var i: int = 0; i < 2; i++)
-				{				
-					add(new Acid(X + 16 * i, Y + 16 * (acidheight + 1)));
+				if (enabled)
+				{
+					for (var i: int = 0; i < 2; i++)
+					{				
+						addAcid(X + 16 * i, Y + 24);
+					}
 				}
-				acidheight++;
 				playStart();
+				counter = 0;
 			}
+			
+			killMapOverlaps((getManager(LevelManager) as LevelManager).map);
+			killCrateOverlaps(getManager(ObjectManager) as ObjectManager as FlxGroup);
 			super.update();
 		}
 		
-		public function overlaps(group:FlxTilemap) : Boolean 
+		public function killMapOverlaps(map:FlxTilemap) : void 
 		{
-			var result : Boolean = false;
+			var currentAcid : Acid = null;
 			for (var i:int; i < length; i++) 
 			{
-				if (members[i] != null) {
-					result = result || (members[i].overlaps(group));
+				currentAcid = members[i];
+				if (currentAcid != null && (map.overlapsWithCallback(currentAcid, overlapCallback)))
+				{
+					remove(currentAcid);
+					currentAcid.kill();
 				}
+				
+			}
+		}
+		
+		public function killCrateOverlaps(objects: FlxGroup) : void
+		{
+			var crates : Array = [];
+			for (var i: int = 0; i < objects.length ; i++) {
+				if (objects.members[i] != null && objects.members[i] is Crate)
+				{
+					crates.push(objects.members[i]);
+				}
+			}
+			
+			var currentAcid : Acid = null;
+			var currentCrate : Crate = null;
+			for (i = 0; i < length; i++) 
+			{
+				currentAcid = members[i];
+				for (var j: int = 0; j < crates.length; j++) {
+					currentCrate = crates[j];
+					if (currentAcid != null && currentCrate != null &&
+					    (currentCrate.overlaps(currentAcid)))
+					{
+						remove(currentAcid);
+						currentAcid.kill();
+					}
+				}
+			}
+		}
+		
+		public function overlapCallback(tile: FlxTile, object: Acid) : Boolean
+		{
+			var platformTileTypes : Array = [423, 424, 425, 426];
+			//var forcefieldTileTypes : Array = [458, 490, 522, 519, 520, 521];
+			var overlapFound : Boolean = false;
+			// copied from flixel code
+			overlapFound = (object.x + object.width > tile.x) && (object.x < tile.x + tile.width) && (object.y + object.height > tile.y) && (object.y < tile.y + tile.height);
+			return (overlapFound && !containsNum(tile.index, platformTileTypes))			
+		}
+		
+		private function containsNum(num: Number, array: Array) : Boolean
+		{
+			var result : Boolean = false;
+			for (var i: int = 0; i < array.length; i++)
+			{
+				result = result || (num == array[i]);
 			}
 			return result;
 		}
 		
 		override public function playStart():void 
 		{
-			var k: int;
-			for (k = 0; k < 2; k++)
+			var currentAcid : Acid = null;
+			for (var k: int = 0; k < length; k++)
 			{
-				members[k].play("slosh");
-			}
-			for (k = 2; k < members.length; k++)
-			{
-				if (members[k] != null) {
-					members[k].play("idle");
+				currentAcid = members[k];
+				if (currentAcid != null) {
+					if (k == 0 || k == 1) 
+					{
+						currentAcid.play("slosh");
+					} else {
+						currentAcid.play("idle");
+					}
 				}
 			}
 		}
@@ -80,15 +151,24 @@ package items.Environmental.Background
 		
 		override public function enable() : void
 		{ 
-			if (getManager(BackgroundManager) != null)
-				getManager(BackgroundManager).add(this);
-			playStart();
+			super.enable();
+			var currentAcid : Acid = null;
+			for (var i: int = 0; i < 2; i++) {
+				currentAcid = members[i];
+				currentAcid.exists = true;
+			}
 		}
 		
 		override public function disable() : void
 		{ 
-			if (getManager(BackgroundManager) != null)
-				getManager(BackgroundManager).remove(this);
+			super.disable();
+			//if (getManager(BackgroundManager) != null)
+			//	getManager(BackgroundManager).remove(this);
+			var currentAcid : Acid = null;
+			for (var i: int = 0; i < 2; i++) {
+				currentAcid = members[i];
+				currentAcid.exists = false;
+			}
 		}
 		
 		/**

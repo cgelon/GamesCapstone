@@ -20,8 +20,6 @@ package items
 		{
 			this.x = x;
 			this.y = y;
-			last.x = x;
-			last.y = y;
 		}
 		
 	}

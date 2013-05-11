@@ -67,6 +67,12 @@ package items.Environmental.Background
 			}
 		}
 		
+		override public function initialize(x : Number, y : Number) : void
+		{
+			super.initialize(x, y);
+			oldY = y;
+		}
+		
 		override public function playStart():void 
 		{
 			play("slosh");
