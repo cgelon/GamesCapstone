@@ -48,18 +48,11 @@ package managers
 		
 		public function strongAttack(facing : uint) : void
 		{
-			/*
 			var attack : StrongAttack = recycle( StrongAttack ) as StrongAttack;
 			
 			var x : Number = facing == FlxObject.LEFT ? player.x - StrongAttack.STRONG_ATTACK_WIDTH + player.width / 2 : player.x + player.width / 2;
 			
 			attack.initialize(x, player.y, player.damageBonus);
-			*/
-			
-			var x : Number = facing == FlxObject.LEFT ? player.x - StrongAttack.STRONG_ATTACK_WIDTH + player.width / 2 : player.x + player.width / 2;
-			var attack : ProjectileAttack = new ProjectileAttack(5, 5, 1, new FlxPoint(0, -100));
-			attack.initialize(x, player.y, 0, Attack.PROJECTILE_DURATION);
-			add(attack);
 		}
 		
 		public function get player() : Player
