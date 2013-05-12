@@ -11,7 +11,7 @@ package attacks
 	{
 		public static const WEAK_LOW_ATTACK_DAMAGE : Number = 1;
 		public static const WEAK_LOW_ATTACK_WIDTH : Number = 30;
-		public static const WEAK_LOW_ATTACK_HEIGHT : Number = 20;
+		public static const WEAK_LOW_ATTACK_HEIGHT : Number = 1;
 		
 		public function WeakLowAttack()
 		{
