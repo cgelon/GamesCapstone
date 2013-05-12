@@ -520,7 +520,7 @@ package people.players
 			Registry.playerStats.stamina = value;
 		}
 		
-		override protected function executeAction(action : ActorAction, newState : ActorState = null, index : int = 0) : void
+		override public function executeAction(action : ActorAction, newState : ActorState = null, index : int = 0) : void
 		{
 			super.executeAction(action, newState, index);
 			Registry.addAction(action, 1);

@@ -1,5 +1,6 @@
 package cutscenes 
 {
+	import cutscenes.engine.MessageBox;
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxTimer;
 	import util.Color;

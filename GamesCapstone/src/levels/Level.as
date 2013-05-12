@@ -1,12 +1,8 @@
 package levels
 {
-	import cutscenes.VelocityAction;
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxTilemap;
-	import org.flixel.FlxPoint;
-	import managers.Manager;
-	import cutscenes.TheInformant;
 	
 	/**
 	 * ...

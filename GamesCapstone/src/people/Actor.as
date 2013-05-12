@@ -164,10 +164,10 @@ package people
 		 * @param	newState	The new state to move into, or null if the state isn't changing.
 		 * @param	index	Specifies which animation to play for the specified action.
 		 */
-		protected function executeAction(action : ActorAction, newState : ActorState = null, index : int = 0) : void
+		public function executeAction(action : ActorAction, newState : ActorState = null, index : int = 0) : void
 		{
 			// Play the sound associated with the action.
-			if (action != lastAction && _soundsToAction[action] != null)
+			if (_soundsToAction[action] != null)
 			{
 				(_soundsToAction[action] as SoundEffect).play();
 			}

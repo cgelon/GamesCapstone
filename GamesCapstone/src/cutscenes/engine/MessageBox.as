@@ -1,4 +1,4 @@
-package cutscenes 
+package cutscenes.engine 
 {
 	import flash.text.Font;
 	import org.flixel.FlxGroup;
@@ -314,6 +314,16 @@ package cutscenes
 					_timer.pause();
 				}
 			}
+		}
+		
+		public function get width() : Number
+		{
+			return (_textLines[0] as FlxText).width;
+		}
+		
+		public function get height() : Number
+		{
+			return (_textLines[0] as FlxText).height * (_numLines + 1);
 		}
 		
 		override public function destroy() : void
