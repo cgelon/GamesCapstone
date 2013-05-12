@@ -83,7 +83,7 @@ package states
 			var enemyManager : EnemyManager = new EnemyManager();
 			for (i = 0; i < _level.enemyStarts.length; i++) 
 			{
-				enemyManager.addEnemy(_level.enemyStarts[i]);
+				enemyManager.addEnemy(_level.enemyStarts[i], _level.enemyTypes[i]);
 			}
 			
 			var playerManager : PlayerManager = new PlayerManager();
@@ -143,7 +143,8 @@ package states
 			addManager(informant);
 			active = true;
 			
-			(Manager.getManager(TheInformant) as TheInformant).talk(_level.loadMessage);
+			if (_level.loadMessage != null)
+				(Manager.getManager(TheInformant) as TheInformant).talk(_level.loadMessage);
 			
 			//	Tell flixel how big our game world is
 			FlxG.worldBounds = new FlxRect(0, 0, _level.width, _level.height);
