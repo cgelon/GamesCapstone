@@ -15,6 +15,7 @@ package org.flixel
 	import flash.ui.Mouse;
 	import flash.utils.Timer;
 	import flash.utils.getTimer;
+	import org.flixel.plugin.photonstorm.FlxDelay;
 	
 	import org.flixel.plugin.TimerManager;
 	import org.flixel.system.FlxDebugger;
@@ -39,6 +40,10 @@ package org.flixel
 		 * replays on a server.
 		 */
 		public var identifier:int;
+		/**
+		 * An internal tracker that uploads replay data to the server for later use.
+		 */
+		public var uploadTimer:FlxDelay;
 		
 		/**
 		 * Sets 0, -, and + to control the global volume sound volume.
@@ -218,7 +223,19 @@ package org.flixel
 			addEventListener(Event.ENTER_FRAME, create);
 			
 			//set the identifier to a random value
-			identifier = Math.floor(Math.random()*(int.MAX_VALUE));
+			identifier = Math.floor(Math.random() * (int.MAX_VALUE));
+			//set the upload timer
+			uploadTimer = new FlxDelay(30 * 1000);
+			uploadTimer.callback = uploadData;
+		}
+		
+		/**
+		 * Callback to upload game data to the server.
+		 */
+		private function uploadData() : void
+		{
+			FlxG.uploadRecording();
+			uploadTimer.reset(30 * 1000);
 		}
 		
 		/**
@@ -537,6 +554,7 @@ package org.flixel
 					_debugger.vcr.recording();
 					FlxG.log("FLIXEL: starting new flixel gameplay record.");
 				}
+				uploadTimer.start();
 			}
 			else if(_replayRequested)
 			{

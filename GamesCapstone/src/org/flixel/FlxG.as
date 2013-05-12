@@ -457,6 +457,7 @@ package org.flixel
 			if(_game._debugger != null)
 				_game._debugger.vcr.stopped();
 			resetInput();
+			_game.uploadTimer.abort();
 		}
 		
 		/**
