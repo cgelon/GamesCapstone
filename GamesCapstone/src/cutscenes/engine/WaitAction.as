@@ -1,5 +1,7 @@
-package cutscenes 
+package cutscenes.engine 
 {
+	import org.flixel.FlxTimer;
+	
 	/**
 	 * WaitAction waits a certain amount of time.
 	 * 
@@ -10,22 +12,26 @@ package cutscenes
 		private var _time : Number;
 		private var _callback : Function;
 		
-		public function WaitAction(time : Number, callback : Function = null)
+		public function WaitAction(time : Number)
 		{
 			_time = time;
-			_callback = callback;
 		}
 		
 		override public function run(callback : Function) : void
 		{
 			_callback = callback;
-			wait(_time, _callback);
+			wait(_time);
 		}
 		
-		public function wait(time : Number, callback : Function = null) : void
+		public function wait(time : Number) : void
 		{
-			var timer = new FlxTimer();
-			timer.start(time, 1, callback);
+			var timer : FlxTimer = new FlxTimer();
+			timer.start(time, 1, afterWait);
+		}
+		
+		private function afterWait(timer : FlxTimer) : void
+		{
+			_callback();
 		}
 		
 		override public function destroy() : void

@@ -1,4 +1,4 @@
-package cutscenes 
+package cutscenes.engine 
 {
 	import org.flixel.FlxObject;
 	import org.flixel.FlxPoint;

@@ -1,4 +1,4 @@
-package cutscenes 
+package cutscenes.engine 
 {
 	import org.flixel.FlxObject;
 	import org.flixel.FlxG;
@@ -21,7 +21,7 @@ package cutscenes
 		private var _point : FlxPoint;
 		private var _zoom : Number;
 		
-		public function CameraAction(action : String, object : FlxObject, point : FlxPoint, _zoom : Number)
+		public function CameraAction(action : String, object : FlxObject, point : FlxPoint, zoom : Number)
 		{
 			_action = action;
 			_object = object;

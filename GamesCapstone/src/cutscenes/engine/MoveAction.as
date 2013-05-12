@@ -1,4 +1,4 @@
-package cutscenes 
+package cutscenes.engine 
 {
 	import org.flixel.FlxObject;
 	import org.flixel.FlxPoint;
@@ -24,7 +24,6 @@ package cutscenes
 			_object = object;
 			_endPosition = endPosition;
 			_time = time;
-			_callback = callback;
 		}
 		
 		override public function run(callback : Function) : void
