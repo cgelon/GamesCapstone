@@ -65,7 +65,7 @@ package attacks
 		{
 			super.update();
 			
-			if (type != AttackType.PROJECTILE && _counter > _duration)
+			if (_counter > _duration)
 			{
 				kill();
 			}

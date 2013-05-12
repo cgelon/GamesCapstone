@@ -6,6 +6,8 @@ package levels
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxTilemap;
+	import people.enemies.LightningRobot;
+	import people.enemies.Robot;
 	
 	/**
 	 * ...
@@ -31,7 +33,9 @@ package levels
 			// Stores the player start points
 			
 			enemyStarts[0] = new FlxPoint(672, 120);
+			enemyTypes[0] = Robot;
 			enemyStarts[1] = new FlxPoint(1312, 120);
+			enemyTypes[1] = LightningRobot;
 			// Stores the enemy start points
 			
 			var leverLocs : Array = [160, 576, 992, 1408, 1824];
@@ -44,7 +48,7 @@ package levels
 			}
 			
 			for (i = 0; i < leverLocs.length; i++) {
-				circuits.push(false);
+				backgroundCircuits.push(false);
 			}
 			// Store the location of the levers
 			
@@ -54,16 +58,16 @@ package levels
 			{
 				for (var k: int = 0; k < 5; k++) 
 				{
-					backgroundStarts[circuits.length * 2 + j * 5 + k] = new FlxPoint(vatLocs[j] + (k * 16), 192);
-					backgroundTypes[circuits.length * 2 + j * 5 + k] = Acid;
+					backgroundStarts[backgroundCircuits.length * 2 + j * 5 + k] = new FlxPoint(vatLocs[j] + (k * 16), 192);
+					backgroundTypes[backgroundCircuits.length * 2 + j * 5 + k] = Acid;
 				}
 			}
 			// Stores the acid locations within the vats
 			
 			for (var l: int = 0; l < (width / 16) - 2; l++) 
 			{
-				backgroundStarts[circuits.length * 2 + vatLocs.length * 5 + l] = new FlxPoint(16 + (l * 16), height - 32);
-				backgroundTypes[circuits.length * 2 + vatLocs.length * 5 + l] = Acid;
+				backgroundStarts[backgroundCircuits.length * 2 + vatLocs.length * 5 + l] = new FlxPoint(16 + (l * 16), height - 32);
+				backgroundTypes[backgroundCircuits.length * 2 + vatLocs.length * 5 + l] = Acid;
 			}
 			// Stores the acid locations for the floor
 			doorLocs[0] = new FlxPoint(16, 112);

@@ -1,13 +1,13 @@
 package items.Environmental.Background.Circuit 
 {
-	import items.Environmental.Background.BackgroundGroup;
+	import items.Environmental.EnvironmentalGroup;
 	import managers.BackgroundManager;
 	
 	/**
 	 * ...
 	 * @author ...
 	 */
-	public class Reactor extends BackgroundGroup
+	public class Reactor extends EnvironmentalGroup
 	{
 		protected var enabled : Boolean;
 		

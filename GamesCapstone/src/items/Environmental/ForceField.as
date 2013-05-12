@@ -1,5 +1,6 @@
 package items.Environmental
 {
+	import items.Environmental.Background.Circuit.Reactor;
 	import managers.ObjectManager;
 	import org.flixel.FlxObject;
 	import org.flixel.FlxPoint;
@@ -11,7 +12,7 @@ package items.Environmental
 	/**
 	 * @author Lydia Duncan
 	 */
-	public class ForceField extends EnvironmentalGroup 
+	public class ForceField extends Reactor 
 	{		
 		/** Takes the starting X and Y coordinates, the height and width of the field in tile squares, and
 		 * an array indicating which sides are present in the order: top, right, bottom, left
@@ -28,8 +29,8 @@ package items.Environmental
 		 * 
 		 * Corners take precedence over more normal end pieces
 		 */
-		function ForceField(Sides: Array, X: Number = 0, Y:Number = 0, Height: Number = 0, 
-							Width: Number = 0) : void
+		function ForceField(Sides: Array, X: Number, Y:Number, Height: Number, 
+							Width: Number) : void
 		{
 			if (Height != 0 && Width != 0)
 			{
@@ -118,72 +119,15 @@ package items.Environmental
 					}
 				}
 			}
-			
-			/*
-			// "Corner case", ha ha
-			if (Sides[0] && Sides[3]) {
-				(add(new ForceFieldUnit(X, Y)) as ForceFieldUnit).upperLeft();
-			} else if (Sides[0]) {
-				(add(new ForceFieldUnit(X, Y)) as ForceFieldUnit).leftHoriz();
-			} else if (Sides[3]) {
-				(add(new ForceFieldUnit(X, Y)) as ForceFieldUnit).upperVert();
+		}
+		
+		override public function disable():void 
+		{
+			super.disable();
+			for (var i : int = 0; i < length; i++) 
+			{
+				(members[i] as ForceFieldUnit).exists = false;
 			}
-			
-			// Draws the top 
-			if (Sides[0]) {
-				for (i = 1; i < Width - 1; i++) {
-					(add(new ForceFieldUnit(X + i * 16, Y)) as ForceFieldUnit).midHoriz();
-				}				
-				// "Corner case", ha ha
-				if (Sides[1]) {
-					(add(new ForceFieldUnit(X + (Width - 1) * 16, Y)) as ForceFieldUnit).upperRight();
-				} else {
-					(add(new ForceFieldUnit(X + (Width - 1) * 16, Y)) as ForceFieldUnit).rightHoriz();
-				}
-			}
-			// Draws the right side
-			if (Sides[1]) {
-				// "Corner case", ha ha
-				if (!Sides[0]) {
-					(add(new ForceFieldUnit(X + (Width - 1) * 16, Y)) as ForceFieldUnit).upperVert();
-				}
-				for (j = 1; j < Height - 1; j++) {
-					(add(new ForceFieldUnit(X + (Width - 1) * 16, Y + j * 16)) as ForceFieldUnit).midVert();
-				}
-				// "Corner case", ha ha
-				if (Sides[2]) {
-					(add(new ForceFieldUnit(X + (Width - 1) * 16, Y + (Height - 1) * 16)) as ForceFieldUnit).lowerRight();
-				} else {
-					(add(new ForceFieldUnit(X + (Width -1) * 16, Y + (Height - 1) * 16)) as ForceFieldUnit).lowerVert();
-				}
-			}
-			// Draws the bottom
-			if (Sides[2]) {
-				// "Corner case", ha ha
-				if (!Sides[1]) {
-					(add(new ForceFieldUnit(X + (Width - 1) * 16, Y + (Height - 1) * 16)) as ForceFieldUnit).rightHoriz();
-				}
-				for (i = Width - 2; i > 0; i--) {
-					(add(new ForceFieldUnit(X + i * 16, Y + (Height - 1) * 16)) as ForceFieldUnit).midHoriz();
-				}				
-				// "Corner case", ha ha
-				if (Sides[3]) {
-					(add(new ForceFieldUnit(X, Y + (Height - 1) * 16)) as ForceFieldUnit).lowerLeft();
-				} else {
-					(add(new ForceFieldUnit(X, Y + (Height - 1) * 16)) as ForceFieldUnit).leftHoriz();
-				}
-			}
-			// Draws the left side
-			if (Sides[3]) {
-				// "Corner case", ha ha
-				if (!Sides[2]) {
-					(add(new ForceFieldUnit(X, Y + (Height - 1) * 16)) as ForceFieldUnit).lowerVert();
-				}
-				for (j = Height - 2; j > 0; j--) {
-					(add(new ForceFieldUnit(X, Y + j * 16)) as ForceFieldUnit).midVert();
-				}
-			}
-			*/
-		}		
+		}
 	}
 }

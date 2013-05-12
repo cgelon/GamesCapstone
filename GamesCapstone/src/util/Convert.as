@@ -13,6 +13,10 @@ package util
 			return frames / FlxG.framerate;
 		}
 		
+		public static function secondsToFrames(seconds : Number) : Number
+		{
+			return FlxG.framerate * seconds;
+		}
 	}
 
 }

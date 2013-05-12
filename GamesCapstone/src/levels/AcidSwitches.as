@@ -7,6 +7,7 @@ package levels
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxTilemap;
+	import people.enemies.LightningRobot;
 	import states.State;
 	
 	/**
@@ -32,12 +33,13 @@ package levels
 			// Stores the player start points
 
 			enemyStarts[0] = new FlxPoint(1093, 250);
+			enemyTypes[0] = LightningRobot;
 			// Stores the enemy start points
 			
 			var leverLocs : Array = [new FlxPoint(144, 271), new FlxPoint(624, 161)];
 			var acidFlowLocs : Array = [new FlxPoint(240, 226), new FlxPoint(720, 77)];
 			for (var i: int = 0; i < leverLocs.length; i++) {
-				circuits.push(true);
+				backgroundCircuits.push(true);
 				backgroundStarts[2 * i] = leverLocs[i];
 				backgroundTypes[2 * i] = Lever;
 				backgroundStarts[2 * i + 1] = acidFlowLocs[i];
@@ -49,8 +51,8 @@ package levels
 			{
 				var pair : FlxPoint = acidLocs[i];
 				for (var j: int = 0; j < pair.y; j++) {
-					backgroundStarts[circuits.length * 2 + sum] = new FlxPoint(pair.x + 16 * j, 336);
-					backgroundTypes[circuits.length * 2 + sum] = Acid;
+					backgroundStarts[backgroundCircuits.length * 2 + sum] = new FlxPoint(pair.x + 16 * j, 336);
+					backgroundTypes[backgroundCircuits.length * 2 + sum] = Acid;
 					sum++;
 				}
 			}

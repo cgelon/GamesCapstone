@@ -132,7 +132,7 @@ package items.Environmental.Background
 			return result;
 		}
 		
-		override public function playStart():void 
+		public function playStart():void 
 		{
 			var currentAcid : Acid = null;
 			for (var k: int = 0; k < length; k++)

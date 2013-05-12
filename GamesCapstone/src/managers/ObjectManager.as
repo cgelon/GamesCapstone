@@ -1,5 +1,7 @@
 package managers
 {
+	import items.Environmental.ForceField;
+	import items.Environmental.EnvironmentalGroup;
 	import items.Environmental.EnvironmentalItem;
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxG;
@@ -14,13 +16,29 @@ package managers
 	 * @author Lydia Duncan
 	 */
 	
-	public class ObjectManager extends Manager 
+	public class ObjectManager extends BackgroundManager 
 	{
 		
-		public function addObject (location: FlxPoint, object:Class) : void
+		public function ObjectManager() {
+			super();
+		}
+		
+		override public function addObject(location:FlxPoint, object:Class):void 
 		{
 			var obj : EnvironmentalItem = new object(location.x, location.y) as EnvironmentalItem;
-			add(obj);
+			// The object provided ought to be an EnvironmentalItem, pure and simple
+			if (obj != null)
+			{
+				// If the object provided is an EnvironmentalItem, add it straight to the level
+				obj.track(this);
+				obj.addTo(this);
+			}
+		}
+		
+		public function addForcefield(obj: ForceField) : void
+		{
+			obj.track(this);
+			obj.addTo(this);
 		}
 		
 		/**

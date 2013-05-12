@@ -1,5 +1,6 @@
 package levels
 {
+	import items.Environmental.ForceField;
 	import org.flixel.FlxBasic;
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxPoint;
@@ -10,12 +11,12 @@ package levels
 	 * ...
 	 * @author Lydia Duncan
 	 */
-	public class StartingEnemiesLevel extends Level
+	public class ForceFieldIntro extends Level
 	{
-		[Embed(source = "../../assets/mapCSV_Group2_Flat_corridor.csv", mimeType = "application/octet-stream")] public var CSV : Class;
+		[Embed(source = "../../assets/mapCSV_Group2_EnemyPlatforms.csv", mimeType = "application/octet-stream")] public var CSV : Class;
 		[Embed(source = "../../assets/lab tile arrange.png")] public var PNG : Class;
 		
-		public function StartingEnemiesLevel ()
+		public function ForceFieldIntro ()
 		{
 			super();
 			
@@ -28,16 +29,12 @@ package levels
 			playerStart = new FlxPoint(16, 192);
 			// Stores the player start points
 			
-			enemyStarts[0] = new FlxPoint(450, 176);
+			enemyStarts[0] = new FlxPoint(528, 50);
 			enemyTypes[0] = Robot;
-			enemyStarts[1] = new FlxPoint(1000, 176);
-			enemyTypes[1] = Robot;
-			enemyStarts[2] = new FlxPoint(1550, 176);
-			enemyTypes[2] = Robot;
 			
-			// Stores the acid locations for the floor
-			doorLocs[0] = new FlxPoint(16, 176);
-			doorLocs[1] = new FlxPoint(2096, 176);
+			
+			objectStarts[0] = null;
+			objectTypes[0] = new ForceField([false, true, false, false], 160, 16, 16, 1);
 			
 			add(map);
 		}

@@ -46,6 +46,10 @@ package people.players
 		private static const WEAK_AIR_ATTACK_WINDUP : Number = Convert.framesToSeconds(10);
 		/** Weak air attack's post-attack delay in seconds. */
 		private static const WEAK_AIR_ATTACK_DELAY : Number = Convert.framesToSeconds(10);
+		/** Weak low attack's windup in seconds. */
+		private static const WEAK_LOW_ATTACK_WINDUP : Number = Convert.framesToSeconds(5);
+		/** Weak low attack's post-attack delay in seconds. */
+		private static const WEAK_LOW_ATTACK_DELAY : Number = Convert.framesToSeconds(5);
 		/** Duration of a roll in seconds. */
 		private static const ROLL_DURATION : Number = .5;
 		/** How long the player is knocked down when they get hurt, in seconds. */
@@ -61,6 +65,11 @@ package people.players
 		private static const WEAK_ATTACK_STAM_COST : Number = 10;
 		/** The stamina cost of a roll */
 		private static const ROLL_STAM_COST : Number = 25;
+		
+		/** Max velocity for the player. */
+		private static const MAX_VELOCITY : FlxPoint = new FlxPoint(200, 1000);
+		/** Max velocity for the player when they are pushing. */
+		private static const MAX_PUSHING_VELOCITY : FlxPoint = new FlxPoint(175, 1000);
 		
 		/** All of the weapons/items that the player has collected. **/
 		private var _weapons : Array = new Array(10);
@@ -122,19 +131,21 @@ package people.players
 			addAnimation("walk", [36, 37, 38, 39, 40, 45, 46, 47, 48, 49], 20, true);
 			addAnimation("jump_rising", [19, 20], 10, false);
 			addAnimation("jump_falling", [21], 0, false);
-			addAnimation("basic_attack_windup", [1, 2, 2], 3 / WEAK_ATTACK_WINDUP, false);
-			addAnimation("basic_attack_hit", [3], 20, false);
-			addAnimation("basic_air_attack_windup", [63, 64, 65, 66], 4 / WEAK_AIR_ATTACK_WINDUP, false);
-			addAnimation("basic_air_attack_hit", [67, 68, 69, 70, 71], 7 / WEAK_AIR_ATTACK_DELAY, false);
-			addAnimation("super_attack_windup", [1, 2, 2], 3 / STRONG_ATTACK_WINDUP, false);
-			addAnimation("super_attack_hit", [3, 4, 5, 6], 20, false);
+			addAnimation("weak_attack_windup", [1, 2, 2], 3 / WEAK_ATTACK_WINDUP, false);
+			addAnimation("weak_attack_hit", [3], 20, false);
+			addAnimation("weak_air_attack_windup", [63, 64, 65, 66], 4 / WEAK_AIR_ATTACK_WINDUP, false);
+			addAnimation("weak_air_attack_hit", [67, 68, 69, 70, 71], 7 / WEAK_AIR_ATTACK_DELAY, false);
+			addAnimation("weak_low_attack_windup", [83], 0, false);
+			addAnimation("weak_low_attack_hit", [84], 0, false);
+			addAnimation("strong_attack_windup", [1, 2, 2], 3 / STRONG_ATTACK_WINDUP, false);
+			addAnimation("strong_attack_hit", [3, 4, 5, 6], 20, false);
 			addAnimation("roll", [27, 28, 29, 30, 31, 32], 12, true);
 			addAnimation("hurt_flying", [9], 0, false); 
 			addAnimation("hurt_kneeling", [10, 11, 12], 40, false);
 			addAnimation("hurt_flashing", [12, 53], 8, true);
 			addAnimation("die_falling", [18, 22, 23], 2, false);
 			addAnimation("die_flashing", [23, 53], 8, true);
-			addAnimation("blocking", [84], 0, false);
+			addAnimation("blocking", [89], 0, false);
 			addAnimation("crouching", [13], 0, false);
 			
 			// Associate animations with actions.
@@ -144,12 +155,14 @@ package people.players
 			associateAnimation(["jump_rising"], ActorAction.JUMP);
 			associateAnimation(["jump_falling"], ActorAction.FALL);
 			associateAnimation(["roll"], ActorAction.ROLL);
-			associateAnimation(["basic_attack_windup"], ActorAction.WINDUP, 0);
-			associateAnimation(["super_attack_windup"], ActorAction.WINDUP, 1);
-			associateAnimation(["basic_air_attack_windup"], ActorAction.WINDUP, 2);
-			associateAnimation(["basic_attack_hit"], ActorAction.ATTACK, 0);
-			associateAnimation(["super_attack_hit"], ActorAction.ATTACK, 1);
-			associateAnimation(["basic_air_attack_hit"], ActorAction.ATTACK, 2);
+			associateAnimation(["weak_attack_windup"], ActorAction.WINDUP, 0);
+			associateAnimation(["weak_attack_hit"], ActorAction.ATTACK, 0);
+			associateAnimation(["strong_attack_windup"], ActorAction.WINDUP, 1);
+			associateAnimation(["strong_attack_hit"], ActorAction.ATTACK, 1);
+			associateAnimation(["weak_air_attack_windup"], ActorAction.WINDUP, 2);
+			associateAnimation(["weak_air_attack_hit"], ActorAction.ATTACK, 2);
+			associateAnimation(["weak_low_attack_windup"], ActorAction.WINDUP, 3);
+			associateAnimation(["weak_low_attack_hit"], ActorAction.ATTACK, 3);
 			associateAnimation(["hurt_kneeling", "hurt_flashing"], ActorAction.HURT, 0);
 			associateAnimation(["hurt_flying"], ActorAction.HURT, 1);
 			associateAnimation(["die_falling", "die_flashing"], ActorAction.DIE);
@@ -165,7 +178,7 @@ package people.players
 			associateSound(new SoundEffect(Sounds.PLAYER_HURT, 0.5), ActorAction.HURT);
 			
 			// Set physic constants.
-			maxVelocity = new FlxPoint(200, 1000);
+			maxVelocity = MAX_VELOCITY;
 			acceleration.y = 1000;
 			drag.x = maxVelocity.x * 4;
 			
@@ -347,6 +360,11 @@ package people.players
 		 */
 		private function updateMovement() : void 
 		{
+			if (state == ActorState.PUSHING)
+				maxVelocity = MAX_PUSHING_VELOCITY;
+			else
+				maxVelocity = MAX_VELOCITY;
+			
 			// Falling off a platform counts as a jump.
 			if (velocity.y > 0 && _jumpCount == 0)
 			{
@@ -405,7 +423,12 @@ package people.players
 				if (state == ActorState.JUMPING || state == ActorState.FALLING)
 				{
 					executeAction(ActorAction.WINDUP, ActorState.ATTACKING, 2);
-					actionTimer.start(WEAK_ATTACK_WINDUP, 1, weakWindupCallback);
+					actionTimer.start(WEAK_AIR_ATTACK_WINDUP, 1, weakWindupCallback);
+				}
+				else if (state == ActorState.CROUCHING)
+				{
+					executeAction(ActorAction.WINDUP, ActorState.ATTACKING, 3);
+					actionTimer.start(WEAK_LOW_ATTACK_WINDUP, 1, weakWindupCallback);
 				}
 				else
 				{
@@ -486,20 +509,22 @@ package people.players
 				if (prevState == ActorState.CROUCHING)
 				{
 					attackManager.weakAttack(facing, AttackType.LOW);
-					executeAction(ActorAction.ATTACK, ActorState.ATTACKING, 0);
+					executeAction(ActorAction.ATTACK, ActorState.ATTACKING, 3);
+					actionTimer.start(WEAK_LOW_ATTACK_DELAY, 1, attackCallback);
 				}
 				else if (prevState == ActorState.JUMPING || prevState == ActorState.FALLING)
 				{
 					attackManager.weakAttack(facing, AttackType.AIR);
 					executeAction(ActorAction.ATTACK, ActorState.ATTACKING, 2);
+					actionTimer.start(WEAK_AIR_ATTACK_DELAY, 1, attackCallback);
 				}
 				else
 				{
 					attackManager.weakAttack(facing, AttackType.NORMAL);
 					executeAction(ActorAction.ATTACK, ActorState.ATTACKING, 0);
+					actionTimer.start(WEAK_ATTACK_DELAY, 1, attackCallback);
 				}
 				stamina -= WEAK_ATTACK_STAM_COST;
-				actionTimer.start(WEAK_ATTACK_DELAY, 1, attackCallback);
 			}
 		}
 		

@@ -1,12 +1,12 @@
 package items.Environmental.Background.Circuit 
 {
-	import items.Environmental.Background.BackgroundItem;
+	import items.Environmental.EnvironmentalItem;
 	import managers.BackgroundManager;
 	/**
 	 * ...
 	 * @author ...
 	 */
-	public class Trigger extends BackgroundItem
+	public class Trigger extends EnvironmentalItem
 	{
 		public var circuit_callback : Function;
 		protected var enabled : Boolean;

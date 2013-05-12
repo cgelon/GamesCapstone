@@ -27,13 +27,6 @@ package items.Environmental.Background
 			}
 		}
 		
-		public function track(manager: BackgroundManager) : void {
-			
-		}
-		
-		public function addTo(manager: BackgroundManager) : void {
-			manager.add(this);
-		}
 	}
 
 }
