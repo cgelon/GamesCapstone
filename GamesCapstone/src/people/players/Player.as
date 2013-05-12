@@ -66,6 +66,11 @@ package people.players
 		/** The stamina cost of a roll */
 		private static const ROLL_STAM_COST : Number = 25;
 		
+		/** Max velocity for the player. */
+		private static const MAX_VELOCITY : FlxPoint = new FlxPoint(200, 1000);
+		/** Max velocity for the player when they are pushing. */
+		private static const MAX_PUSHING_VELOCITY : FlxPoint = new FlxPoint(175, 1000);
+		
 		/** All of the weapons/items that the player has collected. **/
 		private var _weapons : Array = new Array(10);
 		
@@ -173,7 +178,7 @@ package people.players
 			associateSound(new SoundEffect(Sounds.PLAYER_HURT, 0.5), ActorAction.HURT);
 			
 			// Set physic constants.
-			maxVelocity = new FlxPoint(200, 1000);
+			maxVelocity = MAX_VELOCITY;
 			acceleration.y = 1000;
 			drag.x = maxVelocity.x * 4;
 			
@@ -214,11 +219,11 @@ package people.players
 			super.update();
 			switch(state)
 			{
+				case ActorState.PUSHING:
 				case ActorState.IDLE:
 				case ActorState.RUNNING:
 				case ActorState.JUMPING:
 				case ActorState.FALLING:
-				case ActorState.PUSHING:
 					updateMovement();
 					updateNextState();
 					updateAttacking();
@@ -318,6 +323,11 @@ package people.players
 		 */
 		private function updateMovement() : void 
 		{
+			if (state == ActorState.PUSHING)
+				maxVelocity = MAX_PUSHING_VELOCITY;
+			else
+				maxVelocity = MAX_VELOCITY;
+			
 			// Falling off a platform counts as a jump.
 			if (velocity.y > 0 && _jumpCount == 0)
 			{

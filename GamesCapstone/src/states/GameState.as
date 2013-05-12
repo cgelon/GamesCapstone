@@ -196,7 +196,9 @@ package states
 			
 			if ((getManager(PlayerManager) as PlayerManager).player.readyToReset)
 			{
-				Registry.reset();
+				//Registry.reset();
+				(getManager(PlayerManager) as PlayerManager).player.health = PlayerStats.MAX_HEALTH;
+				Registry.playerStats.health = PlayerStats.MAX_HEALTH;
 				resetRoom();
 			}
 		}

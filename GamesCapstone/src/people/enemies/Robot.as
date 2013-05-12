@@ -51,7 +51,7 @@ package people.enemies
 			offset.y = 12;
 			
 			// Create the animations we need.
-			addAnimation("idle", [6, 7], 30, true);
+			addAnimation("idle", [6, 7], 2, true);
 			addAnimation("windup", [0], 0, false);
 			addAnimation("attack", [1, 2, 3], 15, false);
 			addAnimation("hurt", [8], 0, false);

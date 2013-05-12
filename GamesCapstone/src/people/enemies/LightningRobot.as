@@ -25,7 +25,7 @@ package people.enemies
 	public class LightningRobot extends Robot
 	{
 		/** Frames of windup before a lightning bolt attack. */
-		private static const LIGHTNING_WINDUP_FRAMES : Number = Convert.framesToSeconds(10);
+		private static const LIGHTNING_WINDUP_FRAMES : Number = Convert.framesToSeconds(15);
 		/** Frames of delay after a lightning bolt attack. */
 		private static const LIGHTNING_DELAY_FRAMES : Number = Convert.framesToSeconds(15);
 		
