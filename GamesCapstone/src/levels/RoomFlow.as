@@ -31,6 +31,7 @@ package levels
 			_rooms.push(AcidSwitchesPlatforms);
 			_rooms.push(AcidSwitches);
 			_rooms.push(EvilLabVatLevel);
+			_rooms.push(AcidCrates);
 			
 			_currentRoomIndex = 0;
 		}

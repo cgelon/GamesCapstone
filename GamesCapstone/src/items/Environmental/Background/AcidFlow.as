@@ -35,6 +35,7 @@ package items.Environmental.Background
 					add(new Acid(X + 16 * i, Y + 16 * (j + 1)));
 				}
 			}
+			enabled = true;
 			
 			// Keeps track of the acid that will flow when the lever is
 			// activated	
