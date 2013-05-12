@@ -21,7 +21,8 @@ package levels
 		public var objectStarts: Array;
 		public var objectTypes: Array;
 		public var doorLocs: Array;
-		public var circuits: Array;
+		public var backgroundCircuits: Array;
+		public var environmentalCircuits: Array;
 		
 		public var loadMessage : String;
 		
@@ -36,7 +37,8 @@ package levels
 			objectStarts = new Array();
 			objectTypes = new Array();
 			doorLocs = new Array();
-			circuits = new Array();
+			backgroundCircuits = new Array();
+			environmentalCircuits = new Array();
 			
 			loadMessage = "You've entered a new level!";
 		}

@@ -15,7 +15,7 @@ package managers
 	{
 		public var triggers : Array;
 		public var reactors : Array;
-		private var numCircuits : Number;
+		public var numCircuits : Number;
 		
 		public function BackgroundManager() {
 			triggers = new Array();

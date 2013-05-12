@@ -36,7 +36,7 @@ package items.Environmental.Background
 		 */
 		override public function collideWith(actor:Actor, state:GameState) : void 
 		{
-			if (FlxG.keys.justPressed("E"))
+			if (FlxG.keys.justPressed("SPACE"))
 			{
 				if (_curIndex == 4)
 				{
@@ -47,6 +47,11 @@ package items.Environmental.Background
 					enable();
 				}
 			}
+		}
+		
+		public function playStart() : void 
+		{
+			
 		}
 		
 		override public function enable() : void {

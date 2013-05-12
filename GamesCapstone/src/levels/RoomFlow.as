@@ -33,6 +33,8 @@ package levels
 			_rooms.push(AcidSwitches);
 			_rooms.push(EvilLabVatLevel);
 			_rooms.push(AcidCrates);
+			_rooms.push(ForceFieldIntro);
+			_rooms.push(ForceFieldSwitches);
 			
 			_currentRoomIndex = 0;
 		}

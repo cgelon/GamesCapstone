@@ -1,5 +1,6 @@
 package items.Environmental 
 {
+	import managers.BackgroundManager;
 	import org.flixel.FlxGroup;
 	import people.Actor;
 	import states.GameState;
@@ -20,6 +21,15 @@ package items.Environmental
 			super();
 			x = X;
 			y = Y;
+		}
+		
+		
+		public function track(manager: BackgroundManager) : void {
+			
+		}
+		
+		public function addTo(manager: BackgroundManager) : void {
+			manager.add(this);
 		}
 	}
 

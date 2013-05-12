@@ -1,6 +1,7 @@
 package items.Environmental 
 {
 	import items.Item;
+	import managers.BackgroundManager;
 	import org.flixel.FlxObject;
 	import people.Actor;
 	import states.GameState;
@@ -22,6 +23,16 @@ package items.Environmental
 		public function collideWith(actor : Actor, state : GameState) : void
 		{
 			
+		}
+		
+		
+		public function track(manager: BackgroundManager) : void {
+			
+		}
+		
+		
+		public function addTo(manager: BackgroundManager) : void {
+			manager.add(this);
 		}
 	}
 

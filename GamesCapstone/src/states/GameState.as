@@ -9,6 +9,7 @@ package states
 	import items.Environmental.Background.Door;
 	import items.Environmental.Crate;
 	import items.Environmental.EnvironmentalItem;
+	import items.Environmental.Generator;
 	import levels.Level;
 	import managers.BackgroundManager;
 	import managers.EnemyAttackManager;
@@ -73,9 +74,10 @@ package states
 			{
 				backgroundManager.addObject(_level.doorLocs[i], Door);
 			}
-			for (i = 0; i < _level.circuits.length; i++)
+			
+			for (i = 0; i < _level.backgroundCircuits.length; i++)
 			{
-				backgroundManager.addCircuit(_level.circuits[i]);
+				backgroundManager.addCircuit(_level.backgroundCircuits[i]);
 			}
 			
 			var enemyManager : EnemyManager = new EnemyManager();
@@ -91,7 +93,19 @@ package states
 
 			for (i = 0; i < _level.objectStarts.length; i++)
 			{
-				objectManager.addObject(_level.objectStarts[i], _level.objectTypes[i]);
+				if (_level.objectStarts[i] == null)
+				{
+					objectManager.addForcefield(_level.objectTypes[i]);
+				}
+				else 
+				{
+					objectManager.addObject(_level.objectStarts[i], _level.objectTypes[i]);
+				}
+			}
+			
+			for (i = 0; i < _level.environmentalCircuits.length; i++)
+			{
+				objectManager.addCircuit(_level.environmentalCircuits[i]);
 			}
 			
 			var uiObjectManager : UIObjectManager = new UIObjectManager();
@@ -174,6 +188,7 @@ package states
 			
 			collideWithEnvironment(getManager(PlayerManager));
 			collideWithEnvironment(getManager(EnemyManager));
+			collideWithEnvironment(getManager(PlayerAttackManager));
 			
 			//FlxG.overlap(getManager(PlayerManager), getManager(EnemyManager), playerHit);
 			FlxG.overlap(getManager(PlayerManager), getManager(EnemyAttackManager), playerAttacked);
@@ -202,6 +217,10 @@ package states
 		
 		private function collideUsingOverlapFix(Object1:FlxObject, Object2:FlxObject) : void
 		{
+			if (Object2 is Attack)
+			{
+				Object1.x = Object1.x;
+			}
 			if (!((Object1.y + Object1.height - 1 < Object2.y) || (Object2.y + Object2.height - 1 < Object1.y)))
 			{
 				if (FlxObject.separateX(Object1, Object2))
@@ -216,6 +235,10 @@ package states
 						(Object1 as Crate).beingPushed = true;
 						(Object2 as Crate).beingPushed = true;
 					}
+				}
+				if (Object1 is Generator && Object2 is Attack)					
+				{
+					(Object1 as Generator).isDestroyed = true;
 				}
 			}
 			

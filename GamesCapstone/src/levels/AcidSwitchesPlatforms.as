@@ -38,7 +38,7 @@ package levels
 				backgroundTypes.push(Lever);
 				backgroundStarts.push(acidFlowLocs[i]);
 				backgroundTypes.push(AcidFlow);
-				circuits.push(true);
+				backgroundCircuits.push(true);
 			}
 			
 			var acidLocs : Array = [new FlxPoint(240, 26)];
@@ -47,8 +47,8 @@ package levels
 			{
 				var pair : FlxPoint = acidLocs[i];
 				for (var j: int = 0; j < pair.y; j++) {
-					backgroundStarts[circuits.length * 2 + sum] = new FlxPoint(pair.x + 16 * j, 352);
-					backgroundTypes[circuits.length * 2 + sum] = Acid;
+					backgroundStarts[backgroundCircuits.length * 2 + sum] = new FlxPoint(pair.x + 16 * j, 352);
+					backgroundTypes[backgroundCircuits.length * 2 + sum] = Acid;
 					sum++;
 				}
 			}
