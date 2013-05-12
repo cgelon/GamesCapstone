@@ -35,7 +35,7 @@ package levels
 			// Stores the enemy start points
 			
 			var leverLocs : Array = [new FlxPoint(144, 271), new FlxPoint(624, 161)];
-			var acidFlowLocs : Array = [new FlxPoint(240, 226), new FlxPoint(720, 141)];
+			var acidFlowLocs : Array = [new FlxPoint(240, 226), new FlxPoint(720, 77)];
 			for (var i: int = 0; i < leverLocs.length; i++) {
 				circuits.push(true);
 				backgroundStarts[2 * i] = leverLocs[i];
