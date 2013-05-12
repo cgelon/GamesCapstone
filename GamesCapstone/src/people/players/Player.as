@@ -42,6 +42,10 @@ package people.players
 		private static const WEAK_ATTACK_WINDUP : Number = Convert.framesToSeconds(5);
 		/** Post-weak-attack delay in seconds. */
 		private static const WEAK_ATTACK_DELAY : Number = Convert.framesToSeconds(10);
+		/** Weak air attack's windup in seconds. */
+		private static const WEAK_AIR_ATTACK_WINDUP : Number = Convert.framesToSeconds(10);
+		/** Weak air attack's post-attack delay in seconds. */
+		private static const WEAK_AIR_ATTACK_DELAY : Number = Convert.framesToSeconds(10);
 		/** Duration of a roll in seconds. */
 		private static const ROLL_DURATION : Number = .5;
 		/** How long the player is knocked down when they get hurt, in seconds. */
@@ -87,7 +91,7 @@ package people.players
 		/** Internal tracking for how much stamina the player currently has. */
 		private var _stamina : Number;
 		
-		private var _statManager : StatManager;
+		public var statManager : StatManager;
 		
 		/** Whether or not the player has been dead long enough that the level should reset. */
 		public var readyToReset : Boolean;
@@ -120,6 +124,8 @@ package people.players
 			addAnimation("jump_falling", [21], 0, false);
 			addAnimation("basic_attack_windup", [1, 2, 2], 3 / WEAK_ATTACK_WINDUP, false);
 			addAnimation("basic_attack_hit", [3], 20, false);
+			addAnimation("basic_air_attack_windup", [63, 64, 65, 66], 4 / WEAK_AIR_ATTACK_WINDUP, false);
+			addAnimation("basic_air_attack_hit", [67, 68, 69, 70, 71], 7 / WEAK_AIR_ATTACK_DELAY, false);
 			addAnimation("super_attack_windup", [1, 2, 2], 3 / STRONG_ATTACK_WINDUP, false);
 			addAnimation("super_attack_hit", [3, 4, 5, 6], 20, false);
 			addAnimation("roll", [27, 28, 29, 30, 31, 32], 12, true);
@@ -128,7 +134,7 @@ package people.players
 			addAnimation("hurt_flashing", [12, 53], 8, true);
 			addAnimation("die_falling", [18, 22, 23], 2, false);
 			addAnimation("die_flashing", [23, 53], 8, true);
-			addAnimation("blocking", [7], 0, false);
+			addAnimation("blocking", [84], 0, false);
 			addAnimation("crouching", [13], 0, false);
 			
 			// Associate animations with actions.
@@ -140,8 +146,10 @@ package people.players
 			associateAnimation(["roll"], ActorAction.ROLL);
 			associateAnimation(["basic_attack_windup"], ActorAction.WINDUP, 0);
 			associateAnimation(["super_attack_windup"], ActorAction.WINDUP, 1);
+			associateAnimation(["basic_air_attack_windup"], ActorAction.WINDUP, 2);
 			associateAnimation(["basic_attack_hit"], ActorAction.ATTACK, 0);
 			associateAnimation(["super_attack_hit"], ActorAction.ATTACK, 1);
+			associateAnimation(["basic_air_attack_hit"], ActorAction.ATTACK, 2);
 			associateAnimation(["hurt_kneeling", "hurt_flashing"], ActorAction.HURT, 0);
 			associateAnimation(["hurt_flying"], ActorAction.HURT, 1);
 			associateAnimation(["die_falling", "die_flashing"], ActorAction.DIE);
@@ -166,7 +174,7 @@ package people.players
 			_attackReleased = true;
 			_attackType = 0;
 			
-			_statManager = new StatManager();
+			statManager = new StatManager();
 			
 			FlxG.watch(this, "stateName", "State");
 			FlxG.watch(this, "stamina", "Stamina");
@@ -357,8 +365,17 @@ package people.players
 		{
 			if (FlxG.keys.justPressed("J") && attackReady && stamina > WEAK_ATTACK_STAM_COST)
 			{
-				executeAction(ActorAction.WINDUP, ActorState.ATTACKING, 0);
-				actionTimer.start(WEAK_ATTACK_WINDUP, 1, weakWindupCallback);
+				if (state == ActorState.JUMPING || state == ActorState.FALLING)
+				{
+					executeAction(ActorAction.WINDUP, ActorState.ATTACKING, 2);
+					actionTimer.start(WEAK_ATTACK_WINDUP, 1, weakWindupCallback);
+				}
+				else
+				{
+					executeAction(ActorAction.WINDUP, ActorState.ATTACKING, 0);
+					actionTimer.start(WEAK_ATTACK_WINDUP, 1, weakWindupCallback);
+				}
+				
 				_attackReleased = false;
 				_attackType = 0;
 			}
@@ -437,7 +454,7 @@ package people.players
 				else if (prevState == ActorState.JUMPING || prevState == ActorState.FALLING)
 				{
 					attackManager.weakAttack(facing, AttackType.AIR);
-					executeAction(ActorAction.ATTACK, ActorState.ATTACKING, 0);
+					executeAction(ActorAction.ATTACK, ActorState.ATTACKING, 2);
 				}
 				else
 				{
@@ -506,7 +523,7 @@ package people.players
 		override protected function executeAction(action : ActorAction, newState : ActorState = null, index : int = 0) : void
 		{
 			super.executeAction(action, newState, index);
-			_statManager.add(action);
+			Registry.addAction(action, 1);
 		}
 		
 		/**

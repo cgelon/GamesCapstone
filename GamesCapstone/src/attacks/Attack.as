@@ -1,5 +1,6 @@
 package attacks
 {
+	import org.flixel.FlxPoint;
 	import org.flixel.FlxSprite;
 	import org.flixel.FlxG;
 	import people.Actor;
@@ -39,12 +40,17 @@ package attacks
 			_type = type;
 		}
 		
-		public function initialize(x : Number, y : Number, bonusDamage : Number = 0, duration : int = 3) : void
+		public function initialize(x : Number, y : Number, bonusDamage : Number = 0, duration : int = 3, attackVelocity : FlxPoint = null) : void
 		{
 			this.x = x;
 			this.y = y;
 			
 			revive();
+			
+			if (attackVelocity == null)
+				velocity = new FlxPoint(0, 0);
+			else
+				velocity = attackVelocity;
 			
 			_duration = duration;
 			_totalDamage = _baseDamage + bonusDamage;

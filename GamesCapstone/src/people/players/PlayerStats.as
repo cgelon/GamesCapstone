@@ -1,5 +1,11 @@
 package people.players 
 {
+	import flash.display.DisplayObjectContainer;
+	import flash.utils.Dictionary;
+	import util.StatManager;
+	import levels.Level;
+	import people.states.ActorAction;
+	
 	/**
 	 * Stores the player stats that are necessary to keep throughout different states.
 	 */
@@ -15,10 +21,13 @@ package people.players
 		/** Internal tracker for stamina. */
 		private var  _stamina : Number;
 		
+		private var _levelToActionsDict : Dictionary;
+		
 		public function PlayerStats() 
 		{
 			_health = MAX_HEALTH;
 			_stamina = MAX_STAMINA;
+			_levelToActionsDict = new Dictionary();
 		}
 		
 		/** The current health of the player. */
@@ -43,6 +52,21 @@ package people.players
 		public function set stamina(value:Number):void 
 		{
 			_stamina = value;
+		}
+		
+		public function addActionForLevel(action : ActorAction, count : uint, levelName : String) : void
+		{
+			if (_levelToActionsDict[levelName] == undefined)
+			{
+				_levelToActionsDict[levelName] = new StatManager();
+			}
+			_levelToActionsDict[levelName].add(action, count);
+		}
+		
+		public function getNumberOfAction(action : ActorAction, levelName : String) : uint
+		{
+			var statManager : StatManager = (_levelToActionsDict[levelName] as StatManager);
+			return statManager == null ? 0 : statManager.getCount(action);
 		}
 		
 		public function destroy() : void

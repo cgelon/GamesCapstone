@@ -28,12 +28,12 @@ package people.enemies
 		[Embed(source = '../../../assets/robot sheet.png')] private var robotPNG : Class;
 		
 		/** The amount of seconds inbetween enemy attacks. */
-		private var _attackDelay : Number = 15 / FlxG.framerate;
+		protected var _attackDelay : Number = 15 / FlxG.framerate;
 		/** The amount of seconds the enemy takes to windup. */
-		private var _windupDelay : Number = 20 / FlxG.framerate;
+		protected var _windupDelay : Number = 20 / FlxG.framerate;
 		
-		private var _attackRange : Number = 40;
-		private var _seekRange : Number = 200;
+		protected var _attackRange : Number = 40;
+		protected var _seekRange : Number = 200;
 		
 		public function Robot() 
 		{
@@ -85,7 +85,7 @@ package people.enemies
 			state = ActorState.IDLE;
 		}
 		
-		private function attack() : void
+		protected function attack() : void
 		{
 			executeAction(ActorAction.WINDUP, ActorState.ATTACKING);
 			actionTimer.start(_windupDelay, 1, function(timer : FlxTimer) : void
@@ -157,7 +157,7 @@ package people.enemies
 			}
 		}
 		
-		private function move() : void 
+		protected function move() : void 
 		{
 			if (!aboutToFall() && Math.abs(player.y - y) < 50) {
 				moveToPlayer();
@@ -168,7 +168,7 @@ package people.enemies
 			}
 		}
 		
-		private function facePlayer() : void 
+		protected function facePlayer() : void 
 		{
 			if (x - player.x >= 0) {
 				facing = FlxObject.LEFT;
@@ -177,7 +177,7 @@ package people.enemies
 			}
 		}
 		
-		private function moveToPlayer() : void
+		protected function moveToPlayer() : void
 		{
 			if (distanceToPlayer() >= _attackRange) {
 				
@@ -194,13 +194,13 @@ package people.enemies
 			}
 		}
 		
-		private function aboutToFall() : Boolean
+		protected function aboutToFall() : Boolean
 		{
 			var facing_sign : Number = (facing == FlxObject.LEFT) ? -1 : 1;
 			return (!overlapsAt(x + facing_sign * width, y + 1, (getManager(LevelManager) as LevelManager).map))
 		}
 		
-		public function get attackManager() : EnemyAttackManager
+		protected function get attackManager() : EnemyAttackManager
 		{
 			return getManager(EnemyAttackManager) as EnemyAttackManager;
 		}

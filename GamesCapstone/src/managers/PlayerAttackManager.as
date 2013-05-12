@@ -39,8 +39,8 @@ package managers
 			else if (type == AttackType.AIR)
 			{
 				attack = recycle ( WeakAirAttack ) as WeakAirAttack;
-				y = player.y + player.height - WeakAirAttack.WEAK_AIR_ATTACK_HEIGHT;
-				x = facing == FlxObject.LEFT ? player.x - WeakAirAttack.WEAK_AIR_ATTACK_WIDTH + player.width / 2 : player.x + player.width / 2;
+				y = player.y + player.height - WeakAirAttack.WEAK_AIR_ATTACK_HEIGHT / 2;
+				x = player.x + player.width / 2 - (WeakAirAttack.WEAK_AIR_ATTACK_WIDTH / 2);
 			}
 			
 			attack.initialize(x, y, player.damageBonus);

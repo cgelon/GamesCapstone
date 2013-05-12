@@ -4,6 +4,7 @@ package states
 	import attacks.EnemyAttack;
 	import attacks.AttackType;
 	import cutscenes.TheInformant;
+	import flash.utils.getQualifiedClassName;
 	import items.Environmental.Background.AcidFlow;
 	import items.Environmental.Background.Door;
 	import items.Environmental.Crate;
@@ -27,7 +28,10 @@ package states
 	import people.Actor;
 	import people.enemies.Enemy;
 	import people.players.Player;
+	import people.players.PlayerStats;
+	import people.states.ActorAction;
 	import people.states.ActorState;
+	
 	
 	/**
 	 * Base class for all game states.
@@ -167,7 +171,10 @@ package states
 			FlxG.overlap(getManager(PlayerManager), getManager(EnemyAttackManager), playerAttacked);
 			
 			if ((getManager(PlayerManager) as PlayerManager).player.readyToReset)
+			{
+				Registry.reset();
 				resetRoom();
+			}
 		}
 		
 		/**
@@ -233,13 +240,15 @@ package states
 		 * @param	player
 		 * @param	enemy
 		 */
-		private function playerAttacked(player : Player, attack : EnemyAttack) : void
+		private function playerAttacked(player : Player, attack : Attack) : void
 		{
 			if (!playerHitThisFrame)
 			{
 				(getManager(PlayerManager) as PlayerManager).HurtPlayer(attack);
 				playerHitThisFrame = true;
-				attack.kill();
+				
+				if ((getManager(PlayerManager) as PlayerManager).player.state != ActorState.ROLLING)
+					attack.kill();
 			}
 		}
 		

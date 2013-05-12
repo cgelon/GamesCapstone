@@ -34,7 +34,7 @@ package managers
 		 * 
 		 * @param	attack	The attack to hurt the player with.
 		 */
-		public function HurtPlayer(attack : EnemyAttack) : void
+		public function HurtPlayer(attack : Attack) : void
 		{
 			// Check that the player can be hit, because this function will get called multiple times as the player is
 			// moving out of the attack's hitbox.

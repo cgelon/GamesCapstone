@@ -517,6 +517,7 @@ package org.flixel
 		static public function resetGame():void
 		{
 			_game._requestedReset = true;
+			Registry.reset();
 		}
 		
 		/**

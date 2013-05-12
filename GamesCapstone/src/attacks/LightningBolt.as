@@ -1,20 +1,23 @@
 package attacks 
 {
+	import util.Color;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxG;
-	import people.Actor;
-	import util.Color;
 	
 	/**
 	 * ...
 	 * @author ...
 	 */
-	public class ProjectileAttack extends Attack
+	public class LightningBolt extends ProjectileAttack 
 	{
+		public static const LIGHTNING_WIDTH : Number = 15;
+		public static const LIGHTNING_HEIGHT : Number = 3;
+		public static const LIGHTNING_DAMAGE : Number = 2;
+		public static const LIGHTNING_SPEED : Number = 100;
 		
-		public function ProjectileAttack(attackWidth : Number, attackHeight : Number, damage : Number) 
+		public function LightningBolt() 
 		{
-			super(attackWidth, attackHeight, damage, AttackType.PROJECTILE);
+			super(LIGHTNING_WIDTH, LIGHTNING_HEIGHT, LIGHTNING_DAMAGE);
 		}
 		
 		override public function initialize(x : Number, y : Number, bonusDamage : Number = 0, duration : int = 3, attackVelocity : FlxPoint = null) : void
@@ -32,7 +35,7 @@ package attacks
 			_duration = duration;
 			_totalDamage = _baseDamage + bonusDamage;
 			_counter = 0;
-			makeGraphic(width, height, Color.WHITE, true);
+			makeGraphic(width, height, Color.YELLOW, true);
 			alpha = 1; //visible = true;
 			FlxG.clearBitmapCache();
 		}

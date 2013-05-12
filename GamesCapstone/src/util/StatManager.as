@@ -15,12 +15,12 @@ package util
 			_statCounts = new Dictionary();
 		}
 		
-		public function add(action : ActorAction) : void
+		public function add(action : ActorAction, count : uint = 1) : void
 		{
 			if (_statCounts[action] == undefined) 
-				_statCounts[action] = 0;
+				_statCounts[action] = count;
 			else
-				_statCounts[action]++;
+				_statCounts[action] += count;
 		}
 		
 		public function getCount(action : ActorAction) : uint

@@ -1,8 +1,12 @@
 package 
 {
 	import cutscenes.TheInformant;
+	import flash.utils.getQualifiedClassName;
+	import levels.Level;
 	import levels.RoomFlow;
 	import people.players.PlayerStats;
+	import people.states.ActorAction;
+	import util.StatManager;
 	/**
 	 * The registry is used to store global information about the game.
 	 * 
@@ -49,6 +53,11 @@ package
 		public static function get roomFlow() : RoomFlow
 		{
 			return getInstance()._roomFlow;
+		}
+		
+		public static function addAction(action : ActorAction, count : uint) : void
+		{
+			getInstance()._playerStats.addActionForLevel(action, count, getQualifiedClassName(getInstance()._roomFlow.getCurrentRoom())); 
 		}
 		
 		/**
