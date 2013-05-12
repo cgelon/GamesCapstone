@@ -143,7 +143,8 @@ package states
 			addManager(informant);
 			active = true;
 			
-			(Manager.getManager(TheInformant) as TheInformant).talk(_level.loadMessage);
+			if (_level.loadMessage != null)
+				(Manager.getManager(TheInformant) as TheInformant).talk(_level.loadMessage);
 			
 			//	Tell flixel how big our game world is
 			FlxG.worldBounds = new FlxRect(0, 0, _level.width, _level.height);

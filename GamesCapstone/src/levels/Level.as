@@ -40,7 +40,7 @@ package levels
 			backgroundCircuits = new Array();
 			environmentalCircuits = new Array();
 			
-			loadMessage = "You've entered a new level!";
+			loadMessage = null;
 		}
 	}
 }
