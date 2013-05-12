@@ -83,7 +83,7 @@ package states
 			var enemyManager : EnemyManager = new EnemyManager();
 			for (i = 0; i < _level.enemyStarts.length; i++) 
 			{
-				enemyManager.addEnemy(_level.enemyStarts[i]);
+				enemyManager.addEnemy(_level.enemyStarts[i], _level.enemyTypes[i]);
 			}
 			
 			var playerManager : PlayerManager = new PlayerManager();

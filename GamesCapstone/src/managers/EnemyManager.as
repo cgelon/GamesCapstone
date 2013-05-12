@@ -17,9 +17,9 @@ package managers
 	 */
 	public class EnemyManager extends Manager
 	{		
-		public function addEnemy(location : FlxPoint) : void
+		public function addEnemy(location : FlxPoint, Object: Class) : void
 		{			
-			var jock : LightningRobot = recycle( LightningRobot ) as LightningRobot;
+			var jock : Enemy = recycle( (Object) ) as Enemy;
 			jock.initialize(location.x, location.y);
 			add(jock);
 		}

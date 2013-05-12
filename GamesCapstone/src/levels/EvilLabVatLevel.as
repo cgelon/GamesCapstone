@@ -6,6 +6,8 @@ package levels
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxTilemap;
+	import people.enemies.LightningRobot;
+	import people.enemies.Robot;
 	
 	/**
 	 * ...
@@ -31,7 +33,9 @@ package levels
 			// Stores the player start points
 			
 			enemyStarts[0] = new FlxPoint(672, 120);
+			enemyTypes[0] = Robot;
 			enemyStarts[1] = new FlxPoint(1312, 120);
+			enemyTypes[1] = LightningRobot;
 			// Stores the enemy start points
 			
 			var leverLocs : Array = [160, 576, 992, 1408, 1824];
