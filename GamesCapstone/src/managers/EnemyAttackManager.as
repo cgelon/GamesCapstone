@@ -6,6 +6,7 @@ package managers
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxG;
+	import util.Convert;
 	
 	/**
 	 * Manages all of the attacks made by the enemies.
@@ -24,7 +25,7 @@ package managers
 		{
 			var attack : LightningBolt = recycle ( LightningBolt ) as LightningBolt;
 			var attackVelocity : FlxPoint = scaleNorm(direction, LightningBolt.LIGHTNING_SPEED);
-			attack.initialize(x, y, 0, Attack.PROJECTILE_DURATION, attackVelocity);
+			attack.initialize(x, y, 0, Convert.secondsToFrames(3), attackVelocity);
 		}
 		
 		/**
