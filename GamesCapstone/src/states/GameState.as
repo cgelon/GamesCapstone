@@ -37,7 +37,7 @@ package states
 	/**
 	 * Base class for all game states.
 	 * 
-	 * @author Chris Gelon
+	 * @author Rowan and not Chris
 	 */
 	public class GameState extends FlxState 
 	{
