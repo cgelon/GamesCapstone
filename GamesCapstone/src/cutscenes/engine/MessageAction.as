@@ -12,21 +12,36 @@ package cutscenes.engine
 	 */
 	public class MessageAction extends Action
 	{
+		public static const ACTOR : String = "actor";
+		public static const INFORMANT : String = "informant";
+		
+		private var _type : String;
+		private var _title : String;
 		private var _message : String;
 		private var _object : FlxObject;
 		
-		public function MessageAction(message : String, object : FlxObject)
+		public function MessageAction(type : String, title : String, message : String, object : FlxObject)
 		{
+			_type = type;
+			_title = title;
 			_message = message;
 			_object = object;
 		}
 		
 		override public function run(callback : Function) : void
 		{
-			display(_message, callback);
+			switch(_type)
+			{
+				case ACTOR:
+					displayAboveActor(callback);
+					break;
+				case INFORMANT:
+					displayInformant(callback);
+					break;
+			}
 		}
 		
-		public function display(message : String, callback : Function = null) : void
+		private function displayAboveActor(callback : Function = null) : void
 		{
 			var messageBox : MessageBox = new MessageBox();
 			messageBox = new MessageBox();
@@ -37,14 +52,23 @@ package cutscenes.engine
 			messageBox.setPosition(Math.max(position.x + _object.width / 2 - messageBox.width / 2, 0),
 					Math.max(position.y - messageBox.height, 0));
 			add(messageBox);
-			messageBox.displayText("Player", message, callback);
+			messageBox.displayText(_title, _message, callback);
+		}
+		
+		private function displayInformant(callback : Function = null) : void
+		{
+			var messageBox : MessageBox = new MessageBox();
+			messageBox = new MessageBox();
+			messageBox.setFormat(null, 8, Color.WHITE, Color.BLUE, 160, 3);
+			messageBox.setPosition(160, 0);
+			add(messageBox);
+			messageBox.displayText("The Informant", _message, callback);
 		}
 		
 		override public function destroy() : void
 		{
 			super.destroy();
-			
-			_message = null;
+						_message = null;
 			_object = null;
 		}
 	}

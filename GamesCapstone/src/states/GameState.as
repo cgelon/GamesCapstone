@@ -3,6 +3,7 @@ package states
 	import attacks.Attack;
 	import attacks.EnemyAttack;
 	import attacks.AttackType;
+	import cutscenes.BeginningCutscene;
 	import cutscenes.TheInformant;
 	import flash.utils.getQualifiedClassName;
 	import items.Environmental.Background.AcidFlow;
@@ -129,7 +130,7 @@ package states
 			addManager(informant);
 			active = true;
 			
-			(Manager.getManager(TheInformant) as TheInformant).talk(_level.loadMessage);
+			//(Manager.getManager(TheInformant) as TheInformant).talk(_level.loadMessage);
 			
 			//	Tell flixel how big our game world is
 			FlxG.worldBounds = new FlxRect(0, 0, _level.width, _level.height);
@@ -139,6 +140,10 @@ package states
 			
 			//	The camera will follow the player
 			FlxG.camera.follow(playerManager.player, FlxCamera.STYLE_PLATFORMER);
+			
+			var cutscene : BeginningCutscene = new BeginningCutscene();
+			cutscene.run();
+			add(cutscene);
 		}
 		
 		override public function update() : void

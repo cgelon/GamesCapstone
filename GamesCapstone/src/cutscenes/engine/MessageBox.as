@@ -236,7 +236,10 @@ package cutscenes.engine
 				{
 					// Stop the timer if there are no more lines.
 					_timer.stop();
-					_autoTimer.start(_autoCloseTime, 1, autoClose);
+					if (_auto)
+					{
+						_autoTimer.start(_autoCloseTime, 1, autoClose);
+					}
 				}
 				else if (_lineIndex - _startLineIndex == _numLines)
 				{
@@ -244,7 +247,10 @@ package cutscenes.engine
 					// then refresh.
 					_startLineIndex = _lineIndex;
 					_timer.pause();
-					_autoTimer.start(_autoCloseTime, 1, autoClose);
+					if (_auto)
+					{
+						_autoTimer.start(_autoCloseTime, 1, autoClose);
+					}
 				}
 			}
 		}

@@ -31,6 +31,8 @@ package cutscenes.engine
 		
 		public function run() : void
 		{
+			FlxG.cutscene = true;
+			
 			_trackedObject = FlxG.camera.target;
 			_zoom = FlxG.camera.zoom;
 			numActionsRunning = 0;
@@ -77,6 +79,7 @@ package cutscenes.engine
 		{
 			FlxG.camera.follow(_trackedObject, FlxCamera.STYLE_PLATFORMER);
 			FlxG.camera.zoom = _zoom;
+			FlxG.cutscene = false;
 		}
 		
 		override public function destroy() : void

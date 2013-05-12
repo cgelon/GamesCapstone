@@ -110,6 +110,10 @@ package org.flixel
 		 */
 		static public var paused:Boolean;
 		/**
+		 * Handy shared variable for cutscene behavoir.
+		 */
+		static public var cutscene:Boolean;
+		/**
 		 * Whether you are running in Debug or Release mode.
 		 * Set automatically by <code>FlxPreloader</code> during startup.
 		 */
@@ -1179,6 +1183,7 @@ package org.flixel
 			FlxG.level = 0;
 			FlxG.score = 0;
 			FlxG.paused = false;
+			FlxG.cutscene = false;
 			FlxG.timeScale = 1.0;
 			FlxG.elapsed = 0;
 			FlxG.globalSeed = Math.random();

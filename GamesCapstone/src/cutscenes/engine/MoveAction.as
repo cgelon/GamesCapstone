@@ -14,12 +14,12 @@ package cutscenes.engine
 	public class MoveAction extends Action 
 	{
 		private var _timer : FlxTimer;
-		private var _object : FlxObject;
+		private var _object : FlxSprite;
 		private var _endPosition : FlxPoint;
 		private var _time : Number;
 		private var _callback : Function;
 		
-		public function VelocityAction(object : FlxObject, endPosition : FlxPoint, time : Number) : void
+		public function MoveAction(object : FlxSprite, endPosition : FlxPoint, time : Number) : void
 		{
 			_object = object;
 			_endPosition = endPosition;
@@ -38,10 +38,9 @@ package cutscenes.engine
 		 * @param	endPosition	The end position.
 		 * @param	time	The time it will take to get there.
 		 */
-		public function move(object : FlxObject, endPosition : FlxPoint, time : Number, callback : Function = null) : void
+		public function move(object : FlxSprite, endPosition : FlxPoint, time : Number, callback : Function = null) : void
 		{
-			FlxVelocity.moveTowardsPoint(object, endPosition, 0, time * 1000);
-			_object = object;
+			FlxVelocity.moveTowardsPoint(object, endPosition, 0, time * 1000)
 			_timer = new FlxTimer();
 			_timer.start(time, 1, stopMovement);
 		}

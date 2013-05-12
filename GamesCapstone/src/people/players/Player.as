@@ -204,83 +204,120 @@ package people.players
 		override public function update():void 
 		{
 			super.update();
-			switch(state)
+			
+			if (FlxG.cutscene)
 			{
-				case ActorState.IDLE:
-				case ActorState.RUNNING:
-				case ActorState.JUMPING:
-				case ActorState.FALLING:
-				case ActorState.PUSHING:
-					updateMovement();
-					updateNextState();
-					updateAttacking();
-					break;
-				case ActorState.ROLLING:
-					// If the player has pressed the roll button, roll them
-					// in their current direction for a set duration.
-					if (!actionTimer.running)
-					{
-						actionTimer.start(ROLL_DURATION, 1, function(timer : FlxTimer) : void
-						{
-							velocity.x = 0;
-							executeAction(ActorAction.STOP, ActorState.IDLE);
-						});
-					}
-					
-					velocity.x = ((facing == FlxObject.RIGHT) ? 1 : -1) * maxVelocity.x;
-					break;
-				case ActorState.ATTACKING:
-					if (onGround)
-					{
-						acceleration.x = 0;
-					}
-					else
-					{
-						updateMovement();
-					}
-					break;
-				case ActorState.HURT:
-					// Start the hurt timeout once the player hits the floor.
-					if (onGround && !actionTimer.running)
-					{
-						executeAction(ActorAction.HURT, ActorState.HURT, 0);
-						actionTimer.start(HURT_DURATION, 1, function(timer : FlxTimer) : void
-						{
-							if (state == ActorState.HURT)
-							{
-								executeAction(ActorAction.STOP, ActorState.IDLE);
-							}
-						});
-					}
-					break;
-				case ActorState.BLOCKING:
-					if (FlxG.keys.justReleased("L") || stamina <= 0)
-					{
-						executeAction(ActorAction.STOP, ActorState.IDLE);
-					}
-					break;
-				case ActorState.CROUCHING:
-					if (FlxG.keys.justReleased("S"))
-					{
-						executeAction(ActorAction.STOP, ActorState.IDLE);
-					}
-					updateAttacking();
-					break;
-				case ActorState.DEAD:
-					actionTimer.start(RESET_TIME, 1, function(timer : FlxTimer) : void
-					{
-						readyToReset = true;
-					});
-					break;
+				updateCutsceneStates();
+				drag.x = 0;
 			}
-			
-			switchWeapons();
-			updateStamina();
-			buttonReleases();
-			drag.x = (onGround || state != ActorState.HURT) ? maxVelocity.x * 4 : maxVelocity.x;
-			
-			var colors : Array = [0x00FFFFFF, Color.RED, Color.GREEN, Color.ORANGE, Color.BLUE];
-			color = colors[_currentWeapon % colors.length];
+			else
+			{
+				switch(state)
+				{
+					case ActorState.IDLE:
+					case ActorState.RUNNING:
+					case ActorState.JUMPING:
+					case ActorState.FALLING:
+					case ActorState.PUSHING:
+						updateMovement();
+						updateAttacking();
+						updateNextState();
+						break;
+					case ActorState.ROLLING:
+						// If the player has pressed the roll button, roll them
+						// in their current direction for a set duration.
+						if (!actionTimer.running)
+						{
+							actionTimer.start(ROLL_DURATION, 1, function(timer : FlxTimer) : void
+							{
+								velocity.x = 0;
+								executeAction(ActorAction.STOP, ActorState.IDLE);
+							});
+						}
+						
+						velocity.x = ((facing == FlxObject.RIGHT) ? 1 : -1) * maxVelocity.x;
+						break;
+					case ActorState.ATTACKING:
+						if (onGround)
+						{
+							acceleration.x = 0;
+						}
+						else
+						{
+							updateMovement();
+						}
+						break;
+					case ActorState.HURT:
+						// Start the hurt timeout once the player hits the floor.
+						if (onGround && !actionTimer.running)
+						{
+							executeAction(ActorAction.HURT, ActorState.HURT, 0);
+							actionTimer.start(HURT_DURATION, 1, function(timer : FlxTimer) : void
+							{
+								if (state == ActorState.HURT)
+								{
+									executeAction(ActorAction.STOP, ActorState.IDLE);
+								}
+							});
+						}
+						break;
+					case ActorState.BLOCKING:
+						if (!FlxG.keys.pressed("L") || stamina <= 0)
+						{
+							executeAction(ActorAction.STOP, ActorState.IDLE);
+						}
+						break;
+					case ActorState.CROUCHING:
+						if (!FlxG.keys.pressed("S"))
+						{
+							executeAction(ActorAction.STOP, ActorState.IDLE);
+						}
+						updateAttacking();
+						break;
+					case ActorState.DEAD:
+						actionTimer.start(RESET_TIME, 1, function(timer : FlxTimer) : void
+						{
+							readyToReset = true;
+						});
+						break;
+				}
+				
+				switchWeapons();
+				updateStamina();
+				buttonReleases();
+				drag.x = (onGround || state != ActorState.HURT) ? maxVelocity.x * 4 : maxVelocity.x;
+				
+				var colors : Array = [0x00FFFFFF, Color.RED, Color.GREEN, Color.ORANGE, Color.BLUE];
+				color = colors[_currentWeapon % colors.length];
+			}
+		}
+		
+		private function updateCutsceneStates() : void
+		{
+			if (onGround)
+			{
+				// These states can only be triggered when the player is on the ground.
+				if (state == ActorState.FALLING)
+				{
+					executeAction(ActorAction.LAND, ActorState.IDLE);
+				}
+				else if (velocity.x != 0 && state == ActorState.IDLE)
+				{
+					executeAction(ActorAction.RUN, ActorState.RUNNING);
+				}
+				else if (velocity.x == 0 && state == ActorState.RUNNING)
+				{
+					executeAction(ActorAction.STOP, ActorState.IDLE);
+				}
+			}
+			else
+			{
+				// These states can only be triggered when the player is in the air.
+				if (ActorStateGroup.GROUND.contains(state) || (velocity.y > 0 && state == ActorState.JUMPING))
+				{
+					executeAction(ActorAction.FALL, ActorState.FALLING);
+				}
+			}
 		}
 		
 		/**
