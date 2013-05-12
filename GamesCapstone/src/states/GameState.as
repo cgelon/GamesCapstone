@@ -145,6 +145,14 @@ package states
 		{
 			super.update();
 			
+			if ((getManager(PlayerManager) as PlayerManager).player.x > _level.map.width) {
+				moveToNextRoom();
+			}
+			
+			if ((getManager(PlayerManager) as PlayerManager).player.x < 0) {
+				moveToPreviousRoom();
+			}
+			
 			if (FlxG.keys.justPressed("NINE"))
 				moveToPreviousRoom();
 			else if (FlxG.keys.justPressed("ZERO"))
