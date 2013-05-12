@@ -2,20 +2,14 @@ package people.enemies
 {
 	import attacks.Attack;
 	import attacks.AttackType;
-	import managers.Manager;
 	import managers.PlayerManager;
-	import org.flixel.FlxSprite;
-	import org.flixel.FlxG;
-	import org.flixel.FlxPoint;
 	import org.flixel.FlxObject;
+	import org.flixel.FlxPoint;
 	import people.Actor;
-	import people.states.ActorState
 	import people.players.Player;
-	import states.State;
+	import people.states.ActorState;
 	import util.Color;
-	
-	
-	
+
 	/**
 	 * A basic enemy.
 	 * 
@@ -26,15 +20,15 @@ package people.enemies
 		public function Enemy() 
 		{
 			super();
-			
+
 			// Load the player.png into this sprite.
 			makeGraphic(20, 40, Color.GREEN, true);
-			
+
 			maxVelocity = new FlxPoint(200, 500);
 			acceleration.y = 500;
 			facing = FlxObject.RIGHT;
 		}
-		
+
 		override public function update() : void
 		{
 			if (isTouching(FlxObject.FLOOR))
@@ -46,7 +40,7 @@ package people.enemies
 				drag.x = 0;
 			}
 		}
-		
+
 		public function getHit(attack : Attack) : void
 		{
 			if (!(state == ActorState.HURT || state == ActorState.DEAD))
@@ -64,28 +58,28 @@ package people.enemies
 					velocity.y = maxVelocity.y / 4;
 					velocity.x = ((x - player.x < 0) ? -1 : 1) * maxVelocity.x;
 				}
-				
+
+
 				hurt(attack.damage);
 			}
 		}
-		
+
 		override public function destroy() : void
 		{
 			kill();
 			super.destroy();
 		}
-		
+
 		public function distanceToPlayer() : Number
 		{
 			var deltaX : Number = x - player.x;
 			var deltaY : Number = y - player.y;
 			return Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 		}
-		
+
 		public function get player() : Player
 		{
 			return (getManager(PlayerManager) as PlayerManager).player;
 		}
 	}
-
 }

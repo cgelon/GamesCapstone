@@ -19,6 +19,7 @@ package people.states
 		public static const HURT : ActorAction = new ActorAction();
 		public static const DIE : ActorAction = new ActorAction();
 		public static const CROUCH : ActorAction = new ActorAction();
+		public static const COMPUTER : ActorAction = new ActorAction();
 		
 		public function get name() : String
 		{
@@ -47,6 +48,8 @@ package people.states
 					return "die";
 				case CROUCH:
 					return "crouch";
+				case COMPUTER:
+					return "computer";
 			}
 			return "NAME THIS ACTION PLEASE";
 		}

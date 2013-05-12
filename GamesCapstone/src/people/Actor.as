@@ -34,7 +34,7 @@ package people
 		/** True if the actor is on the ground, false otherwise. */
 		public function get onGround() : Boolean
 		{
-			return isTouching(FlxObject.FLOOR) && velocity.y == 0;
+			return isTouching(FlxObject.FLOOR);
 		}
 		
 		/**

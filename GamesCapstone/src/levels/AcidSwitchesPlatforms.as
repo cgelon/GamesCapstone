@@ -3,11 +3,7 @@ package levels
 	import items.Environmental.Background.Acid;
 	import items.Environmental.Background.AcidFlow;
 	import items.Environmental.Background.Lever;
-	import items.Environmental.Crate;
-	import org.flixel.FlxGroup;
 	import org.flixel.FlxPoint;
-	import org.flixel.FlxTilemap;
-	import states.State;
 	
 	/**
 	 * ...

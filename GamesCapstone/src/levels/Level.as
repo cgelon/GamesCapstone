@@ -1,5 +1,6 @@
 package levels
 {
+	import cutscenes.engine.Cutscene;
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxTilemap;
@@ -24,6 +25,7 @@ package levels
 		public var doorLocs: Array;
 		public var backgroundCircuits: Array;
 		public var environmentalCircuits: Array;
+		public var cutscene : Cutscene;
 		
 		public var loadMessage : String;
 		

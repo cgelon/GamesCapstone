@@ -1,21 +1,9 @@
 package people.enemies 
 {
-	import managers.EnemyManager;
-	import managers.EnemyAttackManager;
-	import managers.LevelManager;
-	import org.flixel.FlxSprite;
-	import org.flixel.FlxG;
 	import org.flixel.FlxPoint;
-	import org.flixel.FlxObject;
 	import org.flixel.FlxTimer;
-	import org.flixel.plugin.photonstorm.FlxDelay;
-	import org.flixel.plugin.photonstorm.FlxVelocity;
-	import people.Actor;
 	import people.states.ActorAction;
 	import people.states.ActorState;
-	import states.State;
-	import levels.Level;
-	import util.Color;
 	import util.Convert;
 	
 	/**

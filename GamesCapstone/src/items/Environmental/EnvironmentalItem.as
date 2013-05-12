@@ -2,10 +2,8 @@ package items.Environmental
 {
 	import items.Item;
 	import managers.BackgroundManager;
-	import org.flixel.FlxObject;
 	import people.Actor;
 	import states.GameState;
-	import states.State;
 	
 	/**
 	 * Basis for all level items the player can interact with

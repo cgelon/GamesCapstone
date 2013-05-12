@@ -2,7 +2,7 @@ package levels
 {
 	import cutscenes.BeginningCutscene;
 	import org.flixel.FlxPoint;
-	import org.flixel.FlxTileblock;
+	
 	/**
 	 * The beginning room in the game.
 	 * 
@@ -27,6 +27,9 @@ package levels
 			playerStart = map.getTileCoords(132)[0];
 			
 			add(map);
+			
+			cutscene = new BeginningCutscene();
+			add(cutscene);
 		}
 		
 		public function get computerCoordinates() : FlxPoint

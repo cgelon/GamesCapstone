@@ -1,13 +1,6 @@
 package items.Environmental
 {
 	import items.Environmental.Background.Circuit.Reactor;
-	import managers.ObjectManager;
-	import org.flixel.FlxObject;
-	import org.flixel.FlxPoint;
-	import org.flixel.FlxSprite;
-	import org.flixel.FlxG;
-	import people.Actor;
-	import states.State;
 
 	/**
 	 * @author Lydia Duncan

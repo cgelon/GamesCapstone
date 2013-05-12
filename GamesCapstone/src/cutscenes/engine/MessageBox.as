@@ -63,6 +63,9 @@ package cutscenes.engine
 		/** The timer for automatically closing the message box. */
 		private var _autoTimer : FlxTimer;
 		
+		/** True if space has been released since the last press, false otherwise. */
+		private static var _spaceReleased : Boolean;
+		
 		/** The function to call when the text is done being displayed. */
 		private var _callback : Function;
 		
@@ -81,6 +84,8 @@ package cutscenes.engine
 			// Set up the timers.
 			_timer = new FlxTimer();
 			_autoTimer = new FlxTimer();
+			
+			_spaceReleased = false;
 		}
 		
 		/**
@@ -173,7 +178,7 @@ package cutscenes.engine
 		 * @param	autoCloseTime	The amount of time, in seconds, after the message is fully displayed to close the box.
 		 */
 		public function displayText(name : String, text : String, callback : Function = null, 
-				displaySpeed : Number = 0.005, auto : Boolean = false, autoCloseTime : Number = 2) : void
+				displaySpeed : Number = 0.01, auto : Boolean = false, autoCloseTime : Number = 2) : void
 		{
 			_lines = divideText(text);
 			_lineIndex = 0;
@@ -266,9 +271,14 @@ package cutscenes.engine
 		override public function update() : void 
 		{
 			super.update();
-			if (FlxG.keys.justPressed("SPACE") && !_auto)
+			if (!FlxG.keys.pressed("SPACE"))
+			{
+				_spaceReleased = true;
+			}
+			if (FlxG.keys.pressed("SPACE") && _spaceReleased && !_auto)
 			{
 				lineAdvancement();
+				_spaceReleased = false;
 			}
 		}
 		

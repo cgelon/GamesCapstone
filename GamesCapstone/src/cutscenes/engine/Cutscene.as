@@ -30,7 +30,7 @@ package cutscenes.engine
 		}
 		
 		public function run() : void
-		{
+		{	
 			FlxG.cutscene = true;
 			
 			_trackedObject = FlxG.camera.target;

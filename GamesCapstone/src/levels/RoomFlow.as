@@ -1,7 +1,5 @@
 package levels 
 {
-	import flash.utils.getDefinitionByName;
-	import org.flixel.FlxG;
 	
 	/**
 	 * Describes the room flow of the game.

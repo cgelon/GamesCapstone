@@ -62,7 +62,7 @@ package cutscenes.engine
 			messageBox.setFormat(null, 8, Color.WHITE, Color.BLUE, 160, 3);
 			messageBox.setPosition(160, 0);
 			add(messageBox);
-			messageBox.displayText("The Informant", _message, callback);
+			messageBox.displayText(_title, _message, callback);
 		}
 		
 		override public function destroy() : void

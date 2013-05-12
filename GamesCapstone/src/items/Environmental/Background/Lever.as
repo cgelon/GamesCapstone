@@ -1,15 +1,9 @@
 package items.Environmental.Background
 {
 	import items.Environmental.Background.Circuit.Trigger;
-	import managers.BackgroundManager;
-	import managers.ObjectManager;
-	import org.flixel.FlxGroup;
-	import org.flixel.FlxPoint;
-	import org.flixel.FlxSprite;
 	import org.flixel.FlxG;
 	import people.Actor;
 	import states.GameState;
-	import states.State;
 
 	/**
 	 * @author Lydia Duncan

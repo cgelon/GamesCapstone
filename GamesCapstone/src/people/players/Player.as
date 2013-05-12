@@ -1,33 +1,24 @@
 package people.players
 {
 	import attacks.AttackType;
-	import flash.events.StatusEvent;
-	import items.Item;
 	import items.Weapons.Fists;
 	import items.Weapons.HammerArm;
 	import items.Weapons.WeaponUpgrade;
 	import managers.PlayerAttackManager;
-	import org.flixel.FlxPoint;
-	import org.flixel.FlxSprite
-	import org.flixel.FlxObject;
 	import org.flixel.FlxG;
-	import org.flixel.FlxText;
+	import org.flixel.FlxObject;
+	import org.flixel.FlxPoint;
 	import org.flixel.FlxTimer;
-	import org.flixel.plugin.photonstorm.FlxDelay;
-	import org.flixel.plugin.photonstorm.FlxBar;
 	import people.Actor;
 	import people.PeriodicSound;
 	import people.SoundEffect;
 	import people.states.ActorAction;
 	import people.states.ActorState;
 	import people.states.ActorStateGroup;
-	import states.GameState;
 	import util.Color;
-	import util.Sounds;
 	import util.Convert;
+	import util.Sounds;
 	import util.StatManager;
-	
-	
 	
 	/** 
 	 * Contains all of the information for a player.
@@ -127,7 +118,7 @@ package people.players
 			offset.y = 13;
 			
 			// Create the animations we need.
-			addAnimation("idle", [0], 0, false);
+			addAnimation("idle", [0, 1], 2, true);
 			addAnimation("walk", [36, 37, 38, 39, 40, 45, 46, 47, 48, 49], 20, true);
 			addAnimation("jump_rising", [19, 20], 10, false);
 			addAnimation("jump_falling", [21], 0, false);
@@ -147,6 +138,7 @@ package people.players
 			addAnimation("die_flashing", [23, 53], 8, true);
 			addAnimation("blocking", [89], 0, false);
 			addAnimation("crouching", [13], 0, false);
+			addAnimation("terminal", [76, 77, 78], 9, true);
 			
 			// Associate animations with actions.
 			associateAnimation(["idle"], ActorAction.STOP);
@@ -168,6 +160,7 @@ package people.players
 			associateAnimation(["die_falling", "die_flashing"], ActorAction.DIE);
 			associateAnimation(["blocking"], ActorAction.BLOCK);
 			associateAnimation(["crouching"], ActorAction.CROUCH);
+			associateAnimation(["terminal"], ActorAction.COMPUTER);
 			
 			// Create sound associations with states.
 			associatePeriodicSound(new PeriodicSound(Sounds.PLAYER_WALKING, 0.25, 0.25), ActorState.RUNNING);
@@ -227,14 +220,14 @@ package people.players
 			{
 				switch(state)
 				{
+					case ActorState.PUSHING:
 					case ActorState.IDLE:
 					case ActorState.RUNNING:
 					case ActorState.JUMPING:
 					case ActorState.FALLING:
-					case ActorState.PUSHING:
 						updateMovement();
-						updateAttacking();
 						updateNextState();
+						updateAttacking();
 						break;
 					case ActorState.ROLLING:
 						// If the player has pressed the roll button, roll them
@@ -247,7 +240,8 @@ package people.players
 								executeAction(ActorAction.STOP, ActorState.IDLE);
 							});
 						}
-						
+
+
 						velocity.x = ((facing == FlxObject.RIGHT) ? 1 : -1) * maxVelocity.x;
 						break;
 					case ActorState.ATTACKING:
@@ -275,13 +269,13 @@ package people.players
 						}
 						break;
 					case ActorState.BLOCKING:
-						if (!FlxG.keys.pressed("L") || stamina <= 0)
+						if (FlxG.keys.justReleased("L") || stamina <= 0)
 						{
 							executeAction(ActorAction.STOP, ActorState.IDLE);
 						}
 						break;
 					case ActorState.CROUCHING:
-						if (!FlxG.keys.pressed("S"))
+						if (FlxG.keys.justReleased("S"))
 						{
 							executeAction(ActorAction.STOP, ActorState.IDLE);
 						}
@@ -298,6 +292,7 @@ package people.players
 				switchWeapons();
 				updateStamina();
 				buttonReleases();
+				
 				drag.x = (onGround || state != ActorState.HURT) ? maxVelocity.x * 4 : maxVelocity.x;
 				
 				var colors : Array = [0x00FFFFFF, Color.RED, Color.GREEN, Color.ORANGE, Color.BLUE];

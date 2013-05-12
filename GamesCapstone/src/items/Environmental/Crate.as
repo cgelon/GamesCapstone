@@ -1,15 +1,8 @@
 package items.Environmental
 {
-	import managers.ObjectManager;
-	import managers.PlayerManager;
-	import org.flixel.FlxObject;
-	import org.flixel.FlxPoint;
-	import org.flixel.FlxSprite;
-	import org.flixel.FlxG;
-	import people.Actor;
-	import people.players.Player;
-	import states.State;
 	import managers.Manager;
+	import managers.PlayerManager;
+	import people.players.Player;
 
 	/**
 	 * @author Lydia Duncan
