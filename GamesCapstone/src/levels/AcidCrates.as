@@ -24,10 +24,9 @@ package levels
 			
 			width = map.width;
 			height = map.height;
-			// Initializes the map
 			
 			playerStart = new FlxPoint(16, 304);
-			// Stores the player start points
+			playerEnd = new FlxPoint(640, 312);
 			
 			backgroundStarts[0] = new FlxPoint(368, 160);
 			backgroundTypes[0] = AcidFlow;

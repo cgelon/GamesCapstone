@@ -16,6 +16,7 @@ package levels
 		public var width : int;
 		public var height : int;
 		public var playerStart: FlxPoint;
+		public var playerEnd : FlxPoint;
 		public var enemyStarts: Array;
 		public var enemyTypes: Array;
 		public var backgroundStarts: Array;

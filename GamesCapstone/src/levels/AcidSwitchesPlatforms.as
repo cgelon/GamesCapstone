@@ -25,6 +25,7 @@ package levels
 			// Initializes the map
 			
 			playerStart = new FlxPoint(16, 192);
+			playerEnd = new FlxPoint(1056, 312);
 			// Stores the player start points
 			
 			var leverLocs : Array = [new FlxPoint(720, 304)];
