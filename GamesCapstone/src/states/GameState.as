@@ -48,7 +48,7 @@ package states
 		/** The level that is displayed in this state. */
 		private var _level : Level;
 		public function get level() : Level { return _level; }
-
+		
 		public function GameState(level : Level = null)
 		{
 			_level = (level != null) ? level : Registry.roomFlow.getFirstRoom();

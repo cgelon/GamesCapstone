@@ -61,7 +61,7 @@ package people.players
 		/** Max velocity for the player. */
 		private static const MAX_VELOCITY : FlxPoint = new FlxPoint(200, 1000);
 		/** Max velocity for the player when they are pushing. */
-		private static const MAX_PUSHING_VELOCITY : FlxPoint = new FlxPoint(175, 1000);
+		private static const MAX_PUSHING_VELOCITY : FlxPoint = new FlxPoint(125, 1000);
 		
 		/** All of the weapons/items that the player has collected. **/
 		private var _weapons : Array = new Array(10);
@@ -195,6 +195,9 @@ package people.players
 			
 			super.initialize(x, y, Registry.playerStats.health);
 			
+			velocity.x = 0;
+			velocity.y = 0;
+			
 			_stamina = Registry.playerStats.stamina;
 			facing = FlxObject.RIGHT;
 			_jumpReleased = true;
@@ -204,7 +207,7 @@ package people.players
 			readyToReset = false;
 			
 			acquireWeapon(new Fists());
-			acquireWeapon(new HammerArm());
+			//acquireWeapon(new HammerArm());
 			_currentWeapon = 0;
 		}
 		
@@ -322,7 +325,7 @@ package people.players
 			else
 			{
 				// These states can only be triggered when the player is in the air.
-				if (ActorStateGroup.GROUND.contains(state) || (velocity.y > 0 && state == ActorState.JUMPING))
+				if (velocity.y > 0 && (ActorStateGroup.GROUND.contains(state) || state == ActorState.JUMPING))
 				{
 					executeAction(ActorAction.FALL, ActorState.FALLING);
 				}
@@ -488,7 +491,7 @@ package people.players
 			else
 			{
 				// These states can only be triggered when the player is in the air.
-				if (ActorStateGroup.GROUND.contains(state) || (velocity.y > 0 && state == ActorState.JUMPING))
+				if (velocity.y > 0 && (ActorStateGroup.GROUND.contains(state) || state == ActorState.JUMPING))
 				{
 					executeAction(ActorAction.FALL, ActorState.FALLING);
 				}

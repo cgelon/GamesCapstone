@@ -25,7 +25,7 @@ package levels
 			height = map.height;
 			// Initializes the map
 			
-			playerStart = new FlxPoint(16, 304);
+			playerStart = new FlxPoint(16, 312);
 			// Stores the player start points
 			
 			// Stores the acid locations for the floor

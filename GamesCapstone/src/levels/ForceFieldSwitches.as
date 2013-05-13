@@ -27,7 +27,7 @@ package levels
 			height = map.height;
 			// Initializes the map
 			
-			playerStart = new FlxPoint(16, 192);
+			playerStart = new FlxPoint(16, 296);
 			// Stores the player start points
 			
 			enemyStarts[0] = new FlxPoint(528, 50);

@@ -18,7 +18,7 @@ package items.Environmental
 		public var beingPushed:Boolean = false;
 		
 		private const STOP_VEL:Number = 10000000;	// stop & lock if moving slower than this
-		private const ANTI_SLIDE:Number = 0.77;	// factor to reduce slide by (multiplied by velocity and added to friction)
+		private const ANTI_SLIDE:Number = 0.25;	// factor to reduce slide by (multiplied by velocity and added to friction)
 		// 0 means slippery (just use MIN_FRICTION). 0.5-1 is "normal" slide.  2+ is very little slide
 		
 		public function Crate(X:Number,Y:Number):void
@@ -27,7 +27,7 @@ package items.Environmental
 			initialize(X, Y);
 			
 			loadGraphic(tileset, true, false, 32, 32, false);
-			drag.x = maxVelocity.x / 10;
+			//drag.x = maxVelocity.x / 10;
 			lock();
 			color = 0x77FFFFFF;
 		}
