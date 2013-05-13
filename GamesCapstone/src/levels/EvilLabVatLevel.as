@@ -30,6 +30,7 @@ package levels
 			// Initializes the map
 			
 			playerStart = new FlxPoint(16, 136);
+			playerEnd = new FlxPoint(2112, 72);
 			// Stores the player start points
 			
 			enemyStarts[0] = new FlxPoint(672, 120);
@@ -70,8 +71,8 @@ package levels
 				backgroundTypes[backgroundCircuits.length * 2 + vatLocs.length * 5 + l] = Acid;
 			}
 			// Stores the acid locations for the floor
-			doorLocs[0] = new FlxPoint(16, 112);
-			doorLocs[1] = new FlxPoint(2112, 48);
+			//doorLocs[0] = new FlxPoint(16, 112);
+			//doorLocs[1] = new FlxPoint(2112, 48);
 			// Stores the door locations for this level
 			
 			add(map);

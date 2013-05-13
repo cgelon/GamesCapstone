@@ -25,6 +25,7 @@ package levels
 			// Find the map and set the player start position there.
 			// 132 represets the upper left tile of the vent.
 			playerStart = map.getTileCoords(132)[0];
+			playerEnd = new FlxPoint(368, 168);
 			
 			add(map);
 			
@@ -35,6 +36,7 @@ package levels
 		public function get computerCoordinates() : FlxPoint
 		{
 			// Add 24 (a tile and a half) to get to the center of the computer.
+			// 160 represents the upper left tile of the computer.
 			var location : FlxPoint = map.getTileCoords(160)[0];
 			location.x += 24;
 			return location;
