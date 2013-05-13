@@ -184,9 +184,12 @@ package people.players
 			statManager = new StatManager();
 			
 			FlxG.watch(this, "stateName", "State");
-			FlxG.watch(this, "stamina", "Stamina");
-			FlxG.watch(this, "touching", "Touching");
-			FlxG.watch(this.velocity, "y", "yVel");
+			FlxG.watch(this, "position", "Position");
+		}
+		
+		public function get position() : String
+		{
+			return "(" + Math.floor(x) + ", " + Math.floor(y) + ")";
 		}
 
 		override public function initialize(x : Number, y : Number, health : Number = 5) : void
@@ -483,7 +486,7 @@ package people.players
 				{
 					executeAction(ActorAction.RUN, ActorState.RUNNING);
 				}
-				else if (velocity.x == 0 && state != ActorState.IDLE)
+				else if (velocity.y == 0 && velocity.x == 0 && state != ActorState.IDLE)
 				{
 					executeAction(ActorAction.STOP, ActorState.IDLE);
 				}

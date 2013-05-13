@@ -6,6 +6,7 @@ package items.Environmental.Background
 	import managers.LevelManager;
 	import managers.Manager;
 	import managers.ObjectManager;
+	import org.flixel.FlxBasic;
 	import org.flixel.FlxG;
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxObject;
@@ -172,6 +173,19 @@ package items.Environmental.Background
 				currentAcid = members[i];
 				currentAcid.exists = false;
 			}
+		}
+		
+		public function overlaps(Object: FlxBasic): Boolean
+		{
+			for (var i: int = 0; i < length; i++)
+			{
+				if (members[i] != null)
+				{
+					if ((members[i] as Acid).overlaps(Object))
+						return true;
+				}
+			}
+			return false;
 		}
 		
 		/**

@@ -28,9 +28,10 @@ package levels
 			// Initializes the map
 			
 			playerStart = new FlxPoint(16, 296);
+			playerEnd = new FlxPoint(820, 104);
 			// Stores the player start points
 			
-			enemyStarts[0] = new FlxPoint(528, 50);
+			enemyStarts[0] = new FlxPoint(816, 50);
 			enemyTypes[0] = LightningRobot;
 			
 			objectStarts[0] = null;

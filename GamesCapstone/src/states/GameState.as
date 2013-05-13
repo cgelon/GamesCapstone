@@ -49,9 +49,13 @@ package states
 		private var _level : Level;
 		public function get level() : Level { return _level; }
 		
-		public function GameState(level : Level = null)
+		/** True if the player is traveling to this room from the room in front of them, false otherwise. */
+		private var _backward : Boolean;
+
+		public function GameState(level : Level = null, backward : Boolean = false)
 		{
 			_level = (level != null) ? level : Registry.roomFlow.getFirstRoom();
+			_backward = backward;
 		}
 
 		override public function create() : void
@@ -82,7 +86,7 @@ package states
 			}
 
 			var playerManager : PlayerManager = new PlayerManager();
-			playerManager.addPlayer(_level.playerStart);
+			playerManager.addPlayer((!_backward) ? _level.playerStart : _level.playerEnd);
 
 			var objectManager : ObjectManager = new ObjectManager();
 
@@ -138,7 +142,7 @@ package states
 			addManager(informant);
 			active = true;
 
-			if (_level.loadMessage != null)
+			if (_level.loadMessage != null && !_backward)
 				(Manager.getManager(TheInformant) as TheInformant).talk(_level.loadMessage);
 
 			//	Tell flixel how big our game world is
@@ -150,7 +154,7 @@ package states
 			//	The camera will follow the player
 			FlxG.camera.follow(playerManager.player, FlxCamera.STYLE_PLATFORMER);
 			
-			if (levelManager.level.cutscene != null)
+			if (levelManager.level.cutscene != null && !_backward)
 			{
 				levelManager.level.cutscene.run();
 			}
@@ -332,7 +336,7 @@ package states
 			var previousRoom : Level = Registry.roomFlow.getPreviousRoom();
 			if (previousRoom != null)
 			{
-				FlxG.switchState(new GameState(previousRoom));
+				FlxG.switchState(new GameState(previousRoom, true));
 			}
 		}
 

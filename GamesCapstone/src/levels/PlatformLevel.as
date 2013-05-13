@@ -25,6 +25,7 @@ package levels
 			// Initializes the map
 			
 			playerStart = new FlxPoint(16, 232);
+			playerEnd = new FlxPoint(1344, 104);
 			// Stores the player start points
 
 			add(map);

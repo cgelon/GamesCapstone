@@ -25,11 +25,12 @@ package levels
 			// Initializes the map
 			
 			playerStart = new FlxPoint(16, 200);
+			playerEnd = new FlxPoint(2112, 200);
 			// Stores the player start points
 			
 			// Stores the acid locations for the floor
-			doorLocs[0] = new FlxPoint(16, 176);
-			doorLocs[1] = new FlxPoint(2096, 176);
+			//doorLocs[0] = new FlxPoint(16, 176);
+			//doorLocs[1] = new FlxPoint(2096, 176);
 			
 
 			var boxLocs : Array = [448, 704, 736, 1104, 1136, 1472, 1504];

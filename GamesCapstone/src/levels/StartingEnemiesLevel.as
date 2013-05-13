@@ -26,6 +26,7 @@ package levels
 			// Initializes the map
 			
 			playerStart = new FlxPoint(16, 200);
+			playerEnd = new FlxPoint(2112, 200);
 			// Stores the player start points
 			
 			enemyStarts[0] = new FlxPoint(450, 176);
@@ -36,8 +37,8 @@ package levels
 			enemyTypes[2] = Robot;
 			
 			// Stores the acid locations for the floor
-			doorLocs[0] = new FlxPoint(16, 176);
-			doorLocs[1] = new FlxPoint(2096, 176);
+			//doorLocs[0] = new FlxPoint(16, 176);
+			//doorLocs[1] = new FlxPoint(2096, 176);
 			
 			add(map);
 		}
