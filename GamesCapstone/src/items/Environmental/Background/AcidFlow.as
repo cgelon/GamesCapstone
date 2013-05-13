@@ -47,13 +47,13 @@ package items.Environmental.Background
 			var acid : Acid = recycle( Acid ) as Acid;
 			acid.initialize(X, Y);
 			add(acid);
-			acid.acceleration.y = 1000;
+			acid.acceleration.y = 2000;
 		}
 		
 		override public function update() : void
 		{
 			counter += FlxG.elapsed;
-			if (counter >= 0.25)
+			if (counter >= 0.125)
 			{
 				if (enabled)
 				{

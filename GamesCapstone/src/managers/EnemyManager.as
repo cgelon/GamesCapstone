@@ -23,5 +23,15 @@ package managers
 			jock.initialize(location.x, location.y);
 			add(jock);
 		}
+		
+		public function allEnemiesDead() : Boolean
+		{
+			for each (var enemy : Enemy in members)
+			{
+				if (enemy != null && enemy.health > 0)
+					return false;
+			}
+			return true;
+		}
 	}
 }
