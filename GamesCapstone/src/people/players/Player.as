@@ -52,11 +52,13 @@ package people.players
 		/** The amount of stamina to regenerate every frame. */
 		private static const STAM_REGEN : Number = 0.5;
 		/** The stamina cost of a strong attack. */
-		private static const STRONG_ATTACK_STAM_COST : Number = 40;
+		public static const STRONG_ATTACK_STAM_COST : Number = 40;
 		/** The stamina cost of a weak attack. */
-		private static const WEAK_ATTACK_STAM_COST : Number = 10;
+		public static const WEAK_ATTACK_STAM_COST : Number = 10;
 		/** The stamina cost of a roll */
-		private static const ROLL_STAM_COST : Number = 25;
+		public static const ROLL_STAM_COST : Number = 25;
+		/** The stamina cost of blocking. */
+		public static const BLOCK_STAM_COST : Number = 30;
 		
 		/** Max velocity for the player. */
 		private static const MAX_VELOCITY : FlxPoint = new FlxPoint(200, 1000);
@@ -204,7 +206,7 @@ package people.players
 			_stamina = Registry.playerStats.stamina;
 			facing = FlxObject.RIGHT;
 			_jumpReleased = true;
-			state = ActorState.IDLE;
+			executeAction(ActorAction.STOP, ActorState.IDLE);
 			_jumpCount = 0;
 			
 			readyToReset = false;
@@ -348,12 +350,23 @@ package people.players
 			{
 				_attackReleased = true;
 			}
-			if (!FlxG.keys.pressed("SPACE") && state == ActorState.PUSHING)
+			
+			if (state == ActorState.PUSHING && !(FlxG.keys.pressed("SPACE") && (isTouching(FlxObject.LEFT) || isTouching(FlxObject.RIGHT))))
 			{
-				if (velocity.x == 0)
-					executeAction(ActorAction.STOP, ActorState.IDLE);
+				if (velocity.y == 0)
+				{
+					if (velocity.x == 0)
+						executeAction(ActorAction.STOP, ActorState.IDLE);
+					else
+						executeAction(ActorAction.RUN, ActorState.RUNNING);
+				}
 				else
-					executeAction(ActorAction.RUN, ActorState.RUNNING);
+				{
+					if (velocity.y < 0)
+						executeAction(ActorAction.JUMP, ActorState.JUMPING);
+					else
+						executeAction(ActorAction.FALL, ActorState.FALLING);
+				}
 			}
 		}
 		
@@ -472,7 +485,7 @@ package people.players
 					executeAction(ActorAction.ROLL, ActorState.ROLLING);
 					stamina -= ROLL_STAM_COST;
 				}
-				else if (FlxG.keys.pressed("SPACE"))
+				else if (FlxG.keys.pressed("SPACE") && (isTouching(FlxObject.LEFT) || isTouching(FlxObject.RIGHT)))
 				{
 					var action : ActorAction = velocity.x != 0 ? ActorAction.RUN : ActorAction.STOP;
 					executeAction(action, ActorState.PUSHING);

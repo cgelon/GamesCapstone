@@ -39,12 +39,14 @@ package levels
 				objectStarts[i] = new FlxPoint(boxLocs[i], 208);
 				objectTypes[i] = Crate;
 			}
+			/*
 			var layerTwo : Array = [736, 1104, 1472, 1504];
 			for (var j : int = 0; j < layerTwo.length; j++)
 			{
 				objectStarts[boxLocs.length + j] = new FlxPoint(layerTwo[j], 176);
 				objectTypes[boxLocs.length + j] = Crate;
 			}
+			*/
 			add(map);
 		}
 	}

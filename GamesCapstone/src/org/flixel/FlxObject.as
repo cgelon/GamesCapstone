@@ -56,7 +56,7 @@ package org.flixel
 		/**
 		 * Handy constant used during collision resolution (see <code>separateX()</code> and <code>separateY()</code>).
 		 */
-		static public const OVERLAP_BIAS:Number = 4;
+		static public const OVERLAP_BIAS:Number = 10;
 		
 		/**
 		 * Path behavior controls: move from the start of the path to the end then stop.

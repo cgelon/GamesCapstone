@@ -236,6 +236,8 @@ package states
 					{
 						if ((Object2 as Player).state == ActorState.PUSHING)
 							(Object1 as Crate).beingPushed = true;
+						else
+							(Object1 as Crate).beingPushed = false;
 					}
 					else if (Object1 is Crate && Object2 is Crate)
 					{
