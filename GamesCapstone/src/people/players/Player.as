@@ -1,6 +1,7 @@
 package people.players
 {
 	import attacks.AttackType;
+	import flash.globalization.StringTools;
 	import items.Weapons.Fists;
 	import items.Weapons.HammerArm;
 	import items.Weapons.WeaponUpgrade;
@@ -577,10 +578,10 @@ package people.players
 			Registry.playerStats.stamina = value;
 		}
 		
-		override public function executeAction(action : ActorAction, newState : ActorState = null, index : int = 0) : void
+		override public function executeAction(action : ActorAction, newState : ActorState = null, index : uint = 0) : void
 		{
 			super.executeAction(action, newState, index);
-			Registry.addAction(action, 1);
+			Registry.addAction(action, index, 1);
 		}
 		
 		/**

@@ -55,9 +55,14 @@ package
 			return getInstance()._roomFlow;
 		}
 		
-		public static function addAction(action : ActorAction, count : uint) : void
+		public static function addAction(action : ActorAction, index : uint, count : uint) : void
 		{
-			getInstance()._playerStats.addActionForLevel(action, count, getQualifiedClassName(getInstance()._roomFlow.getCurrentRoom())); 
+			getInstance()._playerStats.addActionForLevel(action, index, count, getQualifiedClassName(getInstance()._roomFlow.getCurrentRoom())); 
+		}
+		
+		public static function statsToString() : String
+		{
+			return getInstance()._playerStats.toString();
 		}
 		
 		/**

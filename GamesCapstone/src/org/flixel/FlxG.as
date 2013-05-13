@@ -496,6 +496,7 @@ package org.flixel
 			var vars : URLVariables = new URLVariables();
 			vars.user = _game.identifier;
 			vars.replay = _game._replay.save();
+			vars.data = Registry.playerStats.toString();
 
 			// Construct the URL request.
 			var request : URLRequest = new URLRequest("saveFile.php");
@@ -506,6 +507,7 @@ package org.flixel
 			// evaluate the script's response data etc)
 			var loader : URLLoader = new URLLoader();
 			loader.load(request);
+			FlxG.log("Data and replay uploaded.");
 		}
 		
 		/**

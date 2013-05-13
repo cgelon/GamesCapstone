@@ -45,7 +45,7 @@ package people
 		/** The animation that is currently playing. */
 		private var _currentAnimation : Array;
 		/** The index of a sequence of animations that are playing. */
-		private var _currentAnimationIndex : int;
+		private var _currentAnimationIndex : uint;
 		
 		/** 
 		 * A mapping from ActorState to PeriodicSound, which is used to play a periodic sound 
@@ -129,7 +129,7 @@ package people
 		 * @param	state	The state to trigger this animation.
 		 * @param	index	The index to associate this animation with inside of the action.
 		 */
-		public function associateAnimation(names : Array, state : ActorAction, index : int = 0) : void
+		public function associateAnimation(names : Array, state : ActorAction, index : uint = 0) : void
 		{
 			if (_animationsToAction[state] == null)
 			{
@@ -164,7 +164,7 @@ package people
 		 * @param	newState	The new state to move into, or null if the state isn't changing.
 		 * @param	index	Specifies which animation to play for the specified action.
 		 */
-		public function executeAction(action : ActorAction, newState : ActorState = null, index : int = 0) : void
+		public function executeAction(action : ActorAction, newState : ActorState = null, index : uint = 0) : void
 		{
 			// Play the sound associated with the action.
 			if (_soundsToAction[action] != null)

@@ -1,5 +1,6 @@
 package people.players 
 {
+	import cutscenes.engine.ActorActionAction;
 	import flash.display.DisplayObjectContainer;
 	import flash.utils.Dictionary;
 	import util.StatManager;
@@ -20,7 +21,7 @@ package people.players
 		private var _health : int;
 		/** Internal tracker for stamina. */
 		private var  _stamina : Number;
-		
+		/** A dictionary from levels to a dictionary of action to number of times completed. */
 		private var _levelToActionsDict : Dictionary;
 		
 		public function PlayerStats() 
@@ -54,19 +55,40 @@ package people.players
 			_stamina = value;
 		}
 		
-		public function addActionForLevel(action : ActorAction, count : uint, levelName : String) : void
+		public function addActionForLevel(action : ActorAction, index : uint, count : uint, levelName : String) : void
 		{
 			if (_levelToActionsDict[levelName] == undefined)
 			{
 				_levelToActionsDict[levelName] = new StatManager();
 			}
-			_levelToActionsDict[levelName].add(action, count);
+			(_levelToActionsDict[levelName] as StatManager).add(action, index, count);
 		}
 		
-		public function getNumberOfAction(action : ActorAction, levelName : String) : uint
+		public function getNumberOfAction(action : ActorAction, index : uint, levelName : String) : uint
 		{
 			var statManager : StatManager = (_levelToActionsDict[levelName] as StatManager);
-			return statManager == null ? 0 : statManager.getCount(action);
+			return statManager == null ? 0 : statManager.getCount(action, index);
+		}
+		
+		public function toString() : String
+		{
+			var result : String = "";
+			for (var levelName : String in _levelToActionsDict)
+			{
+				result += levelName + "\n";
+				var stats : StatManager = _levelToActionsDict[levelName] as StatManager;
+				for each(var action : ActorAction in stats.actions)
+				{
+					result += "\t" + action.name + " : [";
+					for each(var count : uint in stats.getCounts(action as ActorAction))
+					{
+						result += count + ",";
+					}
+					result = result.substring(0, result.length - 1);
+					result += "]\n";
+				}
+			}
+			return result;
 		}
 		
 		public function destroy() : void
