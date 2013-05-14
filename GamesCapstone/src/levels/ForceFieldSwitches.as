@@ -33,7 +33,7 @@ package levels
 			
 			loadMessage = "That generator seems to be powering the forcefield, maybe your fists could break it... actually, that's a ridiculous notion.";
 			
-			enemyStarts[0] = new FlxPoint(816, 50);
+			enemyStarts[0] = new FlxPoint(640, 160);
 			enemyTypes[0] = LightningRobot;
 			
 			objectStarts[0] = null;

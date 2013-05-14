@@ -30,7 +30,7 @@ package levels
 			
 			loadMessage = "You might be able to move crates by pressing space... if you're strong enough.";
 			
-			objectStarts[0] = new FlxPoint(226, 115);
+			objectStarts[0] = new FlxPoint(226, 112);
 			objectTypes[0] = Crate;
 
 			add(map);

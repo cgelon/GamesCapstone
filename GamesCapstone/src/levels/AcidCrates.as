@@ -30,7 +30,7 @@ package levels
 			
 			loadMessage = "Here's a little known fact: crates in this lab resist highly corrosive acid.  Who knew?";
 			
-			backgroundStarts[0] = new FlxPoint(368, 160);
+			backgroundStarts[0] = new FlxPoint(368, 144);
 			backgroundTypes[0] = AcidFlow;
 			
 			objectStarts[0] = new FlxPoint(288, 192);
