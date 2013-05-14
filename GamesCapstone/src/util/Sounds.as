@@ -7,8 +7,11 @@ package util
 	 */
 	public class Sounds 
 	{
+		/// Menu Sounds ///
 		[Embed(source = "../../sounds/messageBoxCharacter.mp3")] public static const MESSAGE_BOX_LETTER:Class;
 		[Embed(source = "../../sounds/menu.mp3")] public static const MENU:Class;
+		[Embed(source = "../../sounds/mainMenuLong.mp3")] public static const MAIN_MENU_LONG:Class;
+		[Embed(source = "../../sounds/mainMenuShort.mp3")] public static const MAIN_MENU_SHORT:Class;
 		
 		/// Player Sounds ///
 		

@@ -214,6 +214,7 @@ package states
 					add(new ScreenOverlay());
 					FlxG.cutscene = true;
 					(getManager(PlayerManager) as PlayerManager).player.readyToReset = false;
+					FlxG.uploadRecording();
 				}
 				else
 				{

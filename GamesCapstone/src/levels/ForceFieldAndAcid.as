@@ -30,6 +30,7 @@ package levels
 			// Initializes the map
 			
 			playerStart = new FlxPoint(16, 296);
+			playerEnd = new FlxPoint(988, 296);
 			// Stores the player start points
 			
 			enemyStarts[0] = new FlxPoint(528, 50);

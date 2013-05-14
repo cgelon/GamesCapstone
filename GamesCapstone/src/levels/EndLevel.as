@@ -24,8 +24,8 @@ package levels
 			// Initializes the map
 			
 			playerStart = new FlxPoint(16, 192);
+			playerEnd = new FlxPoint(16, 192);
 			// Stores the player start points
-			
 			
 			// Add the Acidflow and its lever
 			backgroundStarts[0] = new FlxPoint(288, 128);

@@ -8,6 +8,7 @@ package states
 	import util.Color;
 	import util.FadingText;
 	import util.ScreenOverlay;
+	import util.Sounds;
 	
 	/**
 	 * Main menu state for playing the game.
@@ -19,6 +20,9 @@ package states
 		
 		/** The fading text that tells the player to press space. */
 		private var _fadingText : FadingText;
+		
+		/** True if space has already been pressed, false otherwise. */
+		private var _spacePressed : Boolean;
 		
 		override public function create() : void
 		{
@@ -35,13 +39,15 @@ package states
 			
 			add(_title);
 			add(_fadingText);
+			
+			_spacePressed = false;
 		}
 		
 		override public function update() : void
 		{
 			super.update();
 			
-			if (FlxG.keys.justPressed("SPACE"))
+			if (!_spacePressed && FlxG.keys.justPressed("SPACE"))
 			{
 				add(new ScreenOverlay(false));
 				var timer : FlxTimer = new FlxTimer();
@@ -49,6 +55,8 @@ package states
 				{
 					FlxG.switchState(new GameState(Registry.roomFlow.getCurrentRoom()));
 				});
+				_spacePressed = true;
+				FlxG.play(Sounds.MAIN_MENU_LONG, 0.5);
 			}
 			
 			if (_title.velocity.y != 0 && _title.y > FlxG.height / 2 - 50)

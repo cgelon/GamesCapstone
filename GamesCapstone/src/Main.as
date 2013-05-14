@@ -13,7 +13,10 @@ package
 		{
 			FlxG.debug = true;
 			super( 320, 240, MainMenuState, 2, 30, 30 );
-			//FlxG.recordReplay();
+			if (!FlxG.debug)
+			{
+				FlxG.recordReplay();
+			}
 		}
 	}
 }
