@@ -30,6 +30,7 @@ package states
 	import people.players.Player;
 	import people.players.PlayerStats;
 	import people.states.ActorState;
+	import util.Music;
 	import util.ScreenOverlay;
 
 	/**
@@ -66,6 +67,11 @@ package states
 
 		override public function create() : void
 		{
+			if (FlxG.music == null || !FlxG.music.active)
+			{
+				FlxG.playMusic(Music.CREEPY, 1.0);
+			}
+			
 			// Set up all the managers before adding them to the state.
 			var levelManager : LevelManager = new LevelManager();
 			levelManager.addLevel(_level);
