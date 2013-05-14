@@ -29,6 +29,8 @@ package levels
 			playerEnd = new FlxPoint(1344, 168);
 			// Stores the player start points
 			
+			loadMessage = "Did you know that attacking while crouching or jumping results in special moves?";
+			
 			enemyStarts[0] = new FlxPoint(528, 50);
 			enemyTypes[0] = Robot;
 			

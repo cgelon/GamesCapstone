@@ -30,6 +30,8 @@ package levels
 			playerEnd = new FlxPoint(1344, 168);
 			// Stores the player start points
 			
+			loadMessage = "Red forcefields, how original.";
+			
 			enemyStarts[0] = new FlxPoint(528, 50);
 			enemyTypes[0] = Robot;
 			

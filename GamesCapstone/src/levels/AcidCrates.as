@@ -28,6 +28,8 @@ package levels
 			playerStart = new FlxPoint(16, 312);
 			playerEnd = new FlxPoint(640, 312);
 			
+			loadMessage = "Here's a little known fact: crates in this lab resist highly corrosive acid.  Who knew?";
+			
 			backgroundStarts[0] = new FlxPoint(368, 160);
 			backgroundTypes[0] = AcidFlow;
 			

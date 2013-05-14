@@ -31,6 +31,8 @@ package levels
 			playerEnd = new FlxPoint(820, 104);
 			// Stores the player start points
 			
+			loadMessage = "That generator seems to be powering the forcefield, maybe your fists could break it... actually, that's a ridiculous notion.";
+			
 			enemyStarts[0] = new FlxPoint(816, 50);
 			enemyTypes[0] = LightningRobot;
 			

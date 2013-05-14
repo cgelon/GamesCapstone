@@ -20,7 +20,7 @@ package levels
 			
 			map.loadMap(new CSV(), PNG, 16, 16, 0, 0, 1, 352);
 			
-			loadMessage = "What is that green stuff? Is that...ACID?!";
+			loadMessage = "What is that green stuff? Is that...ACID?! Who does that?";
 			
 			width = map.width;
 			height = map.height;

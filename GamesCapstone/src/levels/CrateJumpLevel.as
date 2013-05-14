@@ -28,6 +28,8 @@ package levels
 			playerEnd = new FlxPoint(1344, 136);
 			// Stores the player start points
 			
+			loadMessage = "You might be able to move crates by pressing space... if you're strong enough.";
+			
 			objectStarts[0] = new FlxPoint(226, 115);
 			objectTypes[0] = Crate;
 

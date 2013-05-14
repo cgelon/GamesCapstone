@@ -33,6 +33,8 @@ package levels
 			playerEnd = new FlxPoint(2112, 72);
 			// Stores the player start points
 			
+			loadMessage = "Acid, acid, and more acid. This obsession with acid is getting a little out of control.";
+			
 			enemyStarts[0] = new FlxPoint(672, 120);
 			enemyTypes[0] = Robot;
 			enemyStarts[1] = new FlxPoint(1312, 120);
