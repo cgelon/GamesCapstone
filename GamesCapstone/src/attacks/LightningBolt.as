@@ -13,7 +13,7 @@ package attacks
 		public static const LIGHTNING_WIDTH : Number = 15;
 		public static const LIGHTNING_HEIGHT : Number = 3;
 		public static const LIGHTNING_DAMAGE : Number = 2;
-		public static const LIGHTNING_SPEED : Number = 150;
+		public static const LIGHTNING_SPEED : Number = 225;
 		
 		public function LightningBolt() 
 		{

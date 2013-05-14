@@ -6,6 +6,7 @@ package people.enemies
 	import org.flixel.FlxObject;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxTimer;
+	import people.players.Player;
 	import people.states.ActorAction;
 	import people.states.ActorState;
 	
@@ -19,10 +20,11 @@ package people.enemies
 		/** The PNG for the robot. */
 		[Embed(source = '../../../assets/robot sheet.png')] private var robotPNG : Class;
 		
-		/** The amount of seconds inbetween enemy attacks. */
-		protected var _attackDelay : Number = 15 / FlxG.framerate;
 		/** The amount of seconds the enemy takes to windup. */
-		protected var _windupDelay : Number = 20 / FlxG.framerate;
+		protected var _windupDelay : Number = 15 / FlxG.framerate;
+		/** The amount of seconds inbetween enemy attacks. */
+		protected var _attackDelay : Number = 10 / FlxG.framerate;
+		
 		
 		protected var _attackRange : Number = 40;
 		protected var _seekRange : Number = 200;
@@ -79,18 +81,21 @@ package people.enemies
 		
 		protected function attack() : void
 		{
-			executeAction(ActorAction.WINDUP, ActorState.ATTACKING);
-			actionTimer.start(_windupDelay, 1, function(timer : FlxTimer) : void
+			if (!(player.state == ActorState.HURT || player.state == ActorState.DEAD))
 			{
-				if (state == ActorState.ATTACKING) {
-					attackManager.attack((facing == FlxObject.LEFT) ? x - 20 : x + width, y);
-					executeAction(ActorAction.ATTACK, ActorState.ATTACKING);
-					actionTimer.start(_attackDelay, 1, function(timer : FlxTimer) : void
-					{
-						if (state == ActorState.ATTACKING) executeAction(ActorAction.STOP, ActorState.IDLE);
-					});
-				}
-			});
+				executeAction(ActorAction.WINDUP, ActorState.ATTACKING);
+				actionTimer.start(_windupDelay, 1, function(timer : FlxTimer) : void
+				{
+					if (state == ActorState.ATTACKING) {
+						attackManager.attack((facing == FlxObject.LEFT) ? x - 20 : x + width, y);
+						executeAction(ActorAction.ATTACK, ActorState.ATTACKING);
+						actionTimer.start(_attackDelay, 1, function(timer : FlxTimer) : void
+						{
+							if (state == ActorState.ATTACKING) executeAction(ActorAction.STOP, ActorState.IDLE);
+						});
+					}
+				});
+			}
 		}
 		
 		override public function update():void 
