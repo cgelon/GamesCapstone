@@ -293,10 +293,13 @@ package people.players
 						updateAttacking();
 						break;
 					case ActorState.DEAD:
-						actionTimer.start(RESET_TIME, 1, function(timer : FlxTimer) : void
+						if (!actionTimer.running)
 						{
-							readyToReset = true;
-						});
+							actionTimer.start(RESET_TIME, 1, function(timer : FlxTimer) : void
+							{
+								readyToReset = true;
+							});
+						}
 						break;
 				}
 				

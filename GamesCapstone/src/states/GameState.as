@@ -7,6 +7,7 @@ package states
 	import items.Environmental.Crate;
 	import items.Environmental.EnvironmentalItem;
 	import items.Environmental.Generator;
+	import levels.EndLevel;
 	import levels.Level;
 	import managers.BackgroundManager;
 	import managers.EnemyAttackManager;
@@ -28,6 +29,7 @@ package states
 	import people.players.Player;
 	import people.players.PlayerStats;
 	import people.states.ActorState;
+	import util.ScreenOverlay;
 
 	/**
 	 * Base class for all game states.
@@ -200,10 +202,18 @@ package states
 
 			if ((getManager(PlayerManager) as PlayerManager).player.readyToReset)
 			{
-				//Registry.reset();
-				(getManager(PlayerManager) as PlayerManager).player.health = PlayerStats.MAX_HEALTH;
-				Registry.playerStats.health = PlayerStats.MAX_HEALTH;
-				resetRoom();
+				if (_level is EndLevel)
+				{
+					add(new ScreenOverlay());
+					FlxG.cutscene = true;
+					(getManager(PlayerManager) as PlayerManager).player.readyToReset = false;
+				}
+				else
+				{
+					(getManager(PlayerManager) as PlayerManager).player.health = PlayerStats.MAX_HEALTH;
+					Registry.playerStats.health = PlayerStats.MAX_HEALTH;
+					resetRoom();
+				}
 			}
 		}
 
