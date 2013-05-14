@@ -28,7 +28,7 @@ package levels
 			playerEnd = new FlxPoint(2112, 200);
 			// Stores the player start points
 			
-			loadMessage = "Seems like there's a block party ahead. Try jumping over these crates.";
+			loadMessage = "Seems like there's a block party ahead. Try jumping over the crates.";
 			
 			// Stores the acid locations for the floor
 			//doorLocs[0] = new FlxPoint(16, 176);

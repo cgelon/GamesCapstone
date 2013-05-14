@@ -20,7 +20,7 @@ package cutscenes
 			_messageBox = new MessageBox();
 			_messageBox.setFormat(null, 8, Color.WHITE, Color.BLUE, 160, 3, "right");
 			_messageBox.setPosition(160, 0);
-			_messageBox.displayText("The Informant", message, destroyMessage, 0.02, true, 2);
+			_messageBox.displayText("The Informant", message, destroyMessage, 0.02, true, 5);
 			add(_messageBox);
 		}
 		

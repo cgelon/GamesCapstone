@@ -29,7 +29,7 @@ package levels
 			playerEnd = new FlxPoint(2112, 200);
 			// Stores the player start points
 			
-			loadMessage = "Robots... such a buzzkill! Perform weak attacks with J, strong attacks with K, block with L, and dodge with P. Well, at least try to survive.";
+			loadMessage = "Robots... such a buzzkill! Perform weak attacks with J, strong attacks with K, block with L, and dodge with P. Have fun!";
 			
 			enemyStarts[0] = new FlxPoint(450, 176);
 			enemyTypes[0] = Robot;
