@@ -11,7 +11,8 @@ package util
 		private var _screen : FlxSprite;
 		private var _text : FlxText;
 		
-		public function ScreenOverlay() {
+		public function ScreenOverlay(text : Boolean = true) 
+		{
 			super();
 			_screen = new FlxSprite();
 			_screen.makeGraphic(FlxG.width, FlxG.height, Color.BLACK);
@@ -19,19 +20,22 @@ package util
 			_screen.scrollFactor = new FlxPoint();
 			
 			_text = new FlxText(0, FlxG.height / 2 - 20, FlxG.width, "Thanks for playing!", true);
-			_text.setFormat(null, 24, Color.WHITE, "center");
+			_text.setFormat(null, 24, Color.WHITE, "center", Color.DARK_GRAY);
 			_text.alpha = 0;
 			_text.scrollFactor = new FlxPoint();
 			
 			add(_screen);
-			add(_text);
+			if (text)
+			{
+				add(_text);
+			}
 		}
 		
 		override public function update():void 
 		{
 			super.update();
-			_screen.alpha += 0.01;
-			_text.alpha += 0.01;
+			_screen.alpha += 0.015;
+			_text.alpha += 0.015;
 		}
 		
 		override public function destroy():void 
