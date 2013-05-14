@@ -321,7 +321,7 @@ package states
 		private function enemyHit(enemy : Enemy, attack : Attack) : void
 		{
 			enemy.getHit(attack);
-			attack.kill();
+			//attack.kill();
 		}
 
 		protected function moveToNextRoom() : void
