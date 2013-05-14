@@ -492,6 +492,11 @@ package org.flixel
 		 */
 		static public function uploadRecording():void
 		{
+			// Only upload recordings when we are on a non-debug release.
+			if (FlxG.debug)
+			{
+				return;
+			}
 			// Prepare the data to send.
 			var vars : URLVariables = new URLVariables();
 			vars.user = _game.identifier;

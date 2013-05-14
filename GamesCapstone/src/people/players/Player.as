@@ -417,7 +417,7 @@ package people.players
 			}
 			
 			// If the player is pressing the jump button and still has jumps left, jump.
-			if (state != ActorState.ATTACKING && FlxG.keys.justPressed("W") && _jumpReleased && _jumpCount < 2)
+			if (state != ActorState.ATTACKING && FlxG.keys.justPressed("W") && _jumpReleased && _jumpCount < 1)
 			{
 				velocity.y = -maxVelocity.y / 2.5;
 				
