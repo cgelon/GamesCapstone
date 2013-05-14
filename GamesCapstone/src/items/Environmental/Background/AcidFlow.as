@@ -6,13 +6,16 @@ package items.Environmental.Background
 	import managers.LevelManager;
 	import managers.Manager;
 	import managers.ObjectManager;
+	import managers.PlayerManager;
 	import org.flixel.FlxBasic;
 	import org.flixel.FlxG;
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxObject;
+	import org.flixel.FlxSound;
 	import org.flixel.FlxTilemap;
 	import org.flixel.system.FlxTile;
 	import states.GameState;
+	import util.Sounds;
 	/**
 	 * @author Lydia Duncan
 	 */
@@ -21,6 +24,7 @@ package items.Environmental.Background
 		private var X : Number;
 		private var Y : Number;
 		private var counter : Number;
+		private var _acidSound : FlxSound;
 		
 		function AcidFlow(X:Number = 0, Y:Number = 0) : void 
 		{	
@@ -37,6 +41,8 @@ package items.Environmental.Background
 				}
 			}
 			enabled = true;
+			
+			_acidSound = FlxG.loadSound(Sounds.ACID, 0.1, true);
 			
 			// Keeps track of the acid that will flow when the lever is
 			// activated	
@@ -69,6 +75,15 @@ package items.Environmental.Background
 			killMapOverlaps((getManager(LevelManager) as LevelManager).map);
 			killCrateOverlaps(getManager(ObjectManager) as ObjectManager as FlxGroup);
 			super.update();
+			
+			if (!_acidSound.playing && enabled)
+			{
+				_acidSound.proximity(X + 16, Y + 16, (getManager(PlayerManager) as PlayerManager).player, 400).play();
+			}
+			else if (_acidSound.playing && !enabled)
+			{
+				_acidSound.stop();
+			}
 		}
 		
 		public function killMapOverlaps(map:FlxTilemap) : void 

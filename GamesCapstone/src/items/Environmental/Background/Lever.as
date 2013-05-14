@@ -4,6 +4,7 @@ package items.Environmental.Background
 	import org.flixel.FlxG;
 	import people.Actor;
 	import states.GameState;
+	import util.Sounds;
 
 	/**
 	 * @author Lydia Duncan
@@ -40,6 +41,7 @@ package items.Environmental.Background
 				{
 					enable();
 				}
+				FlxG.play(Sounds.SWITCH, 0.25);
 			}
 		}
 		

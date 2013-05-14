@@ -29,8 +29,6 @@ package levels
 			playerEnd = new FlxPoint(2096, 312);
 			// Stores the player start points
 			
-			loadMessage = "Try hitting space near switches, that might trigger something.";
-			
 			// Stores the acid locations for the floor
 			//doorLocs[0] = new FlxPoint(16, 288);
 			//doorLocs[1] = new FlxPoint(2096, 288);

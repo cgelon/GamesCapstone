@@ -28,6 +28,8 @@ package levels
 			playerEnd = new FlxPoint(1056, 312);
 			// Stores the player start points
 			
+			loadMessage = "Try hitting space near switches, that might trigger something.";
+			
 			var leverLocs : Array = [new FlxPoint(720, 304)];
 			var acidFlowLocs : Array = [new FlxPoint(864, 241)];
 			for (var i: int = 0; i < leverLocs.length; i++) {

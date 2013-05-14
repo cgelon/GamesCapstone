@@ -228,7 +228,7 @@ package cutscenes.engine
 		 */
 		private function display(timer : FlxTimer) : void
 		{
-			FlxG.play(Sounds.MESSAGE_BOX_LETTER, 0.5);
+			FlxG.play(Sounds.MESSAGE_BOX_LETTER, 0.25);
 			_currentIndex++;
 			_textLines[_lineIndex - _startLineIndex].text = _lines[_lineIndex].substring(0, _currentIndex);
 			// Check to see if a line is done.

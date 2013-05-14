@@ -25,7 +25,7 @@ package UI
 			hud.scrollFactor = new FlxPoint(0, 0);
 			add(hud);
 			
-			var health : PlayerHealthBar = new PlayerHealthBar(7, 6);
+			var health : PlayerHealthBar = new PlayerHealthBar(8, 6);
 			add(health);
 		}
 	}

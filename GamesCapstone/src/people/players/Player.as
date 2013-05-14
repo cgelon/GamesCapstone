@@ -167,11 +167,13 @@ package people.players
 			
 			// Create sound associations with states.
 			associatePeriodicSound(new PeriodicSound(Sounds.PLAYER_WALKING, 0.25, 0.25), ActorState.RUNNING);
+			associatePeriodicSound(new PeriodicSound(Sounds.CRATE, 0.5, 0.25), ActorState.PUSHING);
 			// Create sound associations with actions.
 			associateSound(new SoundEffect(Sounds.PLAYER_JUMP, 0.5), ActorAction.JUMP);
 			associateSound(new SoundEffect(Sounds.PLAYER_PUNCH, 0.5), ActorAction.ATTACK);
-			associateSound(new SoundEffect(Sounds.PLAYER_LAND, 0.5), ActorAction.LAND);
+			associateSound(new SoundEffect(Sounds.PLAYER_LAND, 0.75), ActorAction.LAND);
 			associateSound(new SoundEffect(Sounds.PLAYER_HURT, 0.5), ActorAction.HURT);
+			associateSound(new SoundEffect(Sounds.PLAYER_DEATH, 0.25), ActorAction.DIE);
 			
 			// Set physic constants.
 			maxVelocity = MAX_VELOCITY;
@@ -475,7 +477,7 @@ package people.players
 				{
 					executeAction(ActorAction.LAND, ActorState.IDLE);
 				}
-				if (FlxG.keys.justPressed("L"))
+				if (FlxG.keys.pressed("L"))
 				{
 					executeAction(ActorAction.BLOCK, ActorState.BLOCKING);
 					acceleration.x = 0;

@@ -6,9 +6,12 @@ package people.enemies
 	import org.flixel.FlxObject;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxTimer;
+	import people.PeriodicSound;
 	import people.players.Player;
+	import people.SoundEffect;
 	import people.states.ActorAction;
 	import people.states.ActorState;
+	import util.Sounds;
 	
 	/**
 	 * A robot enemy.
@@ -59,6 +62,13 @@ package people.enemies
 			associateAnimation(["run"], ActorAction.RUN);
 			associateAnimation(["hurt"], ActorAction.HURT);
 			associateAnimation(["die"], ActorAction.DIE);
+			
+			// Create sound associations with states.
+			associatePeriodicSound(new PeriodicSound(Sounds.ROBOT_WALK, 0.25, 0.25), ActorState.RUNNING);
+			// Set sounds
+			associateSound(new SoundEffect(Sounds.ROBOT_ATTACK, 0.5), ActorAction.ATTACK);
+			associateSound(new SoundEffect(Sounds.ROBOT_HURT, 0.5), ActorAction.HURT);
+			associateSound(new SoundEffect(Sounds.ROBOT_DEATH, 0.5), ActorAction.DIE);
 			
 			// Set physics constants
 			maxVelocity = new FlxPoint(100, 1000);
