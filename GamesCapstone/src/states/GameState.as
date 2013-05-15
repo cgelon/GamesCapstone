@@ -71,6 +71,10 @@ package states
 			{
 				FlxG.playMusic(Music.CREEPY, 1.0);
 			}
+			if (_level is EndLevel)
+			{
+				FlxG.music.fadeOut(3);
+			}
 			
 			// Set up all the managers before adding them to the state.
 			var levelManager : LevelManager = new LevelManager();
@@ -187,10 +191,10 @@ package states
 				moveToPreviousRoom();
 			}
 
-			if (FlxG.keys.justPressed("NINE"))
+			/**if (FlxG.keys.justPressed("NINE"))
 				moveToPreviousRoom();
 			else if (FlxG.keys.justPressed("ZERO"))
-				moveToNextRoom();
+				moveToNextRoom();*/
 
 			playerHitThisFrame = false;
 			movedRoomsThisFrame = false;

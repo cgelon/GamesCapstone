@@ -11,7 +11,7 @@ package util
 		private var _screen : FlxSprite;
 		private var _text : FlxText;
 		
-		public function ScreenOverlay(text : Boolean = true) 
+		public function ScreenOverlay() 
 		{
 			super();
 			_screen = new FlxSprite();
@@ -25,10 +25,7 @@ package util
 			_text.scrollFactor = new FlxPoint();
 			
 			add(_screen);
-			if (text)
-			{
-				add(_text);
-			}
+			add(_text);
 		}
 		
 		override public function update():void 

@@ -2,6 +2,7 @@ package managers
 {
 	import attacks.Attack;
 	import attacks.EnemyAttack;
+	import levels.EndLevel;
 	import org.flixel.FlxText;
 	import people.players.Player;
 	import org.flixel.FlxPoint;
@@ -38,7 +39,7 @@ package managers
 		{
 			// Check that the player can be hit, because this function will get called multiple times as the player is
 			// moving out of the attack's hitbox.
-			if (!(player.state == ActorState.ROLLING || /**player.state == ActorState.HURT ||*/ player.state == ActorState.DEAD))
+			if (!(player.state == ActorState.ROLLING || (player.state == ActorState.HURT /**&& !((getManager(LevelManager) as LevelManager).level is EndLevel)*/) || player.state == ActorState.DEAD))
 			{
 				player.acceleration.x = 0;
 				player.velocity.x = ((player.x - attack.x < 0) ? -1 : 1) * player.maxVelocity.x * 2;
