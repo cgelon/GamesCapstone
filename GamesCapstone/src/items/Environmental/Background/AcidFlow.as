@@ -32,7 +32,7 @@ package items.Environmental.Background
 			
 			this.X = X;
 			this.Y = Y;
-			this.counter = 0;
+			this.counter = 0;			
 			for (var j: int = 0; j < 1; j++)
 			{
 				for (var i: int = 0; i < 2; i++)
@@ -53,13 +53,15 @@ package items.Environmental.Background
 			var acid : Acid = recycle( Acid ) as Acid;
 			acid.initialize(X, Y);
 			add(acid);
-			acid.acceleration.y = 2000;
+			acid.velocity.y = 40;
+			//acid.acceleration.y = 200;
 		}
 		
 		override public function update() : void
 		{
 			counter += FlxG.elapsed;
-			if (counter >= 0.125)
+			if (counter >= 0.1875)
+			//if (counter >= 0.125)
 			{
 				if (enabled)
 				{
@@ -155,11 +157,23 @@ package items.Environmental.Background
 			{
 				currentAcid = members[k];
 				if (currentAcid != null) {
-					if (k == 0 || k == 1) 
+					if (k == 0)
+						currentAcid.play("flow_left");
+					else if (k == 1) 
+						currentAcid.play("flow_right");
+					else if (currentAcid.x < X + 16) 
 					{
-						currentAcid.play("slosh");
-					} else {
-						currentAcid.play("idle");
+						if (k % 4 < 2)
+							currentAcid.play("clockwise_slosh1");
+						else
+							currentAcid.play("clockwise_slosh2");
+					}
+					else 
+					{
+						if (k % 4 >= 2)
+							currentAcid.play("counter_slosh1");
+						else
+							currentAcid.play("counter_slosh2");
 					}
 				}
 			}
@@ -169,11 +183,12 @@ package items.Environmental.Background
 		override public function enable() : void
 		{ 
 			super.enable();
-			var currentAcid : Acid = null;
+			var currentAcid : Acid = null; 
 			for (var i: int = 0; i < 2; i++) {
 				currentAcid = members[i];
 				currentAcid.exists = true;
 			}
+			
 			if (getManager(BackgroundManager) != null)
 				getManager(BackgroundManager).add(this);
 		}
