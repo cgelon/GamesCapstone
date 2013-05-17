@@ -34,7 +34,7 @@ package levels
 			//doorLocs[1] = new FlxPoint(2096, 288);
 			
 
-			var acidLocs : Array = [240, 528, 816, 1104, 1392, 1680];
+			var acidLocs : Array = [240, 528, 816];
 			for (var i : int = 0; i < acidLocs.length; i++)
 			{
 				for (var j: int = 0; j < 8; j++)
@@ -44,7 +44,7 @@ package levels
 				}
 			}
 			
-			var acidFlows : Array = [288, 576, 864, 1152, 1440, 1728];
+			var acidFlows : Array = [288, 576, 864];
 			for (var k : int = 0; k < acidFlows.length; k++)
 			{
 				backgroundStarts[acidLocs.length * 8 + k] = new FlxPoint(acidFlows[k], 288);
