@@ -125,8 +125,8 @@ package people.enemies
 				switch(state)
 				{
 					case ActorState.IDLE:
-						acceleration.x = 0;
-						velocity.x = 0;
+						//acceleration.x = 0;
+						//velocity.x = 0;
 						if (distanceToPlayer() <= _attackRange) 
 						{
 							facePlayer();
@@ -158,8 +158,8 @@ package people.enemies
 						}
 						break;
 					case ActorState.ATTACKING:
-						acceleration.x = 0;
-						velocity.x = 0;
+						//acceleration.x = 0;
+						//velocity.x = 0;
 						break;
 					case ActorState.DEAD:
 						acceleration.x = 0;
@@ -181,8 +181,8 @@ package people.enemies
 			if (!aboutToFall() && Math.abs(player.y - y) < 50) {
 				moveToPlayer();
 			} else {
-				acceleration.x = 0;
-				velocity.x = 0;
+				//acceleration.x = 0;
+				//velocity.x = 0;
 				facePlayer();
 			}
 		}
@@ -197,14 +197,14 @@ package people.enemies
 		}
 		
 		protected function moveToPlayer() : void
-		{
+		{		
 			if (distanceToPlayer() >= _attackRange) {
 				
 				if (x - player.x >= 0) {
-					acceleration.x = -maxVelocity.x * 6;
+					acceleration.x = -maxVelocity.x * 10;
 					facing = FlxObject.LEFT;
 				} else {
-					acceleration.x = maxVelocity.x * 6;
+					acceleration.x = maxVelocity.x * 10;
 					facing = FlxObject.RIGHT;
 				}
 			} else {

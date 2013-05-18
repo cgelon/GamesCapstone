@@ -2,6 +2,7 @@ package people.enemies
 {
 	import attacks.Attack;
 	import attacks.AttackType;
+	import attacks.StrongAttack;
 	import managers.PlayerManager;
 	import org.flixel.FlxObject;
 	import org.flixel.FlxPoint;
@@ -45,23 +46,27 @@ package people.enemies
 		{
 			if (!(state == ActorState.HURT || state == ActorState.DEAD))
 			{
-				if (attack.type == AttackType.NORMAL)
+				if (attack is StrongAttack)
 				{
-					velocity.x = ((x - player.x < 0) ? -1 : 1) * maxVelocity.x;
+					if (attack.type == AttackType.NORMAL)
+					{
+						velocity.x = ((x - player.x < 0) ? -1 : 1) * maxVelocity.x;
+						velocity.y = -maxVelocity.y / 8;
+					}
+					else if (attack.type == AttackType.LOW)
+					{
+						velocity.y = -maxVelocity.y / 4;
+					}
+					else if (attack.type == AttackType.AIR)
+					{
+						velocity.y = maxVelocity.y / 4;
+						velocity.x = ((x - player.x < 0) ? -1 : 1) * maxVelocity.x;
+					}
 				}
-				else if (attack.type == AttackType.LOW)
-				{
-					velocity.y = -maxVelocity.y / 4;
-				}
-				else if (attack.type == AttackType.AIR)
-				{
-					velocity.y = maxVelocity.y / 4;
-					velocity.x = ((x - player.x < 0) ? -1 : 1) * maxVelocity.x;
-				}
-
-
+				
 				hurt(attack.damage);
 			}
+			
 		}
 
 		override public function destroy() : void

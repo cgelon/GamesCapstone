@@ -3,10 +3,14 @@ package managers
 	import attacks.Attack;
 	import attacks.AttackType;
 	import attacks.ProjectileAttack;
+	import attacks.StrongAirAttack;
 	import attacks.StrongAttack;
+	import attacks.StrongLowAttack;
+	import attacks.StrongNormalAttack;
 	import attacks.WeakAttack;
 	import attacks.WeakLowAttack;
 	import attacks.WeakAirAttack;
+	import attacks.WeakNormalAttack;
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxObject;
 	import org.flixel.FlxPoint;
@@ -26,9 +30,9 @@ package managers
 			var x : Number;
 			if (type == AttackType.NORMAL)
 			{
-				attack = recycle( WeakAttack ) as WeakAttack;
+				attack = recycle( WeakNormalAttack ) as WeakNormalAttack;
 				y = player.y;
-				x = facing == FlxObject.LEFT ? player.x - WeakAttack.WEAK_ATTACK_WIDTH + player.width / 2 : player.x + player.width / 2;
+				x = facing == FlxObject.LEFT ? player.x - WeakNormalAttack.WEAK_NORMAL_ATTACK_WIDTH + player.width / 2 : player.x + player.width / 2;
 			}
 			else if (type == AttackType.LOW)
 			{
@@ -46,13 +50,31 @@ package managers
 			attack.initialize(x, y, player.damageBonus);
 		}
 		
-		public function strongAttack(facing : uint) : void
+		public function strongAttack(facing : uint, type : AttackType) : void
 		{
-			var attack : StrongAttack = recycle( StrongAttack ) as StrongAttack;
+			var attack : Attack;
+			var y : Number;
+			var x : Number;
+			if (type == AttackType.NORMAL)
+			{
+				attack = recycle( StrongNormalAttack ) as StrongNormalAttack;
+				y = player.y;
+				x = facing == FlxObject.LEFT ? player.x - StrongNormalAttack.STRONG_NORMAL_ATTACK_WIDTH + player.width / 2 : player.x + player.width / 2;
+			}
+			else if (type == AttackType.LOW)
+			{
+				attack = recycle( StrongLowAttack ) as StrongLowAttack;
+				y = player.y + player.height - StrongLowAttack.STRONG_LOW_ATTACK_HEIGHT;
+				x = facing == FlxObject.LEFT ? player.x - StrongLowAttack.STRONG_LOW_ATTACK_WIDTH + player.width / 2 : player.x + player.width / 2;
+			}
+			else if (type == AttackType.AIR)
+			{
+				attack = recycle ( StrongAirAttack ) as StrongAirAttack;
+				y = player.y + player.height - StrongAirAttack.STRONG_AIR_ATTACK_HEIGHT / 2;
+				x = player.x + player.width / 2 - (StrongAirAttack.STRONG_AIR_ATTACK_WIDTH / 2);
+			}
 			
-			var x : Number = facing == FlxObject.LEFT ? player.x - StrongAttack.STRONG_ATTACK_WIDTH + player.width / 2 : player.x + player.width / 2;
-			
-			attack.initialize(x, player.y, player.damageBonus);
+			attack.initialize(x, y, player.damageBonus);
 		}
 		
 		public function get player() : Player
