@@ -67,8 +67,6 @@ package people.players
 		public static const WEAK_ATTACK_STAM_COST : Number = 10;
 		/** The stamina cost of a roll */
 		public static const ROLL_STAM_COST : Number = 25;
-		/** The stamina cost of blocking. */
-		public static const BLOCK_STAM_COST : Number = 30;
 		
 		/** Max velocity for the player. */
 		private static const MAX_VELOCITY : FlxPoint = new FlxPoint(200, 1000);
@@ -149,7 +147,6 @@ package people.players
 			addAnimation("hurt_flashing", [12, 53], 8, true);
 			addAnimation("die_falling", [18, 22, 23], 2, false);
 			addAnimation("die_flashing", [23, 53], 8, true);
-			addAnimation("blocking", [89], 0, false);
 			addAnimation("crouching", [13], 0, false);
 			addAnimation("terminal", [76, 77, 78], 9, true);
 			
@@ -171,7 +168,6 @@ package people.players
 			associateAnimation(["hurt_kneeling", "hurt_flashing"], ActorAction.HURT, 0);
 			associateAnimation(["hurt_flying"], ActorAction.HURT, 1);
 			associateAnimation(["die_falling", "die_flashing"], ActorAction.DIE);
-			associateAnimation(["blocking"], ActorAction.BLOCK);
 			associateAnimation(["crouching"], ActorAction.CROUCH);
 			associateAnimation(["terminal"], ActorAction.COMPUTER);
 			
@@ -289,14 +285,8 @@ package people.players
 							});
 						}
 						break;
-					case ActorState.BLOCKING:
-						if (FlxG.keys.justReleased("L") || stamina <= 0)
-						{
-							executeAction(ActorAction.STOP, ActorState.IDLE);
-						}
-						break;
 					case ActorState.CROUCHING:
-						if (FlxG.keys.justReleased("S"))
+						if (FlxG.keys.justReleased("S") || FlxG.keys.justReleased("DOWN"))
 						{
 							executeAction(ActorAction.STOP, ActorState.IDLE);
 						}
@@ -357,7 +347,7 @@ package people.players
 		 */
 		private function buttonReleases() : void
 		{
-			if (!_jumpReleased && !FlxG.keys.pressed("W"))
+			if (!_jumpReleased && !FlxG.keys.pressed("W") && !FlxG.keys.pressed("UP"))
 			{
 				_jumpReleased = true;
 			}
@@ -407,13 +397,13 @@ package people.players
 			}
 			
 			// If certain directions are being pressed, move.
-			if (FlxG.keys.pressed("A"))
+			if (FlxG.keys.pressed("A") || FlxG.keys.pressed("LEFT"))
 			{
 				acceleration.x = -maxVelocity.x * 10;
 				if (state != ActorState.ATTACKING)
 					facing = FlxObject.LEFT;
 			}
-			else if (FlxG.keys.pressed("D"))
+			else if (FlxG.keys.pressed("D") || FlxG.keys.pressed("RIGHT"))
 			{
 				acceleration.x = maxVelocity.x * 10;
 				if (state != ActorState.ATTACKING)
@@ -421,13 +411,13 @@ package people.players
 			}
 			
 			// If no directions are being pressed, stop movement.
-			if (!FlxG.keys.pressed("D") && !FlxG.keys.pressed("A")) 
+			if (!FlxG.keys.pressed("D") && !FlxG.keys.pressed("A") && !FlxG.keys.pressed("LEFT") && !FlxG.keys.pressed("RIGHT")) 
 			{
 				acceleration.x = 0;
 			}
 			
 			// If the player is pressing the jump button and still has jumps left, jump.
-			if (state != ActorState.ATTACKING && FlxG.keys.justPressed("W") && _jumpReleased && _jumpCount < 1)
+			if (state != ActorState.ATTACKING && (FlxG.keys.justPressed("W") || FlxG.keys.justPressed("UP")) && _jumpReleased && _jumpCount < 1)
 			{
 				velocity.y = -maxVelocity.y / 2.5;
 				
@@ -437,7 +427,7 @@ package people.players
 			}
 			
 			// Allow the player to end their jump early
-			if (FlxG.keys.justReleased("W") && velocity.y < 0)
+			if ((FlxG.keys.justReleased("W") || FlxG.keys.justReleased("UP")) && velocity.y < 0)
 			{
 				velocity.y /= 2;
 			}
@@ -504,12 +494,7 @@ package people.players
 				{
 					executeAction(ActorAction.LAND, ActorState.IDLE);
 				}
-				if (FlxG.keys.pressed("L"))
-				{
-					executeAction(ActorAction.BLOCK, ActorState.BLOCKING);
-					acceleration.x = 0;
-				}
-				else if (FlxG.keys.pressed("P") && stamina >= ROLL_STAM_COST)
+				else if (FlxG.keys.pressed("L") && stamina >= ROLL_STAM_COST)
 				{
 					executeAction(ActorAction.ROLL, ActorState.ROLLING);
 					stamina -= ROLL_STAM_COST;
@@ -519,7 +504,7 @@ package people.players
 					var action : ActorAction = velocity.x != 0 ? ActorAction.RUN : ActorAction.STOP;
 					executeAction(action, ActorState.PUSHING);
 				}
-				else if (FlxG.keys.pressed("S"))
+				else if (FlxG.keys.pressed("S") || FlxG.keys.pressed("DOWN"))
 				{
 					executeAction(ActorAction.CROUCH, ActorState.CROUCHING);
 					acceleration.x = 0;
@@ -618,14 +603,7 @@ package people.players
 		 */
 		private function updateStamina() : void
 		{
-			if (state == ActorState.BLOCKING)
-			{
-				stamina -= STAM_REGEN;
-			}
-			else
-			{
-				stamina += STAM_REGEN;
-			}
+			stamina += STAM_REGEN;
 		}
 		
 		/** The amount of stamina the player currently has. */
@@ -677,11 +655,6 @@ package people.players
 		public function get damageBonus() : Number
 		{
 			return _weapons[_currentWeapon].damageUp;
-		}
-		
-		public function get isCountering() : Boolean
-		{
-			return state == ActorState.BLOCKING && currentStateFrame < 5;
 		}
 		
 		/**

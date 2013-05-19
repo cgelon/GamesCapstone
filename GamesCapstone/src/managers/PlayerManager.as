@@ -51,22 +51,7 @@ package managers
 					player.velocity.x = -player.velocity.x;
 				}
 				
-				if (player.state == ActorState.BLOCKING)
-				{
-					if (player.stamina >= Player.BLOCK_STAM_COST)
-					{
-						player.stamina -= Player.BLOCK_STAM_COST;
-					}
-					else
-					{
-						player.stamina = 0;
-						player.hurt(attack.damage);
-					}
-				}
-				else
-				{
-					player.hurt(attack.damage);
-				}
+				player.hurt(attack.damage);
 			}
 		}
 	}

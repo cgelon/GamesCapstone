@@ -181,8 +181,8 @@ package people.enemies
 			if (!aboutToFall() && Math.abs(player.y - y) < 50) {
 				moveToPlayer();
 			} else {
-				//acceleration.x = 0;
-				//velocity.x = 0;
+				acceleration.x = 0;
+				velocity.x = 0;
 				facePlayer();
 			}
 		}
