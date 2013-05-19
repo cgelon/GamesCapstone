@@ -62,9 +62,12 @@ package people.enemies
 						velocity.y = maxVelocity.y / 4;
 						velocity.x = ((x - player.x < 0) ? -1 : 1) * maxVelocity.x;
 					}
+					hurt(attack.damage)
 				}
-				
-				hurt(attack.damage);
+				else
+				{
+					dealDamage(attack.damage);
+				}
 			}
 			
 		}

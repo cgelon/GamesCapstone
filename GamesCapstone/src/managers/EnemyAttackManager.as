@@ -15,6 +15,8 @@ package managers
 	 */
 	public class EnemyAttackManager extends Manager 
 	{
+		private static const LIGHTNING_BOLT_DURATION : Number = 1.5;
+		
 		public function attack(x : Number, y : Number) : void
 		{
 			var attack : EnemyAttack = recycle( EnemyAttack ) as EnemyAttack;
@@ -25,7 +27,7 @@ package managers
 		{
 			var attack : LightningBolt = recycle ( LightningBolt ) as LightningBolt;
 			var attackVelocity : FlxPoint = scaleNorm(direction, LightningBolt.LIGHTNING_SPEED);
-			attack.initialize(x, y, 0, Convert.secondsToFrames(1.5), attackVelocity);
+			attack.initialize(x, y, 0, Convert.secondsToFrames(LIGHTNING_BOLT_DURATION), attackVelocity);
 		}
 		
 		/**

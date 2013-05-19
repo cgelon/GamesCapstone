@@ -191,10 +191,10 @@ package states
 				moveToPreviousRoom();
 			}
 
-			/**if (FlxG.keys.justPressed("NINE"))
+			if (FlxG.keys.justPressed("NINE"))
 				moveToPreviousRoom();
 			else if (FlxG.keys.justPressed("ZERO"))
-				moveToNextRoom();*/
+				moveToNextRoom();
 
 			playerHitThisFrame = false;
 			movedRoomsThisFrame = false;
@@ -320,8 +320,9 @@ package states
 		 */
 		private function playerAttacked(player : Player, attack : Attack) : void
 		{
-			if (!playerHitThisFrame)
+			if (!attack.hasHitActor(player))
 			{
+				attack.hitActor(player);
 				(getManager(PlayerManager) as PlayerManager).HurtPlayer(attack);
 				playerHitThisFrame = true;
 
@@ -358,7 +359,11 @@ package states
 		 */
 		private function enemyHit(enemy : Enemy, attack : Attack) : void
 		{
-			enemy.getHit(attack);
+			if (!attack.hasHitActor(enemy))
+			{
+				attack.hitActor(enemy);
+				enemy.getHit(attack);
+			}
 			//attack.kill();
 		}
 

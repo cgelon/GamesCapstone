@@ -224,11 +224,21 @@ package people
 		 */
 		override public function hurt(damage : Number) : void
 		{
-			health = health - damage;
+			dealDamage(damage);
+			if (health > 0)
+				executeAction(ActorAction.HURT, ActorState.HURT);
+		}
+		
+		/**
+		 * Deals damage to the actor.
+		 * 
+		 * @param	damage	The amount of damage to deal.
+		 */
+		public function dealDamage(damage : Number) : void
+		{
+			health -= damage;
 			if (health <= 0)
 				executeAction(ActorAction.DIE, ActorState.DEAD);
-			else
-				executeAction(ActorAction.HURT, ActorState.HURT);
 		}
 		
 		/**

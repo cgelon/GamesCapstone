@@ -7,7 +7,7 @@ package attacks
 	/**
 	 * A low weak attack.
 	 */
-	public class WeakLowAttack extends Attack
+	public class WeakLowAttack extends WeakAttack
 	{
 		public static const WEAK_LOW_ATTACK_DAMAGE : Number = 1;
 		public static const WEAK_LOW_ATTACK_WIDTH : Number = 30;

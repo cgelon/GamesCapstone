@@ -7,7 +7,7 @@ package attacks
 	/**
 	 * A weak air attack.
 	 */
-	public class WeakAirAttack extends Attack
+	public class WeakAirAttack extends WeakAttack
 	{
 		public static const WEAK_AIR_ATTACK_DAMAGE : Number = 1;
 		public static const WEAK_AIR_ATTACK_WIDTH : Number = 30;

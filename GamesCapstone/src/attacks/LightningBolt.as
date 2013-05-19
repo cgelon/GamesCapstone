@@ -22,19 +22,8 @@ package attacks
 		
 		override public function initialize(x : Number, y : Number, bonusDamage : Number = 0, duration : int = 3, attackVelocity : FlxPoint = null) : void
 		{
-			this.x = x;
-			this.y = y;
+			super.initialize(x, y, bonusDamage, duration, attackVelocity);
 			
-			revive();
-			
-			if (attackVelocity == null)
-				velocity = new FlxPoint(0, 0);
-			else
-				velocity = attackVelocity;
-			
-			_duration = duration;
-			_totalDamage = _baseDamage + bonusDamage;
-			_counter = 0;
 			makeGraphic(width, height, Color.YELLOW, true);
 			alpha = 1; //visible = true;
 			FlxG.clearBitmapCache();
