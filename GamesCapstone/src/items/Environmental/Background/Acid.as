@@ -1,14 +1,23 @@
 package items.Environmental.Background
 {
 	import items.Environmental.Background.BackgroundItem;
+	import org.flixel.FlxG;
 	import people.Actor;
+	import people.players.PlayerStats;
+	import people.states.ActorState;
 	import states.GameState;
-
+	
+	
 	/**
 	 * @author Lydia Duncan
 	 */
 	public class Acid extends BackgroundItem implements BackgroundInterface
 	{
+		/** Percent of players health that acid should do every second. */
+		private const ACID_DAMAGE_PERCENT : Number = 50;
+		/** Damage dealt by acid every frame. */
+		private const ACID_DAMAGE : Number = (ACID_DAMAGE_PERCENT / 100)  * PlayerStats.MAX_HEALTH / FlxG.framerate;
+		
 		[Embed(source = '../../../../assets/acid.png')] private var tileset: Class;
 		
 		private var oldY: Number;
@@ -40,7 +49,11 @@ package items.Environmental.Background
 		
 		override public function collideWith(actor:Actor, state:GameState):void 
 		{
-			actor.die();
+			if (actor.state != ActorState.DEAD && !actor.touchedAcidThisFrame)
+			{
+				actor.touchedAcidThisFrame = true;
+				actor.dealDamage(ACID_DAMAGE);
+			}
 		}
 		
 		override public function update():void 

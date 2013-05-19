@@ -295,6 +295,10 @@ package people.players
 					case ActorState.DEAD:
 						if (!actionTimer.running)
 						{
+							velocity.x = 0;
+							velocity.y = 0;
+							acceleration.x = 0;
+							acceleration.y = 0;
 							actionTimer.start(RESET_TIME, 1, function(timer : FlxTimer) : void
 							{
 								readyToReset = true;

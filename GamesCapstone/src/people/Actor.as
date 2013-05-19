@@ -67,6 +67,9 @@ package people
 		
 		protected var actionTimer : FlxTimer;
 		
+		/** Whether or not the player has been hit by acid this frame. */
+		public var touchedAcidThisFrame : Boolean;
+		
 		public function Actor() : void
 		{
 			_periodicSoundsToState = new Dictionary();
@@ -94,6 +97,7 @@ package people
 		{
 			super.update();
 			currentStateFrame++;
+			touchedAcidThisFrame = false;
 		}
 		
 		/**
@@ -239,21 +243,6 @@ package people
 			health -= damage;
 			if (health <= 0)
 				executeAction(ActorAction.DIE, ActorState.DEAD);
-		}
-		
-		/**
-		 * Kills the actor, making them stop moving and their health turn to zero.
-		 */
-		public function die() : void
-		{
-			// Sorry, you aren't a cat, you can't die more than once.
-			if (state != ActorState.DEAD)
-			{
-				executeAction(ActorAction.DIE, ActorState.DEAD);
-				health = 0;
-				velocity.x = 0;
-				acceleration.x = 0;
-			}
 		}
 		
 		/**
