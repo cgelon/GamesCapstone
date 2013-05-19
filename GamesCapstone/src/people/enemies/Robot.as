@@ -20,6 +20,9 @@ package people.enemies
 	 */
 	public class Robot extends Enemy 
 	{
+		/** Amount of time to be incapacitated for when hurt (in seconds). */
+		private const HURT_DURATION : Number =  1;
+		
 		/** The PNG for the robot. */
 		[Embed(source = '../../../assets/robot sheet.png')] private var robotPNG : Class;
 		
@@ -140,7 +143,7 @@ package people.enemies
 					case ActorState.HURT:
 						if (!actionTimer.running)
 						{
-							actionTimer.start(0.2, 1, function() : void
+							actionTimer.start(HURT_DURATION, 1, function() : void
 							{
 								executeAction(ActorAction.STOP, ActorState.IDLE);
 							});

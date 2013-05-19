@@ -44,7 +44,7 @@ package people.enemies
 
 		public function getHit(attack : Attack) : void
 		{
-			if (!(state == ActorState.HURT || state == ActorState.DEAD))
+			if (state != ActorState.DEAD)
 			{
 				if (attack is StrongAttack)
 				{

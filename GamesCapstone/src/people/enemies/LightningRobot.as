@@ -40,41 +40,10 @@ package people.enemies
 		override public function update():void 
 		{
 			super.update();
-			if (player.state == ActorState.DEAD)
-			{
-				if (state != ActorState.IDLE)
-				{
-					executeAction(ActorAction.STOP, ActorState.IDLE);
-					acceleration.x = 0;
-					velocity.x = 0;
-				}
-			}
-			else
+			if (player.state != ActorState.DEAD)
 			{
 				switch(state)
 				{
-					case ActorState.IDLE:
-						acceleration.x = 0;
-						velocity.x = 0;
-						facePlayer();
-						if (distanceToPlayer() <= _attackRange) 
-						{
-							attack();
-						} 
-						else if (distanceToPlayer() < _seekRange) 
-						{
-							executeAction(ActorAction.RUN, ActorState.RUNNING);
-						}
-						break;
-					case ActorState.HURT:
-						if (!actionTimer.running)
-						{
-							actionTimer.start(0.2, 1, function() : void
-							{
-								executeAction(ActorAction.STOP, ActorState.IDLE);
-							});
-						}
-						break;
 					case ActorState.RUNNING:
 						if (distanceToPlayer() <= _attackRange)
 						{
@@ -107,17 +76,6 @@ package people.enemies
 						}
 						acceleration.x = 0;
 						velocity.x = 0;
-						break;
-					case ActorState.DEAD:
-						acceleration.x = 0;
-						velocity.x = 0;
-						if (!actionTimer.running)
-						{
-							actionTimer.start(0.5, 1, function() : void
-							{
-								kill();
-							});
-						}
 						break;
 				}
 			}

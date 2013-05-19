@@ -18,7 +18,7 @@ package people.players
 		public static const MAX_STAMINA : Number = 100;
 		
 		/** Internal tracker for health. */
-		private var _health : int;
+		private var _health : Number;
 		/** Internal tracker for stamina. */
 		private var  _stamina : Number;
 		/** A dictionary from levels to a dictionary of action to number of times completed. */
@@ -32,13 +32,13 @@ package people.players
 		}
 		
 		/** The current health of the player. */
-		public function get health():int 
+		public function get health() : Number 
 		{
 			return _health;
 		}
 		
 		/** The current health of the player. */
-		public function set health(value:int):void 
+		public function set health(value : Number):void 
 		{
 			_health = value;
 		}

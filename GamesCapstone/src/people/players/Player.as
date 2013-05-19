@@ -697,12 +697,15 @@ package people.players
 		
 		override public function hurt(damage:Number):void 
 		{
-			health -= damage;
-			Registry.playerStats.health = health;
-			if (health <= 0)
-				executeAction(ActorAction.DIE, ActorState.DEAD);
-			else
+			dealDamage(damage);
+			if (health > 0)
 				executeAction(ActorAction.HURT, ActorState.HURT, (onGround) ? 0 : 1);
+		}
+		
+		override public function dealDamage(damage : Number) : void
+		{
+			super.dealDamage(damage);
+			Registry.playerStats.health = health;
 		}
 		
 		override public function destroy() : void
