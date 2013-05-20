@@ -1,6 +1,7 @@
 package levels
 {
 	import cutscenes.engine.Cutscene;
+	import items.Environmental.Background.Acid;
 	import items.Environmental.Crate;
 	import org.flixel.FlxG;
 	import org.flixel.FlxGroup;
@@ -69,7 +70,8 @@ package levels
 			objectsTilemap.loadMap(new objectsCSV(), tilePNG, 16, 16, 0, 0, 1, 352);
 			// top left of crate sprite
 			var crateLocs : Array = objectsTilemap.getTileCoords(162).sortOn("x", Array.NUMERIC)
-			for (var i: int = 0; i < crateLocs.length; i++) {
+			for (var i: int = 0; i < crateLocs.length; i++)
+			{
 				objectStarts.push(new FlxPoint(crateLocs[i].x - 8, crateLocs[i].y - 8));
 				objectTypes.push(Crate);
 			}
@@ -84,7 +86,8 @@ package levels
 			if (robotLocs != null)
 			{
 				robotLocs = robotLocs.sortOn("x", Array.NUMERIC);
-				for (var i: int = 0; i < robotLocs.length; i++) {
+				for (var i: int = 0; i < robotLocs.length; i++)
+				{
 					enemyStarts.push(robotLocs[i]);
 					enemyTypes.push(Robot);
 				}
@@ -94,9 +97,33 @@ package levels
 			if (lightningRobotLocs != null)
 			{
 				lightningRobotLocs = lightningRobotLocs.sortOn("x", Array.NUMERIC);
-				for (i = 0; i < lightningRobotLocs.length; i++) {
+				for (i = 0; i < lightningRobotLocs.length; i++)
+				{
 					enemyStarts.push(lightningRobotLocs[i]);
 					enemyStarts.push(LightningRobot);
+				}
+			}
+		}
+		
+		// only handles acid pools for now
+		public function parseBackground(backgroundCSV: Class, tilePNG: Class) : void
+		{
+			var backgroundTilemap : FlxTilemap = new FlxTilemap();
+			backgroundTilemap.loadMap(new backgroundCSV(), tilePNG, 16, 16, 0, 0, 1, 352);
+			var acidLocs : Array = backgroundTilemap.getTileCoords(454)
+			if (acidLocs != null) {
+				for (var i: int = 0; i < acidLocs.length; i++)
+				{
+					backgroundStarts.push(new FlxPoint(acidLocs[i].x - 8, acidLocs[i].y - 8));
+					backgroundTypes.push(Acid);
+				}
+			}
+			acidLocs = backgroundTilemap.getTileCoords(455)
+			if (acidLocs != null) {
+				for (i = 0; i < acidLocs.length; i++)
+				{
+					backgroundStarts.push(new FlxPoint(acidLocs[i].x - 8, acidLocs[i].y - 8));
+					backgroundTypes.push(Acid);
 				}
 			}
 		}

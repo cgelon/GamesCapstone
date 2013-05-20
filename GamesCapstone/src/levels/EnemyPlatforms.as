@@ -12,27 +12,25 @@ package levels
 	 */
 	public class EnemyPlatforms extends Level
 	{
-		[Embed(source = "../../assets/mapCSV_Group2_EnemyPlatforms.csv", mimeType = "application/octet-stream")] public var CSV : Class;
-		[Embed(source = "../../assets/lab tile arrange.png")] public var PNG : Class;
+		[Embed(source = "../../assets/mapCSV_EnemyPlatforms_Map.csv", mimeType = "application/octet-stream")] public var mapCSV : Class;
+		[Embed(source = "../../assets/mapCSV_EnemyPlatforms_Player.csv", mimeType = "application/octet-stream")] public var playerCSV : Class;
+		[Embed(source = "../../assets/mapCSV_EnemyPlatforms_Enemies.csv", mimeType = "application/octet-stream")] public var enemiesCSV : Class;
+		[Embed(source = "../../assets/lab tile arrange.png")] public var tilePNG : Class;
 		
 		public function EnemyPlatforms ()
 		{
 			super();
 			
-			map.loadMap(new CSV(), PNG, 16, 16, 0, 0, 1, 352);
+			map.loadMap(new mapCSV(), tilePNG, 16, 16, 0, 0, 1, 352);
 			
 			width = map.width;
 			height = map.height;
 			// Initializes the map
-			
-			playerStart = new FlxPoint(16, 296);
-			playerEnd = new FlxPoint(1344, 168);
-			// Stores the player start points
+
+			parsePlayer(playerCSV, tilePNG);
+			parseEnemies(enemiesCSV,  tilePNG);
 			
 			loadMessage = "Did you know that attacking while crouching or jumping results in special moves?";
-			
-			enemyStarts[0] = new FlxPoint(528, 50);
-			enemyTypes[0] = Robot;
 			
 			add(map);
 		}

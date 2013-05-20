@@ -11,36 +11,26 @@ package levels
 	 */
 	public class StartingAcidLevel extends Level
 	{
-		[Embed(source = "../../assets/mapCSV_Group2_Flat_corridor_with_acid.csv", mimeType = "application/octet-stream")] public var CSV : Class;
-		[Embed(source = "../../assets/lab tile arrange.png")] public var PNG : Class;
+		[Embed(source = "../../assets/mapCSV_StartingAcid_Map.csv", mimeType = "application/octet-stream")] public var mapCSV : Class;
+		[Embed(source = "../../assets/mapCSV_StartingAcid_Player.csv", mimeType = "application/octet-stream")] public var playerCSV : Class;
+		[Embed(source = "../../assets/mapCSV_StartingAcid_Background.csv", mimeType = "application/octet-stream")] public var backgroundCSV : Class;
+		[Embed(source = "../../assets/lab tile arrange.png")] public var tilePNG : Class;
 		
 		public function StartingAcidLevel ()
 		{
 			super();
 			
-			map.loadMap(new CSV(), PNG, 16, 16, 0, 0, 1, 352);
-			
-			loadMessage = "What is that green stuff? Is that...ACID?! Why would anyone want to make that?";
+			map.loadMap(new mapCSV(), tilePNG, 16, 16, 0, 0, 1, 352);
 			
 			width = map.width;
 			height = map.height;
 			// Initializes the map
 			
-			playerStart = new FlxPoint(16, 200);
-			playerEnd = new FlxPoint(2112, 200);
-			// Stores the player start points
+			parsePlayer(playerCSV, tilePNG);
+			parseBackground(backgroundCSV, tilePNG);
 			
-			// Stores the acid locations for the floor
-			//doorLocs[0] = new FlxPoint(16, 176);
-			//doorLocs[1] = new FlxPoint(2096, 176);
+			loadMessage = "What is that green stuff? Is that...ACID?! Why would anyone want to make that?";
 			
-
-			var acidLocs : Array = [432, 448, 464, 720, 736, 752, 768, 784, 800, 1104, 1120, 1136, 1152, 1168, 1184, 1200, 1216];
-			for (var i : int = 0; i < acidLocs.length; i++)
-			{
-				backgroundStarts[i] = new FlxPoint(acidLocs[i], 240);
-				backgroundTypes[i] = Acid;
-			}
 			add(map);
 		}
 	}

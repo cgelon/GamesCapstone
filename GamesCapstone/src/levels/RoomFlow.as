@@ -23,8 +23,8 @@ package levels
 			//_rooms.push(StartingLevel);
 			//_rooms.push(PlatformLevel);
 			//_rooms.push(CrateJumpLevel); 
-			_rooms.push(StartingEnemiesLevel);
-			_rooms.push(EnemyPlatforms);
+			//_rooms.push(StartingEnemiesLevel);
+			//_rooms.push(EnemyPlatforms);
 			_rooms.push(StartingAcidLevel);
 			_rooms.push(AcidPlatformLevel); 
 			_rooms.push(AcidSwitchesPlatforms);
