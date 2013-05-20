@@ -12,35 +12,25 @@ package levels
 	 */
 	public class StartingEnemiesLevel extends Level
 	{
-		[Embed(source = "../../assets/mapCSV_Group2_Flat_corridor.csv", mimeType = "application/octet-stream")] public var CSV : Class;
-		[Embed(source = "../../assets/lab tile arrange.png")] public var PNG : Class;
+		[Embed(source = "../../assets/mapCSV_StartingEnemiesLevel_Map.csv", mimeType = "application/octet-stream")] public var mapCSV : Class;
+		[Embed(source = "../../assets/mapCSV_StartingEnemiesLevel_Player.csv", mimeType = "application/octet-stream")] public var playerCSV : Class;
+		[Embed(source = "../../assets/mapCSV_StartingEnemiesLevel_Enemies.csv", mimeType = "application/octet-stream")] public var enemiesCSV : Class;
+		[Embed(source = "../../assets/lab tile arrange.png")] public var tilePNG : Class;
 		
 		public function StartingEnemiesLevel ()
 		{
 			super();
 			
-			map.loadMap(new CSV(), PNG, 16, 16, 0, 0, 1, 352);
+			map.loadMap(new mapCSV(), tilePNG, 16, 16, 0, 0, 1, 352);
 			
 			width = map.width;
 			height = map.height;
 			// Initializes the map
-			
-			playerStart = new FlxPoint(16, 200);
-			playerEnd = new FlxPoint(2112, 200);
-			// Stores the player start points
+
+			parsePlayer(playerCSV, tilePNG);
+			parseEnemies(enemiesCSV,  tilePNG);
 			
 			loadMessage = "Robots... such a buzzkill! Perform weak attacks with J, strong attacks with K, block with L, and dodge with P. Have fun!";
-			
-			enemyStarts[0] = new FlxPoint(450, 176);
-			enemyTypes[0] = Robot;
-			enemyStarts[1] = new FlxPoint(1000, 176);
-			enemyTypes[1] = Robot;
-			enemyStarts[2] = new FlxPoint(1550, 176);
-			enemyTypes[2] = Robot;
-			
-			// Stores the acid locations for the floor
-			//doorLocs[0] = new FlxPoint(16, 176);
-			//doorLocs[1] = new FlxPoint(2096, 176);
 			
 			add(map);
 		}
