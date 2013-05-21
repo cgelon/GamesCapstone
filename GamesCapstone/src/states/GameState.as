@@ -6,6 +6,7 @@ package states
 	import items.Environmental.Background.Door;
 	import items.Environmental.Crate;
 	import items.Environmental.EnvironmentalItem;
+	import items.Environmental.ForceFieldUnit;
 	import items.Environmental.Generator;
 	import levels.AcidSwitchesPlatforms;
 	import levels.EndLevel;
@@ -281,6 +282,10 @@ package states
 					{
 						(Object1 as Crate).beingPushed = true;
 						(Object2 as Crate).beingPushed = true;
+					}
+					else if (Object1 is ForceFieldUnit && Object2 is Actor)
+					{
+						(Object1 as ForceFieldUnit).touchedActor((Object2 as Actor));
 					}
 				}
 				if (Object1 is Generator && Object2 is Attack)					

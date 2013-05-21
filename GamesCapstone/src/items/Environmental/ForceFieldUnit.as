@@ -1,7 +1,8 @@
 package items.Environmental
 {
-	import states.GameState;
 	import people.Actor;
+	import people.states.ActorState;
+	import org.flixel.FlxObject;
 	/**
 	 * Forcefield unit - most basic portion
 	 * 
@@ -154,10 +155,19 @@ package items.Environmental
 			corner();
 		}
 		
-		// TODO: Override so that force field repels the actor backwards
-		override public function collideWith(actor:Actor, state:GameState):void 
+		public function touchedActor(actor: Actor) : void
 		{
-			super.collideWith(actor, state);
+			actor.acceleration.x = 0;
+			actor.velocity.x = ((actor.x - x < 0) ? -1 : 1) * actor.maxVelocity.x * 2;
+			
+			// If the player is pinned against a wall, make the fly the other direction.
+			if ((actor.isTouching(FlxObject.RIGHT) && actor.velocity.x > 0)
+				|| (actor.isTouching(FlxObject.LEFT) && actor.velocity.x < 0))
+			{
+				actor.velocity.x = -actor.velocity.x;
+			}
+			actor.state = ActorState.HURT; // TODO: make this not such a hack
 		}
+		
 	}
 }
