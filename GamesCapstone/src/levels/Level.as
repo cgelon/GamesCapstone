@@ -2,6 +2,8 @@ package levels
 {
 	import cutscenes.engine.Cutscene;
 	import items.Environmental.Background.Acid;
+	import items.Environmental.Background.AcidFlow;
+	import items.Environmental.Background.Lever;
 	import items.Environmental.Crate;
 	import org.flixel.FlxG;
 	import org.flixel.FlxGroup;
@@ -105,13 +107,13 @@ package levels
 			}
 		}
 		
-		// only handles acid pools for now
 		public function parseBackground(backgroundCSV: Class, tilePNG: Class) : void
 		{
 			var backgroundTilemap : FlxTilemap = new FlxTilemap();
 			backgroundTilemap.loadMap(new backgroundCSV(), tilePNG, 16, 16, 0, 0, 1, 352);
 			var acidLocs : Array = backgroundTilemap.getTileCoords(454)
-			if (acidLocs != null) {
+			if (acidLocs != null)
+			{
 				for (var i: int = 0; i < acidLocs.length; i++)
 				{
 					backgroundStarts.push(new FlxPoint(acidLocs[i].x - 8, acidLocs[i].y - 8));
@@ -119,11 +121,34 @@ package levels
 				}
 			}
 			acidLocs = backgroundTilemap.getTileCoords(455)
-			if (acidLocs != null) {
+			if (acidLocs != null)
+			{
 				for (i = 0; i < acidLocs.length; i++)
 				{
 					backgroundStarts.push(new FlxPoint(acidLocs[i].x - 8, acidLocs[i].y - 8));
 					backgroundTypes.push(Acid);
+				}
+			}
+
+			var acidFlowLocs : Array = backgroundTilemap.getTileCoords(486);
+			if (acidFlowLocs != null)
+			{
+				acidFlowLocs = acidFlowLocs.sortOn("x", Array.NUMERIC);
+				for (i = 0; i < acidFlowLocs.length; i++)
+				{
+					backgroundStarts.push(new FlxPoint(acidFlowLocs[i].x - 8, acidFlowLocs[i].y - 24));
+					backgroundTypes.push(AcidFlow);
+				}
+			}
+			
+			var leverLocs : Array = backgroundTilemap.getTileCoords(196);
+			if (leverLocs != null)
+			{
+				leverLocs = leverLocs.sortOn("x", Array.NUMERIC);
+				for (i = 0; i < leverLocs.length; i++)
+				{
+					backgroundStarts.push(new FlxPoint(leverLocs[i].x - 8, leverLocs[i].y - 8));
+					backgroundTypes.push(Lever);
 				}
 			}
 		}
