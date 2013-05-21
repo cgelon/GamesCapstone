@@ -51,6 +51,8 @@ package items.Environmental.Background
 		{
 			if (actor.state != ActorState.DEAD && !actor.touchedAcidThisFrame)
 			{
+				if (FlxG.keys.pressed("Z"))
+					FlxG.log("Dealing damage!");
 				actor.touchedAcidThisFrame = true;
 				actor.dealDamage(ACID_DAMAGE);
 			}

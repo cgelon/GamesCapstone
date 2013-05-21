@@ -32,6 +32,7 @@ package people.enemies
 
 		override public function update() : void
 		{
+			super.update();
 			if (isTouching(FlxObject.FLOOR))
 			{
 				drag.x = maxVelocity.x * 4;
