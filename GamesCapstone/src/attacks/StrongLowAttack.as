@@ -8,7 +8,7 @@ package attacks
 	{
 		public static const STRONG_LOW_ATTACK_DAMAGE : Number = 2;
 		public static const STRONG_LOW_ATTACK_WIDTH : Number = 40;
-		public static const STRONG_LOW_ATTACK_HEIGHT : Number = 20;
+		public static const STRONG_LOW_ATTACK_HEIGHT : Number = 1;
 		
 		public function StrongLowAttack() 
 		{

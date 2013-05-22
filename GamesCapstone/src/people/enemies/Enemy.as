@@ -68,6 +68,23 @@ package people.enemies
 					}
 					
 				}
+				else
+				{
+					if (attack.type == AttackType.NORMAL)
+					{
+						velocity.x = ((x - player.x < 0) ? -1 : 1) * maxVelocity.x / 2;
+						velocity.y = -maxVelocity.y / 8;
+					}
+					else if (attack.type == AttackType.LOW)
+					{
+						velocity.y = -maxVelocity.y / 8;
+					}
+					else if (attack.type == AttackType.AIR)
+					{
+						velocity.y = maxVelocity.y / 8;
+						velocity.x = ((x - player.x < 0) ? -1 : 1) * maxVelocity.x / 2;
+					}
+				}
 				hurt(attack.damage)
 				hurtType = attack is StrongAttack ? StrongAttack : WeakAttack;
 			}

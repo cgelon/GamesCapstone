@@ -37,7 +37,7 @@ package people.players
 		/** Weak low attack's windup in seconds. */
 		private static const WEAK_LOW_ATTACK_WINDUP : Number = Convert.framesToSeconds(5);
 		/** Weak low attack's post-attack delay in seconds. */
-		private static const WEAK_LOW_ATTACK_DELAY : Number = Convert.framesToSeconds(5);
+		private static const WEAK_LOW_ATTACK_DELAY : Number = Convert.framesToSeconds(10);
 		
 		/** Strong windup delay in seconds. */
 		private static const STRONG_NORMAL_ATTACK_WINDUP : Number = Convert.framesToSeconds(5);
@@ -50,7 +50,7 @@ package people.players
 		/** Strong low attack windup delay in seconds. */
 		private static const STRONG_LOW_ATTACK_WINDUP : Number = Convert.framesToSeconds(5);
 		/** Strong low attack's post-attack delay in seconds. */
-		private static const STRONG_LOW_ATTACK_DELAY : Number = Convert.framesToSeconds(5);
+		private static const STRONG_LOW_ATTACK_DELAY : Number = Convert.framesToSeconds(10);
 		
 		/** Duration of a roll in seconds. */
 		private static const ROLL_DURATION : Number = .5;

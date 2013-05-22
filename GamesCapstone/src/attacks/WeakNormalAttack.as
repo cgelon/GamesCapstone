@@ -7,7 +7,7 @@ package attacks
 	public class WeakNormalAttack extends WeakAttack
 	{
 		public static const WEAK_NORMAL_ATTACK_DAMAGE : Number = 1;
-		public static const WEAK_NORMAL_ATTACK_WIDTH : Number = 20;
+		public static const WEAK_NORMAL_ATTACK_WIDTH : Number = 30;
 		public static const WEAK_NORMAL_ATTACK_HEIGHT : Number = 20;
 		
 		public function WeakNormalAttack()
