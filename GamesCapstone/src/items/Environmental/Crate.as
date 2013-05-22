@@ -2,6 +2,7 @@ package items.Environmental
 {
 	import managers.Manager;
 	import managers.PlayerManager;
+	import org.flixel.FlxG;
 	import people.players.Player;
 
 	/**
@@ -14,6 +15,8 @@ package items.Environmental
 		private const GRAVITY:int = 500;
 		private const MIN_FRICTION:int = 20; 
 		
+		//private const 
+		
 		public var isLocked:Boolean;
 		public var beingPushed:Boolean = false;
 		
@@ -21,15 +24,19 @@ package items.Environmental
 		private const ANTI_SLIDE:Number = 0.25;	// factor to reduce slide by (multiplied by velocity and added to friction)
 		// 0 means slippery (just use MIN_FRICTION). 0.5-1 is "normal" slide.  2+ is very little slide
 		
+		
+		
 		public function Crate(X:Number,Y:Number):void
 		{
 			super("crate");
 			initialize(X, Y);
 			
 			loadGraphic(tileset, true, false, 32, 32, false);
-			//drag.x = maxVelocity.x / 10;
+			drag.x = maxVelocity.x / 10;
 			lock();
 			color = 0x77FFFFFF;
+			
+			FlxG.watch(this, "immovable", "Immovable");
 		}
 		
 		override public function update():void
@@ -41,6 +48,9 @@ package items.Environmental
 			else // not being pushed
 			{
 				if (!isLocked && isTouching(FLOOR)) lock();
+				
+				if (FlxG.keys.pressed("Z"))
+					FlxG.log("NOT BEING PUSHED!");
 			}
 			
 			// post update (reset flags)

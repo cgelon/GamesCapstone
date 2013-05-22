@@ -518,7 +518,10 @@ package people.players
 				else if (FlxG.keys.pressed("SPACE") && (isTouching(FlxObject.LEFT) || isTouching(FlxObject.RIGHT)))
 				{
 					var action : ActorAction = velocity.x != 0 ? ActorAction.RUN : ActorAction.STOP;
-					executeAction(action, ActorState.PUSHING);
+					if (state != ActorState.PUSHING || lastAction != action)
+					{
+						executeAction(action, ActorState.PUSHING);
+					}
 				}
 				else if (FlxG.keys.pressed("S") || FlxG.keys.pressed("DOWN"))
 				{
