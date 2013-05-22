@@ -1,5 +1,6 @@
 package people.enemies 
 {
+	import attacks.WeakAttack;
 	import managers.EnemyAttackManager;
 	import managers.LevelManager;
 	import org.flixel.FlxG;
@@ -20,8 +21,10 @@ package people.enemies
 	 */
 	public class Robot extends Enemy 
 	{
-		/** Amount of time to be incapacitated for when hurt (in seconds). */
-		private const HURT_DURATION : Number =  1;
+		/** Amount of time to be incapacitated for when hurt by a strong attack (in seconds). */
+		private const STRONG_HURT_DURATION : Number =  1;
+		/** Amount of time to be incapacitated for when hurt by a weak attack (in seconds). */
+		private const WEAK_HURT_DURATION : Number = 0.35;
 		
 		/** The PNG for the robot. */
 		[Embed(source = '../../../assets/robot sheet.png')] private var robotPNG : Class;
@@ -143,7 +146,14 @@ package people.enemies
 					case ActorState.HURT:
 						if (!actionTimer.running)
 						{
-							actionTimer.start(HURT_DURATION, 1, function() : void
+							var duration : Number;
+							if (hurtType == null || hurtType == WeakAttack)
+								duration = WEAK_HURT_DURATION;
+							else
+								duration = STRONG_HURT_DURATION;
+							hurtType = null;
+							
+							actionTimer.start(duration, 1, function() : void
 							{
 								executeAction(ActorAction.STOP, ActorState.IDLE);
 							});

@@ -3,6 +3,7 @@ package people.enemies
 	import attacks.Attack;
 	import attacks.AttackType;
 	import attacks.StrongAttack;
+	import attacks.WeakAttack;
 	import managers.PlayerManager;
 	import org.flixel.FlxObject;
 	import org.flixel.FlxPoint;
@@ -18,6 +19,8 @@ package people.enemies
 	 */
 	public class Enemy extends Actor 
 	{
+		public var hurtType : Class;
+		
 		public function Enemy() 
 		{
 			super();
@@ -63,12 +66,10 @@ package people.enemies
 						velocity.y = maxVelocity.y / 4;
 						velocity.x = ((x - player.x < 0) ? -1 : 1) * maxVelocity.x;
 					}
-					hurt(attack.damage)
+					
 				}
-				else
-				{
-					dealDamage(attack.damage);
-				}
+				hurt(attack.damage)
+				hurtType = attack is StrongAttack ? StrongAttack : WeakAttack;
 			}
 			
 		}
