@@ -167,6 +167,7 @@ package people.players
 			associateAnimation(["weak_low_attack_hit"], ActorAction.ATTACK, 2);
 			associateAnimation(["hurt_kneeling", "hurt_flashing"], ActorAction.HURT, 0);
 			associateAnimation(["hurt_flying"], ActorAction.HURT, 1);
+			associateAnimation(["hurt_flying"], ActorAction.REPELLED);
 			associateAnimation(["die_falling", "die_flashing"], ActorAction.DIE);
 			associateAnimation(["crouching"], ActorAction.CROUCH);
 			associateAnimation(["terminal"], ActorAction.COMPUTER);
@@ -300,6 +301,19 @@ package people.players
 							actionTimer.start(RESET_TIME, 1, function(timer : FlxTimer) : void
 							{
 								readyToReset = true;
+							});
+						}
+						break;
+					case ActorState.REPELLED:
+						if (!actionTimer.running)
+						{
+							executeAction(ActorAction.REPELLED, ActorState.REPELLED, 0);
+							actionTimer.start(.25, 1, function(timer : FlxTimer) : void
+							{
+								if (state == ActorState.REPELLED)
+								{
+									executeAction(ActorAction.STOP, ActorState.IDLE);
+								}
 							});
 						}
 						break;

@@ -1,6 +1,9 @@
 package items.Environmental
 {
+	import org.flixel.FlxTimer;
 	import people.Actor;
+	import people.players.Player;
+	import people.states.ActorAction;
 	import people.states.ActorState;
 	import org.flixel.FlxObject;
 	/**
@@ -166,7 +169,14 @@ package items.Environmental
 			{
 				actor.velocity.x = -actor.velocity.x;
 			}
-			actor.state = ActorState.HURT; // TODO: make this not such a hack
+			// Currently only animates repelled when the player is the one colliding.  This
+			// is bad because without the enemies recognizing that they shouldn't touch the
+			// forcefield, they may just run into it over and over again and that would look
+			// stupid.
+			if (actor is Player) 
+			{
+				actor.state = ActorState.REPELLED;			
+			}
 		}
 		
 	}

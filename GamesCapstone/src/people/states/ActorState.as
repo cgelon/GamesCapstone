@@ -19,6 +19,7 @@ package people.states
 		public static const CROUCHING : ActorState = new ActorState();
 		public static const PUSHING : ActorState = new ActorState();
 		public static const COMPUTER : ActorState = new ActorState();
+		public static const REPELLED : ActorState = new ActorState();
 		
 		public function get name() : String
 		{
@@ -47,6 +48,8 @@ package people.states
 					return "pushing";
 				case COMPUTER:
 					return "computer";
+				case REPELLED:
+					return "repelled";
 			}
 			return "NAME THIS FREAKING STATE";
 		}

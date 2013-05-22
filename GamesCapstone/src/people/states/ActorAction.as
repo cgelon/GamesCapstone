@@ -20,6 +20,7 @@ package people.states
 		public static const DIE : ActorAction = new ActorAction();
 		public static const CROUCH : ActorAction = new ActorAction();
 		public static const COMPUTER : ActorAction = new ActorAction();
+		public static const REPELLED : ActorAction = new ActorAction();
 		
 		public function get name() : String
 		{
@@ -50,6 +51,8 @@ package people.states
 					return "crouch";
 				case COMPUTER:
 					return "computer";
+				case REPELLED:
+					return "repelled";
 			}
 			return "NAME THIS ACTION PLEASE";
 		}
