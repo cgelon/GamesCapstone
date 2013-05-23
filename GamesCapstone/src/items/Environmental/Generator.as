@@ -17,6 +17,8 @@ package items.Environmental
 		[Embed(source = '../../../assets/Generator.png')] private var generator: Class;
 		public var isDestroyed: Boolean;
 		
+		private static const DESTROYED_COLOR : uint = 0x444444;
+		
 		function Generator(X:Number = 0, Y:Number = 0) : void 
 		{
 			super("generator");
@@ -39,6 +41,7 @@ package items.Environmental
 		{
 			if (isDestroyed)
 			{
+				color = DESTROYED_COLOR;
 				disable();
 			}
 			isDestroyed = false;
