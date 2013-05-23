@@ -457,7 +457,7 @@ package people.players
 		 */
 		private function updateAttacking() : void
 		{
-			if (FlxG.keys.justPressed("J") && attackReady && stamina > WEAK_ATTACK_STAM_COST)
+			if (FlxG.keys.justPressed("J") && attackReady)
 			{
 				if (state == ActorState.JUMPING || state == ActorState.FALLING)
 				{
@@ -577,7 +577,6 @@ package people.players
 					executeAction(ActorAction.ATTACK, ActorState.ATTACKING, 0);
 					actionTimer.start(WEAK_NORMAL_ATTACK_DELAY, 1, attackCallback);
 				}
-				stamina -= WEAK_ATTACK_STAM_COST;
 			}
 		}
 		

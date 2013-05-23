@@ -37,6 +37,7 @@ package people.enemies
 			switch (state)
 			{
 				case ActorState.IDLE:
+					velocity.x = 0;
 					if (!actionTimer.running)
 					{
 						actionTimer.start(MOVE_INTERVAL, 1, function(timer : FlxTimer) : void {
@@ -52,7 +53,6 @@ package people.enemies
 					{
 						//velocity.x = maxVelocity.x / 2 * (Math.random() > 0.5 ? -1 : 1);
 						_moveDir = Math.random() > 0.5 ? -1 : 1;
-						//drag.x
 						actionTimer.start(MOVE_INTERVAL, 1, function(timer : FlxTimer) : void {
 							if (state == ActorState.RUNNING)
 							{
