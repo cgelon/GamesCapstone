@@ -185,7 +185,6 @@ package people.players
 			// Set physic constants.
 			maxVelocity = MAX_VELOCITY;
 			acceleration.y = 1000;
-			drag.x = maxVelocity.x * 4;
 			
 			// Set up the attack variables.
 
@@ -246,6 +245,7 @@ package people.players
 						updateMovement();
 						updateNextState();
 						updateAttacking();
+						drag.x = maxVelocity.x * 4;
 						break;
 					case ActorState.ROLLING:
 						// If the player has pressed the roll button, roll them
@@ -271,6 +271,7 @@ package people.players
 						{
 							updateMovement();
 						}
+						drag.x = maxVelocity.x * 2;
 						break;
 					case ActorState.HURT:
 						// Start the hurt timeout once the player hits the floor.
@@ -323,7 +324,8 @@ package people.players
 				updateStamina();
 				buttonReleases();
 				
-				drag.x = (onGround || state != ActorState.HURT) ? maxVelocity.x * 4 : maxVelocity.x;
+				if (!(onGround || state != ActorState.HURT))
+					drag.x = maxVelocity.x;
 				
 				var colors : Array = [0x00FFFFFF, Color.RED, Color.GREEN, Color.ORANGE, Color.BLUE];
 				color = colors[_currentWeapon % colors.length];
@@ -396,6 +398,7 @@ package people.players
 		 */
 		private function updateMovement() : void 
 		{
+			// Update maximum velocity
 			if (state == ActorState.PUSHING)
 				maxVelocity = MAX_PUSHING_VELOCITY;
 			else
@@ -474,6 +477,7 @@ package people.players
 				
 				_attackReleased = false;
 				_attackType = 0;
+				//velocity.x = (facing == FlxObject.LEFT ? -1 : 1) * maxVelocity.x / 2;
 			}
 			else if (FlxG.keys.justPressed("K") && attackReady && stamina > STRONG_ATTACK_STAM_COST)
 			{
@@ -495,6 +499,7 @@ package people.players
 				
 				_attackReleased = false;
 				_attackType = 1;
+				//velocity.x = (facing == FlxObject.LEFT ? -1 : 1) * maxVelocity.x / 2;
 			}
 		}
 		
