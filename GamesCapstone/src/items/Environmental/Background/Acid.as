@@ -14,7 +14,7 @@ package items.Environmental.Background
 	public class Acid extends BackgroundItem implements BackgroundInterface
 	{
 		/** Percent of players health that acid should do every second. */
-		private const ACID_DAMAGE_PERCENT : Number = 50;
+		private const ACID_DAMAGE_PERCENT : Number = 150;
 		/** Damage dealt by acid every frame. */
 		private const ACID_DAMAGE : Number = (ACID_DAMAGE_PERCENT / 100)  * PlayerStats.MAX_HEALTH / FlxG.framerate;
 		
