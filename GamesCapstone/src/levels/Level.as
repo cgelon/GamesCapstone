@@ -5,6 +5,7 @@ package levels
 	import items.Environmental.Background.AcidFlow;
 	import items.Environmental.Background.Lever;
 	import items.Environmental.Crate;
+	import items.Environmental.Generator;
 	import org.flixel.FlxG;
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxPoint;
@@ -71,11 +72,26 @@ package levels
 			var objectsTilemap : FlxTilemap = new FlxTilemap();
 			objectsTilemap.loadMap(new objectsCSV(), tilePNG, 16, 16, 0, 0, 1, 352);
 			// top left of crate sprite
-			var crateLocs : Array = objectsTilemap.getTileCoords(162).sortOn("x", Array.NUMERIC)
-			for (var i: int = 0; i < crateLocs.length; i++)
+			var crateLocs : Array = objectsTilemap.getTileCoords(162);
+			if (crateLocs != null)
 			{
-				objectStarts.push(new FlxPoint(crateLocs[i].x - 8, crateLocs[i].y - 8));
-				objectTypes.push(Crate);
+				crateLocs = crateLocs.sortOn("x", Array.NUMERIC);
+				for (var i: int = 0; i < crateLocs.length; i++)
+				{
+					objectStarts.push(new FlxPoint(crateLocs[i].x - 8, crateLocs[i].y - 8));
+					objectTypes.push(Crate);
+				}
+			}
+			
+			var generatorLocs : Array = objectsTilemap.getTileCoords(550);
+			if (generatorLocs != null)
+			{
+				generatorLocs = generatorLocs.sortOn("x", Array.NUMERIC);
+				for (var j: int = 0; j < generatorLocs.length; j++)
+				{
+					objectStarts.push(new FlxPoint(generatorLocs[j].x - 8, generatorLocs[j].y - 8));
+					objectTypes.push(Generator);
+				}
 			}
 		}
 		
@@ -102,7 +118,7 @@ package levels
 				for (i = 0; i < lightningRobotLocs.length; i++)
 				{
 					enemyStarts.push(lightningRobotLocs[i]);
-					enemyStarts.push(LightningRobot);
+					enemyTypes.push(LightningRobot);
 				}
 			}
 		}
