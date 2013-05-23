@@ -19,8 +19,8 @@ package people.enemies
 		private static const LIGHTNING_DELAY_FRAMES : Number = Convert.framesToSeconds(15);
 		
 		
-		private static const GREEN_NATURAL : int = 0xFF00FF00;
-		private static const GREEN_GLOWING : int = 0xFF007700;
+		private static const GREEN_NATURAL : uint = 0xFF00FF00;
+		private static const GREEN_GLOWING : uint = 0xFF007700;
 		
 		private var _attackType : int;
 		private var _glowCount : uint;
