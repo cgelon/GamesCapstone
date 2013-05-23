@@ -5,6 +5,7 @@ package levels
 	import items.Environmental.Background.AcidFlow;
 	import items.Environmental.Background.Lever;
 	import items.Environmental.Crate;
+	import items.Environmental.ForceField;
 	import items.Environmental.Generator;
 	import org.flixel.FlxG;
 	import org.flixel.FlxGroup;
@@ -93,6 +94,93 @@ package levels
 					objectTypes.push(Generator);
 				}
 			}
+			
+			// Gets the top forcefield source
+			var topVert : Array = objectsTilemap.getTileCoords(457);
+			// Gets the bottom forcefield source (these should always be paired)
+			var bottomVert : Array = objectsTilemap.getTileCoords(488);
+			
+			// Gets the left forcefield source
+			var leftHoriz : Array = objectsTilemap.getTileCoords(456);
+			// Gets the right forcefield source (these should always be paired)
+			var rightHoriz : Array = objectsTilemap.getTileCoords(489);
+			
+			// Checks if corners are even possible
+			if (topVert != null && leftHoriz != null)
+			{
+				// Gets the corners of the forcefield, if they exist.  They may not
+				var upperLeftCorner : Array = objectsTilemap.getTileCoords(363);
+				var upperRightCorner : Array = objectsTilemap.getTileCoords(364);
+				var lowerLeftCorner : Array = objectsTilemap.getTileCoords(395);
+				var lowerRightCorner : Array = objectsTilemap.getTileCoords(396);
+				
+				// Sorts the values based on the x coordinate
+				topVert = topVert.sortOn("x", Array.NUMERIC);
+				bottomVert = bottomVert.sortOn("x", Array.NUMERIC);
+				leftHoriz = leftHoriz.sortOn("x", Array.NUMERIC);
+				rightHoriz = rightHoriz.sortOn("x", Array.NUMERIC);
+				
+				// Sorts the values based on the x coordinate if they exist
+				if (upperLeftCorner != null)
+				{
+					upperLeftCorner = upperLeftCorner.sortOn("x", Array.NUMERIC);
+				}
+				if (upperRightCorner != null)
+				{
+					upperRightCorner = upperRightCorner.sortOn("x", Array.NUMERIC);
+				}
+				if (lowerLeftCorner != null)
+				{
+					lowerLeftCorner = lowerLeftCorner.sortOn("x", Array.NUMERIC);
+				}
+				if (lowerRightCorner != null)
+				{
+					lowerRightCorner = lowerRightCorner.sortOn("x", Array.NUMERIC);
+				}
+			}
+			else
+			{
+				// There may only be vertical bars, or only horizontal bars, or none at all
+				
+				if (topVert != null)
+				{
+					// Since all top verts must be paired with a bottom vert, it is
+					// fine not to test if the bottom vert array exists when we know the top does
+					topVert = topVert.sortOn("x", Array.NUMERIC);
+					bottomVert = bottomVert.sortOn("x", Array.NUMERIC);	
+					
+					var s1: Array = [false, true, false, false]; 
+					// We only have one side, call it the right one
+					for (var k: int = 0; k < topVert.length; k++)
+					{
+						var h1: int = bottomVert[k].y - topVert[k].y;
+						h1 = h1 / 16;
+						var w1: int = 1;
+						objectStarts[objectStarts.length] = null;
+						objectTypes[objectTypes.length] = new ForceField(s1, topVert[k].x, topVert[k].y, h1, w1);
+					}
+					
+				}
+				if (leftHoriz != null)
+				{
+					// Since all left horizs must be paired with a right horiz, it is
+					// fine not to test if the right horiz array exists when we know the left does
+					leftHoriz = leftHoriz.sortOn("x", Array.NUMERIC);
+					rightHoriz = rightHoriz.sortOn("x", Array.NUMERIC);
+					
+					var s2: Array = [true, false, false, false]; 
+					// We only have one side, call it the top one
+					for (var l: int = 0; l < topVert.length; l++)
+					{
+						var h2: int = 1;
+						var w2: int = rightHoriz[l].x - leftHoriz[l].x;
+						w2 = w2 / 16;
+						objectStarts[l * 2] = null;
+						objectTypes[l * 2] = new ForceField(s2, leftHoriz[l].x, leftHoriz[l].y, h2, w2);
+					}
+				}
+			}
+			
 		}
 		
 		public function parseEnemies(enemiesCSV: Class,  tilePNG: Class) : void
