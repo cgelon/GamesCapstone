@@ -1,5 +1,6 @@
 package people.enemies 
 {
+	import org.flixel.FlxObject;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxTimer;
 	import people.states.ActorAction;
@@ -93,7 +94,10 @@ package people.enemies
 					color = GREEN_NATURAL;
 					if (state == ActorState.ATTACKING) 
 					{
-						attackManager.lightningBoltAttack(x  + width / 2, y  + height / 2, new FlxPoint(windupPlayerX - x, 0));
+						// Offset so that the lightning bolt comes out of the front side of the enemy.
+						var offsetX : Number = facing == FlxObject.LEFT ? 0 : width;
+						
+						attackManager.lightningBoltAttack(x  + offsetX, y  + height / 2, new FlxPoint(windupPlayerX - x, 0));
 						executeAction(ActorAction.ATTACK, ActorState.ATTACKING);
 						actionTimer.start(LIGHTNING_DELAY_FRAMES, 1, function(timer : FlxTimer) : void
 						{
