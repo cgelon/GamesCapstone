@@ -70,12 +70,18 @@ package people
 		/** Whether or not the player has been hit by acid this frame. */
 		public var touchedAcidThisFrame : Boolean;
 		
+		private var _actorFlickerTimer : FlxTimer;
+		private var _actorFlickerCount : int;
+		private var _actorFlickerDuration : int;
+		
 		public function Actor() : void
 		{
 			_periodicSoundsToState = new Dictionary();
 			_soundsToAction = new Dictionary();
 			_animationsToAction = new Dictionary();
 			actionTimer = new FlxTimer();
+			
+			_actorFlickerTimer = new FlxTimer();
 		}
 		
 		/**
@@ -88,9 +94,11 @@ package people
 			this.x = x;
 			this.y = y;
 			
-			health = actorHealth
+			health = actorHealth;
 			_maxHealth = actorHealth;
 			currentStateFrame = 0;
+			
+			_actorFlickerDuration = 8;
 		}
 		
 		override public function update():void 
@@ -98,6 +106,31 @@ package people
 			super.update();
 			currentStateFrame++;
 			touchedAcidThisFrame = false;
+			
+			if (_actorFlickerTimer.running)
+			{
+				if (_actorFlickerCount % _actorFlickerDuration < _actorFlickerDuration / 2)
+				{
+					alpha = 0;
+				}
+				else
+				{
+					alpha = 1;
+				}
+				_actorFlickerCount++;
+			}
+		}
+		
+		
+		public function flickerActor(duration : Number) : void
+		{
+			if (!_actorFlickerTimer.running)
+			{
+				_actorFlickerCount = 0;
+				_actorFlickerTimer.start(duration, 1, function(timer : FlxTimer) : void {
+					alpha = 1;
+				});
+			}
 		}
 		
 		/**

@@ -249,7 +249,7 @@ package people.players
 			// Player can only be standin up for the first frame of a new state.
 			if (currentStateFrame > 1)
 				_standingUp = false;
-				
+			
 			if (FlxG.cutscene)
 			{
 				updateCutsceneStates();
@@ -342,9 +342,6 @@ package people.players
 				
 				if (!(onGround || state != ActorState.HURT))
 					drag.x = maxVelocity.x;
-					
-				var colors : Array = [0x00FFFFFF, Color.RED, Color.GREEN, Color.ORANGE, Color.BLUE];
-				color = colors[_currentWeapon % colors.length];
 			}
 		}
 		
