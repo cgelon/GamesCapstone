@@ -13,7 +13,6 @@ package levels
 	import org.flixel.FlxTilemap;
 	import people.enemies.LightningRobot;
 	import people.enemies.Robot;
-	import people.enemies.BossEnemy;
 	
 	/**
 	 * ...
