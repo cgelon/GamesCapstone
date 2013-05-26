@@ -659,6 +659,7 @@ package people.players
 		
 		override public function executeAction(action : ActorAction, newState : ActorState = null, index : uint = 0) : void
 		{
+			var oldState : ActorState = state;
 			super.executeAction(action, newState, index);
 			Registry.addAction(action, index, 1);
 			
@@ -671,16 +672,14 @@ package people.players
 				
 				offset.y += NORMAL_HITBOX.y - CROUCHING_HITBOX.y;
 				y += NORMAL_HITBOX.y - CROUCHING_HITBOX.y;
-				touching |= FlxObject.FLOOR;
 			}
-			else if (prevState == ActorState.CROUCHING && state != ActorState.CROUCHING)
+			else if (prevState == ActorState.CROUCHING && state != ActorState.CROUCHING && oldState != newState)
 			{
 				width = NORMAL_HITBOX.x;
 				height = NORMAL_HITBOX.y;
 				
 				offset.y -= NORMAL_HITBOX.y - CROUCHING_HITBOX.y;
 				y -= NORMAL_HITBOX.y - CROUCHING_HITBOX.y;
-				touching |= FlxObject.FLOOR;
 				velocity.y = 0;
 				
 				_standingUp = true;
