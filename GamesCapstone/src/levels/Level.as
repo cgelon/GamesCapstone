@@ -230,7 +230,6 @@ package levels
 						}
 						
 						
-						objectStarts[objectStarts.length] = null;
 						if (!sides[0] && !sides[2])
 						{
 							// In this case, we have not found a corner block, meaning that we have a single vertical forcefield.

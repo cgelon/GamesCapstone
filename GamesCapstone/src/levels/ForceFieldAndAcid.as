@@ -34,24 +34,9 @@ package levels
 			// Initializes the map
 			parsePlayer(playerCSV, tilePNG);
 			// Stores the player start points
-			parseEnemies(enemiesCSV, tilePNG); /*
-			enemyStarts[0] = new FlxPoint(528, 50);
-			enemyTypes[0] = Robot; */
+			parseEnemies(enemiesCSV, tilePNG);
 			parseObjects(ObjectsCSV, tilePNG);
 			// Add the Forcefields and Generators 
-			/*
-			objectStarts[0] = null;
-			objectTypes[0] = new ForceField([true, true, false, true], 288, 256, 5, 9);
-			
-			objectStarts[1] = new FlxPoint(352, 304);
-			objectTypes[1] = Generator;
-			environmentalCircuits.push(true);
-			
-			objectStarts[2] = null;
-			objectTypes[2] = new ForceField([false, true, true, true], 288, 16, 16, 9);
-			
-			objectStarts[3] = new FlxPoint(352, 304);
-			objectTypes[3] = Generator; */
 			environmentalCircuits.push(true);
 			
 			parseBackground(BackgroundCSV, tilePNG);
