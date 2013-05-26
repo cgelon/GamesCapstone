@@ -10,6 +10,9 @@ package people.states
 		public static const CONTROL : ActorStateGroup = new ActorStateGroup([ActorState.IDLE, ActorState.JUMPING, ActorState.RUNNING, ActorState.FALLING]);
 		public static const GROUND : ActorStateGroup = new ActorStateGroup([ActorState.IDLE, ActorState.RUNNING, ActorState.ROLLING, ActorState.BLOCKING, ActorState.CROUCHING]);
 		
+		/** Valid crouching state. */
+		public static const CROUCH : ActorStateGroup = new ActorStateGroup([ActorState.CROUCHING, ActorState.ATTACKING]);
+		
 		private var _states : Array;
 		
 		public function ActorStateGroup(states : Array)
