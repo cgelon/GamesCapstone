@@ -73,6 +73,11 @@ package people.players
 		/** Max velocity for the player when they are pushing. */
 		private static const MAX_PUSHING_VELOCITY : FlxPoint = new FlxPoint(125, 1000);
 		
+		/** The normal hitbox for the player. */
+		private static const NORMAL_HITBOX : FlxPoint = new FlxPoint(24, 40);
+		/** The hitbox for the player when they are crouching. */
+		private static const CROUCHING_HITBOX : FlxPoint = new FlxPoint(24, 20);
+		
 		/** All of the weapons/items that the player has collected. **/
 		private var _weapons : Array = new Array(10);
 		
@@ -107,6 +112,9 @@ package people.players
 		/** Whether or not the player has been dead long enough that the level should reset. */
 		public var readyToReset : Boolean;
 		
+		/** Whether or not the player is making the transition from crouching to standing this frame. */
+		private var _standingUp : Boolean;
+		
 		/** The PNG for the player. */
 		[Embed(source = '../../../assets/player.png')] private var playerPNG : Class;
 		
@@ -121,8 +129,8 @@ package people.players
 			loadGraphic(playerPNG, true, true, 64, 64, true);
 			
 			// Set the bounding box for the sprite.
-			width = 24;
-			height = 40;
+			width = NORMAL_HITBOX.x;
+			height = NORMAL_HITBOX.y;
 			
 			// Offset the sprite image's bounding box.
 			offset.x = 20;
@@ -195,6 +203,7 @@ package people.players
 			
 			FlxG.watch(this, "stateName", "State");
 			FlxG.watch(this, "position", "Position");
+			FlxG.watch(this.velocity, "y", "yVel");
 		}
 		
 		public function get position() : String
@@ -222,11 +231,17 @@ package people.players
 			acquireWeapon(new Fists());
 			//acquireWeapon(new HammerArm());
 			_currentWeapon = 0;
+			
+			_standingUp = false;
 		}
 		
 		override public function update():void 
 		{
 			super.update();
+			
+			// Player can only be standin up for the first frame of a new state.
+			if (currentStateFrame > 1)
+				_standingUp = false;
 			
 			if (FlxG.cutscene)
 			{
@@ -545,7 +560,7 @@ package people.players
 			else
 			{
 				// These states can only be triggered when the player is in the air.
-				if (velocity.y > 0 && (ActorStateGroup.GROUND.contains(state) || state == ActorState.JUMPING))
+				if (!_standingUp && velocity.y > 0 && (ActorStateGroup.GROUND.contains(state) || state == ActorState.JUMPING))
 				{
 					executeAction(ActorAction.FALL, ActorState.FALLING);
 				}
@@ -646,6 +661,30 @@ package people.players
 		{
 			super.executeAction(action, newState, index);
 			Registry.addAction(action, index, 1);
+			
+			// Change the bounding box for the player if they're crouching, or
+			// standing up from crouching.
+			if (prevState != ActorState.CROUCHING && newState == ActorState.CROUCHING)
+			{
+				width = CROUCHING_HITBOX.x;
+				height = CROUCHING_HITBOX.y;
+				
+				offset.y += NORMAL_HITBOX.y - CROUCHING_HITBOX.y;
+				y += NORMAL_HITBOX.y - CROUCHING_HITBOX.y;
+				touching |= FlxObject.FLOOR;
+			}
+			else if (prevState == ActorState.CROUCHING && state != ActorState.CROUCHING)
+			{
+				width = NORMAL_HITBOX.x;
+				height = NORMAL_HITBOX.y;
+				
+				offset.y -= NORMAL_HITBOX.y - CROUCHING_HITBOX.y;
+				y -= NORMAL_HITBOX.y - CROUCHING_HITBOX.y;
+				touching |= FlxObject.FLOOR;
+				velocity.y = 0;
+				
+				_standingUp = true;
+			}
 		}
 		
 		/**

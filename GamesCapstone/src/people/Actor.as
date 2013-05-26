@@ -159,7 +159,7 @@ package people
 				(_periodicSoundsToState[newState] as PeriodicSound).play();
 			}
 			state = newState;
-			currentStateFrame
+			currentStateFrame = 0;
 		}
 		
 		/**

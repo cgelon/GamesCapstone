@@ -33,5 +33,21 @@ package managers
 			}
 			return true;
 		}
+		
+		/**
+		 * Set's the "immovable" flag for all enemies to the given value.
+		 * 
+		 * @param	flag	Boolean value that every enemy's immovable flag is set to.
+		 */
+		public function setAllImmovable(flag : Boolean) : void
+		{
+			for each (var enemy : Enemy in members)
+			{
+				if (enemy != null)
+				{
+					enemy.immovable = flag;
+				}
+			}
+		}
 	}
 }
