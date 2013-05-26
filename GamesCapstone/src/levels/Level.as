@@ -13,7 +13,6 @@ package levels
 	import org.flixel.FlxTilemap;
 	import people.enemies.LightningRobot;
 	import people.enemies.Robot;
-	import people.enemies.BossEnemy;
 	
 	/**
 	 * ...
@@ -137,6 +136,257 @@ package levels
 				if (lowerRightCorner != null)
 				{
 					lowerRightCorner = lowerRightCorner.sortOn("x", Array.NUMERIC);
+				}
+				
+				// Initializes all the traversal ints I will need.  ulc - upperLeftCorner,
+				// urc - upperRightCorner, llc - lowerLeftCorner, lrc - lowerRightCorner
+				var verts: int = 0;
+				var horizs: int = 0;
+				var ulc: int = 0;
+				var urc: int = 0;
+				var llc: int = 0;
+				var lrc: int = 0;
+				// fill these with dummy values for now
+				var sides: Array = [false, false, false, false]; 
+				var height: int = 1;
+				var width: int = 1;
+				
+				// Watch out, this is going to get complicated.  
+				while (verts < topVert.length && horizs < leftHoriz.length)
+				{
+					objectStarts[objectStarts.length] = null;
+					if (topVert[verts].x < leftHoriz[horizs].x) 
+					{
+						if (upperLeftCorner != null && 
+							upperLeftCorner[ulc].x == topVert[verts].x &&
+							upperLeftCorner[ulc].y == topVert[verts].y - 16)
+						{
+							// This means that the vertical edge we have is the left edge
+							sides[3] = true;
+							// And that we should have a top edge, too
+							sides[0] = true;
+							height = bottomVert[verts].y - topVert[verts].y;
+							height = height / 16;
+							width = rightHoriz[horizs].x - leftHoriz[horizs].x;
+							width = width / 16;
+							ulc++;
+						}
+						if (lowerLeftCorner != null &&
+							lowerLeftCorner[llc].x == topVert[verts].x &&
+							(lowerLeftCorner[llc].y == leftHoriz[horizs].y ||
+							 lowerLeftCorner[llc].y == leftHoriz[horizs + 1].y)) 
+						{
+							// We know the vertical edge is the left edge.  There are two
+							// possibilities for the first horizontal edge, though: it
+							// could be the top edge (which means we've already taken care of it
+							// and need to look at the next horizontal edge) or it could be the
+							// bottom edge, in which case we are taking care of it now
+							// Either way, we take the same action
+							
+							sides[3] = true;
+							// The presence of the corner means we have both a left and a bottom edge
+							sides[2] = true;
+							// Determine the height and width (note: even if these were set before by
+							// the check for the upper left corner, setting it again should be fine)
+							height = bottomVert[verts].y - topVert[verts].y;
+							height = height / 16;
+							width = rightHoriz[horizs].x - leftHoriz[horizs].x;
+							width = width / 16;
+							llc++;
+						}
+						if (upperRightCorner != null &&
+							upperRightCorner[urc].x == topVert[verts + 1].x &&
+							(upperRightCorner[urc].y == leftHoriz[horizs].y ||
+							 upperRightCorner[urc].y == leftHoriz[horizs + 1].y))
+						{
+							// Because topVert[verts].x < leftHoriz[horizs].x, we know that if the right side
+							// exists, it must be found at topVert[verts + 1], so we only need to compare that
+							// x coordinate.  We also know that at least one of leftHoriz[horizs] or leftHoriz[horizs+1]
+							// is on the top and the other is on the bottom or nonexistant.  Which one it is doesn't matter
+							// because matching at least one means that we have an upper right corner
+							sides[1] = true;
+							sides[0] = true;
+							// Because topVert[verts].x < leftHoriz[horizs].x, we know that the height and width must
+							// be set already because we would have encountered the upperLeftCorner (having both a right
+							// side and because we know we have a top side)
+							urc++;
+						}
+						if (lowerRightCorner != null &&
+							lowerRightCorner[lrc].x == topVert[verts + 1].x &&
+							(lowerRightCorner[lrc].y == leftHoriz[horizs].y ||
+							 lowerRightCorner[lrc].y == leftHoriz[horizs + 1].y))
+						{
+							// Because topVert[verts].x < leftHoriz[horizs].x, we know that if the right side
+							// exists, it must be found at topVert[verts + 1], so we only need to compare that
+							// x coordinate.  We also know that at least one of leftHoriz[horizs] or leftHoriz[horizs+1]
+							// is on the top or nonexistant and the other is on the bottom.  Which one it is doesn't matter
+							// because matching at least one means that we have an lower right corner
+							sides[1] = true;
+							sides[2] = true;
+							// Because topVert[verts].x < leftHoriz[horizs].x, we know that the height and width must
+							// be set already because we would have encountered the lowerLeftCorner (having both a right
+							// side and because we know we have a bottom side)
+							lrc++;
+						}
+						
+						
+						objectStarts[objectStarts.length] = null;
+						if (!sides[0] && !sides[2])
+						{
+							// In this case, we have not found a corner block, meaning that we have a single vertical forcefield.
+							// We're going to pretend it is on the right side
+							sides[1] = true;
+							height = bottomVert[verts].y - topVert[verts].y;
+							height = height / 16;
+							width = 1;
+							objectTypes[objectTypes.length] = new ForceField(sides, topVert[verts].x, topVert[verts].y, height, width);
+							verts++;
+						}
+						else
+						{
+							// There exists at least one corner block
+							// To account for corner offset
+							if (sides[1])
+							{
+								width = width + 2;
+							}
+							else
+							{
+								width = width + 1;
+							}
+							if (sides[0] && sides[2])
+							{
+								height = height + 2;
+								// Need to offset the y coordinate from topVert[verts].y because it is not the actual corner
+								objectTypes[objectTypes.length] = new ForceField(sides, topVert[verts].x, leftHoriz[horizs].y, height, width);
+							}
+							else
+							{
+								height = height + 1;
+								if (sides[0])
+								{
+									objectTypes[objectTypes.length] = new ForceField(sides, topVert[verts].x, leftHoriz[horizs].y, height, width);
+								}
+								else 
+								{
+									objectTypes[objectTypes.length] = new ForceField(sides, topVert[verts].x, topVert[verts].y, height, width);
+								}
+							}							
+							// We know that the left side exists, so utilize its starting x and y coordinate
+							if (sides[1])
+							{
+								// The right side also exists, so must increment verts by 2 instead of just 1
+								verts = verts + 2;
+							}
+							else
+							{
+								verts++;
+							}
+							
+							if (sides[0] && sides[2])
+							{
+								// Both a top and a bottom exist, so increment horizs by 2
+								horizs = horizs + 2;
+							}
+							else
+							{
+								// Because we know one corner block exists, and not both a top and a bottom exist,
+								// there must be one of them, so increment horizs by 1
+								horizs++;
+							}							
+						}
+					}
+					else
+					{
+						// Means we have a horizontal forcefield before a vertical one.  This occurs in one of four
+						// cases out of eleven.
+						if (upperRightCorner != null &&
+							upperRightCorner[urc].x == topVert[verts].x &&
+							(upperRightCorner[urc].y == leftHoriz[horizs].y ||
+							 upperRightCorner[urc].y == leftHoriz[horizs + 1].y))
+						{
+							// Because topVert[verts].x >= leftHoriz[horizs].x, we know that if the right side
+							// exists, it must be found at topVert[verts], so we only need to compare that
+							// x coordinate.  We also know that at least one of leftHoriz[horizs] or leftHoriz[horizs+1]
+							// is on the top and the other is on the bottom or nonexistant.  Which one it is doesn't matter
+							// because matching at least one means that we have an upper right corner
+							sides[1] = true;
+							sides[0] = true;
+							height = bottomVert[verts].y - topVert[verts].y;
+							height = height / 16;
+							width = rightHoriz[horizs].x - leftHoriz[horizs].x;
+							width = width / 16;
+							urc++;
+						}
+						
+						if (lowerRightCorner != null &&
+							lowerRightCorner[lrc].x == topVert[verts].x &&
+							(lowerRightCorner[lrc].y == leftHoriz[horizs].y ||
+							 lowerRightCorner[lrc].y == leftHoriz[horizs + 1].y))
+						{
+							// Because topVert[verts].x >= leftHoriz[horizs].x, we know that if the right side
+							// exists, it must be found at topVert[verts], so we only need to compare that
+							// x coordinate.  We also know that at least one of leftHoriz[horizs] or leftHoriz[horizs+1]
+							// is on the top or nonexistant and the other is on the bottom.  Which one it is doesn't matter
+							// because matching at least one means that we have an lower right corner
+							sides[1] = true;
+							sides[2] = true;
+							height = bottomVert[verts].y - topVert[verts].y;
+							height = height / 16;
+							width = rightHoriz[horizs].x - leftHoriz[horizs].x;
+							width = width / 16;
+							lrc++;
+						}
+						
+						if (!sides[1])
+						{
+							// In this case, we have not found a corner block, meaning that we have a single horizontal forcefield.
+							// We're going to pretend it is on the top side
+							sides[0] = true;
+							height = 1;
+							width = rightHoriz[horizs].x - leftHoriz[horizs].x;
+							width = width / 16;
+							objectTypes[objectTypes.length] = new ForceField(sides, leftHoriz[horizs].x, leftHoriz[horizs].y, height, width);
+							horizs++;
+						}
+						else
+						{
+							// The width must increase by 1, since we have a corner block
+							width++;
+							if (sides[0] && sides[2])
+							{
+								// We have both a top and a bottom, so increase the height by 2
+								height = height + 2;
+							}
+							else
+							{
+								// We only have one, so increase the height by 1 for the corner
+								height++;
+							}
+							if (sides[0])
+							{
+								// Since we can't assume that leftHoriz[horizs] is the top side, we must utilize the right side we know
+								// we have for the y coordinate.
+								objectTypes[objectTypes.length] = new ForceField(sides, leftHoriz[horizs].x, topVert[verts].y - 16, height, width);
+							}
+							else
+							{
+								// We don't have a top side, so no need to modify verts' y coordinate
+								objectTypes[objectTypes.length] = new ForceField(sides, leftHoriz[horizs].x, topVert[verts].y, height, width);
+							}
+							verts++;
+							if (sides[0] && sides[2])
+							{
+								// We have both a top and a bottom, so increase horizs by 2
+								horizs = horizs + 2;
+							}
+							else
+							{
+								// We only have one, so increase horizs by 1
+								horizs++;
+							}
+						}
+					}
 				}
 			}
 			else
