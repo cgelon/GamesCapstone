@@ -11,6 +11,7 @@ package people.enemies
 	import people.players.Player;
 	import people.states.ActorState;
 	import util.Color;
+	import managers.EnemyAttackManager;
 
 	/**
 	 * A basic enemy.
@@ -107,6 +108,12 @@ package people.enemies
 		public function get player() : Player
 		{
 			return (getManager(PlayerManager) as PlayerManager).player;
+		}
+		
+		
+		protected function get attackManager() : EnemyAttackManager
+		{
+			return getManager(EnemyAttackManager) as EnemyAttackManager;
 		}
 	}
 }
