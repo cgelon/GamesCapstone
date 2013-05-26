@@ -16,47 +16,31 @@ package levels
 	 */
 	public class ForceFieldAndAcid extends Level
 	{
-		[Embed(source = "../../assets/mapCSV_Group2_ForcefieldsAndAcid.csv", mimeType = "application/octet-stream")] public var CSV : Class;
-		[Embed(source = "../../assets/lab tile arrange.png")] public var PNG : Class;
+		[Embed(source = "../../assets/mapCSV_ForcefieldsAndAcid_Map.csv", mimeType = "application/octet-stream")] public var mapCSV : Class;
+		[Embed(source = "../../assets/mapCSV_ForcefieldsAndAcid_Player.csv", mimeType = "application/octet-stream")] public var playerCSV : Class;
+		[Embed(source = "../../assets/mapCSV_ForcefieldsAndAcid_Enemies.csv", mimeType = "application/octet-stream")] public var enemiesCSV : Class;
+		[Embed(source = "../../assets/mapCSV_ForcefieldsAndAcid_Background.csv", mimeType = "application/octet-stream")] public var BackgroundCSV : Class;
+		[Embed(source = "../../assets/mapCSV_ForcefieldsAndAcid_Objects.csv", mimeType = "application/octet-stream")] public var ObjectsCSV : Class;
+		[Embed(source = "../../assets/lab tile arrange.png")] public var tilePNG : Class;
 		
 		public function ForceFieldAndAcid ()
 		{
 			super();
 			
-			map.loadMap(new CSV(), PNG, 16, 16, 0, 0, 1, 352);
+			map.loadMap(new mapCSV(), tilePNG, 16, 16, 0, 0, 1, 352);
 			
 			width = map.width;
 			height = map.height;
 			// Initializes the map
-			
-			playerStart = new FlxPoint(16, 296);
-			playerEnd = new FlxPoint(988, 296);
+			parsePlayer(playerCSV, tilePNG);
 			// Stores the player start points
-			
-			enemyStarts[0] = new FlxPoint(528, 50);
-			enemyTypes[0] = Robot;
-			
-			// Add the Forcefields and Generators
-			objectStarts[0] = null;
-			objectTypes[0] = new ForceField([true, true, false, true], 288, 256, 5, 9);
-			
-			objectStarts[1] = new FlxPoint(352, 304);
-			objectTypes[1] = Generator;
+			parseEnemies(enemiesCSV, tilePNG);
+			parseObjects(ObjectsCSV, tilePNG);
+			// Add the Forcefields and Generators 
 			environmentalCircuits.push(true);
 			
-			objectStarts[2] = null;
-			objectTypes[2] = new ForceField([false, true, true, true], 288, 16, 16, 9);
-			
-			objectStarts[3] = new FlxPoint(352, 304);
-			objectTypes[3] = Generator;
-			environmentalCircuits.push(true);
-			
-			
+			parseBackground(BackgroundCSV, tilePNG);
 			// Add the Acidflow and its lever
-			backgroundStarts[0] = new FlxPoint(384, 176);
-			backgroundTypes[0] = AcidFlow;
-			backgroundStarts[1] = new FlxPoint(240, 112);
-			backgroundTypes[1] = Lever;
 			backgroundCircuits.push(false);
 			
 			add(map);
