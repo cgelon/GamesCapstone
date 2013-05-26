@@ -115,6 +115,10 @@ package people.players
 		/** Whether or not the player is making the transition from crouching to standing this frame. */
 		private var _standingUp : Boolean;
 		
+		/** Whether the player's current state should be be crouching. */
+		private var _crouching : Boolean;
+		private var _prevCrouching : Boolean;
+		
 		/** The PNG for the player. */
 		[Embed(source = '../../../assets/player.png')] private var playerPNG : Class;
 		
@@ -195,7 +199,6 @@ package people.players
 			acceleration.y = 1000;
 			
 			// Set up the attack variables.
-
 			_attackReleased = true;
 			_attackType = 0;
 			
@@ -203,7 +206,7 @@ package people.players
 			
 			FlxG.watch(this, "stateName", "State");
 			FlxG.watch(this, "position", "Position");
-			FlxG.watch(this.velocity, "y", "yVel");
+			FlxG.watch(this, "crouching", "Crouching")
 		}
 		
 		public function get position() : String
@@ -233,16 +236,20 @@ package people.players
 			_currentWeapon = 0;
 			
 			_standingUp = false;
+			_prevCrouching = false;
 		}
 		
 		override public function update():void 
 		{
 			super.update();
 			
+			updateStamina();
+			buttonReleases();
+			
 			// Player can only be standin up for the first frame of a new state.
 			if (currentStateFrame > 1)
 				_standingUp = false;
-			
+				
 			if (FlxG.cutscene)
 			{
 				updateCutsceneStates();
@@ -252,8 +259,8 @@ package people.players
 			{
 				switch(state)
 				{
-					case ActorState.PUSHING:
 					case ActorState.IDLE:
+					case ActorState.PUSHING:
 					case ActorState.RUNNING:
 					case ActorState.JUMPING:
 					case ActorState.FALLING:
@@ -303,10 +310,6 @@ package people.players
 						}
 						break;
 					case ActorState.CROUCHING:
-						if (FlxG.keys.justReleased("S") || FlxG.keys.justReleased("DOWN"))
-						{
-							executeAction(ActorAction.STOP, ActorState.IDLE);
-						}
 						updateAttacking();
 						break;
 					case ActorState.DEAD:
@@ -336,12 +339,10 @@ package people.players
 				}
 				
 				switchWeapons();
-				updateStamina();
-				buttonReleases();
 				
 				if (!(onGround || state != ActorState.HURT))
 					drag.x = maxVelocity.x;
-				
+					
 				var colors : Array = [0x00FFFFFF, Color.RED, Color.GREEN, Color.ORANGE, Color.BLUE];
 				color = colors[_currentWeapon % colors.length];
 			}
@@ -405,6 +406,13 @@ package people.players
 					else
 						executeAction(ActorAction.FALL, ActorState.FALLING);
 				}
+			}
+			
+			if (_crouching && (FlxG.keys.justReleased("S") || FlxG.keys.justReleased("DOWN")))
+			{
+				_crouching = false;
+				if (state == ActorState.CROUCHING)
+					executeAction(ActorAction.STOP, ActorState.IDLE);
 			}
 		}
 		
@@ -545,8 +553,12 @@ package people.players
 				}
 				else if (FlxG.keys.pressed("S") || FlxG.keys.pressed("DOWN"))
 				{
-					executeAction(ActorAction.CROUCH, ActorState.CROUCHING);
-					acceleration.x = 0;
+					if (state != ActorState.CROUCHING)
+					{
+						_crouching = true;
+						executeAction(ActorAction.CROUCH, ActorState.CROUCHING);
+						acceleration.x = 0;
+					}
 				}
 				else if (velocity.x != 0 && state == ActorState.IDLE)
 				{
@@ -631,8 +643,21 @@ package people.players
 		{
 			if (state == ActorState.ATTACKING)
 			{
-				//if (prevState ==
-				executeAction(ActorAction.STOP, ActorState.IDLE);
+				if (prevState == ActorState.CROUCHING && _crouching)
+				{
+					executeAction(ActorAction.CROUCH, ActorState.CROUCHING);
+				}
+				else if (!onGround && (prevState == ActorState.JUMPING || prevState == ActorState.FALLING))
+				{
+					if (velocity.y > 0)
+						executeAction(ActorAction.FALL, ActorState.FALLING);
+					else
+						executeAction(ActorAction.JUMP, ActorState.JUMPING);
+				}
+				else
+				{
+					executeAction(ActorAction.STOP, ActorState.IDLE);
+				}
 			}
 		}
 		
@@ -665,7 +690,7 @@ package people.players
 			
 			// Change the bounding box for the player if they're crouching, or
 			// standing up from crouching.
-			if (prevState != ActorState.CROUCHING && newState == ActorState.CROUCHING)
+			if (_crouching && ActorStateGroup.CROUCH.contains(newState) && !ActorStateGroup.CROUCH.contains(oldState))
 			{
 				width = CROUCHING_HITBOX.x;
 				height = CROUCHING_HITBOX.y;
@@ -673,17 +698,17 @@ package people.players
 				offset.y += NORMAL_HITBOX.y - CROUCHING_HITBOX.y;
 				y += NORMAL_HITBOX.y - CROUCHING_HITBOX.y;
 			}
-			else if (prevState == ActorState.CROUCHING && state != ActorState.CROUCHING && oldState != newState)
+			else if (!_crouching && _prevCrouching)
 			{
 				width = NORMAL_HITBOX.x;
 				height = NORMAL_HITBOX.y;
 				
 				offset.y -= NORMAL_HITBOX.y - CROUCHING_HITBOX.y;
 				y -= NORMAL_HITBOX.y - CROUCHING_HITBOX.y;
-				velocity.y = 0;
 				
 				_standingUp = true;
 			}
+			_prevCrouching = _crouching;
 		}
 		
 		/**
@@ -742,6 +767,11 @@ package people.players
 		private function get attackReady() : Boolean
 		{
 			return !actionTimer.running && _attackReleased;
+		}
+		
+		public function get crouching() : Boolean
+		{
+			return _crouching;
 		}
 		
 		/**
