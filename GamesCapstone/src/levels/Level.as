@@ -4,6 +4,7 @@ package levels
 	import items.Environmental.Background.Acid;
 	import items.Environmental.Background.AcidFlow;
 	import items.Environmental.Background.Lever;
+	import items.Environmental.BlastDoor;
 	import items.Environmental.Crate;
 	import items.Environmental.ForceField;
 	import items.Environmental.Generator;
@@ -440,6 +441,33 @@ package levels
 				}
 			}
 			
+			// Gets the blastdoor source for entry doors
+			var entryLocs : Array = objectsTilemap.getTileCoords(453);
+			
+			if (entryLocs != null)
+			{
+				// there should always be two, on the same x coordinate
+				entryLocs = entryLocs.sortOn("y", Array.NUMERIC);
+				var top : FlxPoint = entryLocs[0];
+				var bottom : FlxPoint = entryLocs[1];
+				var doorheight : Number = bottom.y - top.y;
+				objectStarts.push(null);
+				objectTypes.push(new BlastDoor(top.x - 8, top.y - 8, doorheight + 16));
+			}
+			
+			// Gets the top blastdoor source for entry doors
+			var exitLocs : Array = objectsTilemap.getTileCoords(485);
+			
+			if (exitLocs != null)
+			{
+				// there should always be two, on the same x coordinate
+				entryLocs = entryLocs.sortOn("y", Array.NUMERIC);
+				top = entryLocs[0];
+				bottom = entryLocs[1];
+				doorheight = bottom.y - top.y;
+				objectStarts.push(null);
+				objectTypes.push(new BlastDoor(top.x - 8, top.y - 8, doorheight + 16, true));
+			}
 		}
 		
 		public function parseEnemies(enemiesCSV: Class,  tilePNG: Class) : void

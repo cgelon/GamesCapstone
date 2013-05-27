@@ -111,7 +111,7 @@ package states
 			{
 				if (_level.objectStarts[i] == null)
 				{
-					objectManager.addForcefield(_level.objectTypes[i]);
+					objectManager.addObjectInstance(_level.objectTypes[i]);
 				}
 				else 
 				{

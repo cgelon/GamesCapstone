@@ -32,10 +32,14 @@ package managers
 				// If the object provided is an EnvironmentalItem, add it straight to the level
 				obj.track(this);
 				obj.addTo(this);
+			} else {
+				var grp : EnvironmentalGroup = new object(location.x, location.y) as EnvironmentalGroup;
+				grp.track(this);
+				grp.addTo(this);
 			}
 		}
 		
-		public function addForcefield(obj: ForceField) : void
+		public function addObjectInstance(obj: EnvironmentalGroup) : void
 		{
 			obj.track(this);
 			obj.addTo(this);

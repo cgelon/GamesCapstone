@@ -1,5 +1,6 @@
 package levels
 {
+	import items.Environmental.BlastDoor;
 	import org.flixel.FlxBasic;
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxPoint;

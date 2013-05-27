@@ -13,6 +13,7 @@ package levels
 	{
 		[Embed(source = "../../assets/mapCSV_Platform_Map.csv", mimeType = "application/octet-stream")] public var mapCSV : Class;
 		[Embed(source = "../../assets/mapCSV_Platform_Player.csv", mimeType = "application/octet-stream")] public var playerCSV : Class;
+		[Embed(source = "../../assets/mapCSV_Platform_Objects.csv", mimeType = "application/octet-stream")] public var objectsCSV : Class;
 		[Embed(source = "../../assets/lab tile arrange.png")] public var tilePNG : Class;
 		
 		public function PlatformLevel ()
@@ -26,6 +27,7 @@ package levels
 			// Initializes the map
 			
 			parsePlayer(playerCSV, tilePNG);
+			parseObjects(objectsCSV, tilePNG);
 
 			add(map);
 		}
