@@ -2,6 +2,7 @@ package managers
 {
 	import org.flixel.FlxBasic;
 	import org.flixel.FlxGroup;
+	import org.flixel.FlxTimer;
 	import org.flixel.plugin.photonstorm.FlxBar;
 	import people.players.Player;
 	import people.players.PlayerStats;
@@ -18,10 +19,53 @@ package managers
 	 */
 	public class UIObjectManager extends Manager
 	{
+		private var _hud : PlayerHud;
+		private var _flashTimer : FlxTimer;
+		private var _flashingCount : int;
+		
+		public function UIObjectManager()
+		{
+			_flashTimer = new FlxTimer();
+		}
+		
+		override public function update() : void
+		{
+			super.update();
+			
+			if (_flashTimer.running)
+			{
+				if (_flashingCount % 8 < 8 / 2)
+				{
+					_hud.staminaBar.color = 0x7F7F7F7F;
+				}
+				else
+				{
+					_hud.staminaBar.color = 0xFFFFFFFF;
+				}
+				_flashingCount++;
+			}
+		}
+		
 		public function createPlayerHud() : void
 		{
 			var hud : PlayerHud = new PlayerHud();
 			add(hud);
+			_hud = hud;
+		}
+		
+		public function flashStaminaBar(duration : Number) : void
+		{
+			if (_flashTimer == null)
+				_flashTimer = new FlxTimer();
+				
+			if (!_flashTimer.running)
+			{
+				_flashingCount = 0;
+				_flashTimer.start(duration, 1, function(timer : FlxTimer) : void
+				{
+					_hud.staminaBar.color = 0xFFFFFFFF;
+				});
+			}
 		}
 		
 		/**
