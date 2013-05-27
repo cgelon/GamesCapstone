@@ -15,6 +15,8 @@ package attacks
 		public static const LIGHTNING_DAMAGE : Number = 2;
 		public static const LIGHTNING_SPEED : Number = 225;
 		
+		public static const LIGHTNING_DURATION : Number = 1.5;
+		
 		public function LightningBolt() 
 		{
 			super(LIGHTNING_WIDTH, LIGHTNING_HEIGHT, LIGHTNING_DAMAGE);
