@@ -13,32 +13,25 @@ package levels
 	 */
 	public class ForceFieldIntro extends Level
 	{
-		[Embed(source = "../../assets/mapCSV_Group2_EnemyPlatforms.csv", mimeType = "application/octet-stream")] public var CSV : Class;
-		[Embed(source = "../../assets/lab tile arrange.png")] public var PNG : Class;
+		[Embed(source = "../../assets/mapCSV_ForcefieldIntro_Map.csv", mimeType = "application/octet-stream")] public var mapCSV : Class;
+		[Embed(source = "../../assets/mapCSV_ForcefieldIntro_Player.csv", mimeType = "application/octet-stream")] public var playerCSV : Class;
+		[Embed(source = "../../assets/mapCSV_ForcefieldIntro_Objects.csv", mimeType = "application/octet-stream")] public var objectsCSV : Class;
+		[Embed(source = "../../assets/lab tile arrange.png")] public var tilePNG : Class;
 		
 		public function ForceFieldIntro ()
 		{
 			super();
 			
-			map.loadMap(new CSV(), PNG, 16, 16, 0, 0, 1, 352);
+			map.loadMap(new mapCSV(), tilePNG, 16, 16, 0, 0, 1, 352);
 			
 			width = map.width;
 			height = map.height;
 			// Initializes the map
-			
-			playerStart = new FlxPoint(16, 296);
-			playerEnd = new FlxPoint(1344, 168);
+			parsePlayer(playerCSV, tilePNG);
 			// Stores the player start points
-			
+			parseObjects(objectsCSV, tilePNG);
+			environmentalCircuits.push(true);
 			loadMessage = "Red forcefields, how original.";
-			
-			enemyStarts[0] = new FlxPoint(528, 50);
-			enemyTypes[0] = Robot;
-			
-			
-			objectStarts[0] = null;
-			objectTypes[0] = new ForceField([false, true, false, false], 160, 16, 16, 1);
-			
 			add(map);
 		}
 	}

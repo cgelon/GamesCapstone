@@ -6,6 +6,7 @@ package people.players
 	import items.Weapons.HammerArm;
 	import items.Weapons.WeaponUpgrade;
 	import managers.PlayerAttackManager;
+	import managers.UIObjectManager;
 	import org.flixel.FlxG;
 	import org.flixel.FlxObject;
 	import org.flixel.FlxPoint;
@@ -249,7 +250,7 @@ package people.players
 			// Player can only be standin up for the first frame of a new state.
 			if (currentStateFrame > 1)
 				_standingUp = false;
-				
+			
 			if (FlxG.cutscene)
 			{
 				updateCutsceneStates();
@@ -342,9 +343,6 @@ package people.players
 				
 				if (!(onGround || state != ActorState.HURT))
 					drag.x = maxVelocity.x;
-					
-				var colors : Array = [0x00FFFFFF, Color.RED, Color.GREEN, Color.ORANGE, Color.BLUE];
-				color = colors[_currentWeapon % colors.length];
 			}
 		}
 		
@@ -502,26 +500,33 @@ package people.players
 				_attackType = 0;
 				//velocity.x = (facing == FlxObject.LEFT ? -1 : 1) * maxVelocity.x / 2;
 			}
-			else if (FlxG.keys.justPressed("K") && attackReady && stamina > STRONG_ATTACK_STAM_COST)
+			else if (FlxG.keys.justPressed("K") && attackReady)
 			{
-				if (state == ActorState.JUMPING || state == ActorState.FALLING)
+				if (stamina < STRONG_ATTACK_STAM_COST)
 				{
-					executeAction(ActorAction.WINDUP, ActorState.ATTACKING, 3);
-					actionTimer.start(STRONG_AIR_ATTACK_WINDUP, 1, strongWindupCallback);
-				}
-				else if (state == ActorState.CROUCHING)
-				{
-					executeAction(ActorAction.WINDUP, ActorState.ATTACKING, 3);
-					actionTimer.start(STRONG_LOW_ATTACK_WINDUP, 1, strongWindupCallback);
+					flashStaminaBar();
 				}
 				else
 				{
-					executeAction(ActorAction.WINDUP, ActorState.ATTACKING, 3);
-					actionTimer.start(STRONG_NORMAL_ATTACK_WINDUP, 1, strongWindupCallback);
-				}
+					if (state == ActorState.JUMPING || state == ActorState.FALLING)
+					{
+						executeAction(ActorAction.WINDUP, ActorState.ATTACKING, 3);
+						actionTimer.start(STRONG_AIR_ATTACK_WINDUP, 1, strongWindupCallback);
+					}
+					else if (state == ActorState.CROUCHING)
+					{
+						executeAction(ActorAction.WINDUP, ActorState.ATTACKING, 3);
+						actionTimer.start(STRONG_LOW_ATTACK_WINDUP, 1, strongWindupCallback);
+					}
+					else
+					{
+						executeAction(ActorAction.WINDUP, ActorState.ATTACKING, 3);
+						actionTimer.start(STRONG_NORMAL_ATTACK_WINDUP, 1, strongWindupCallback);
+					}
 				
-				_attackReleased = false;
-				_attackType = 1;
+					_attackReleased = false;
+					_attackType = 1;
+				}
 				//velocity.x = (facing == FlxObject.LEFT ? -1 : 1) * maxVelocity.x / 2;
 			}
 		}
@@ -538,10 +543,17 @@ package people.players
 				{
 					executeAction(ActorAction.LAND, ActorState.IDLE);
 				}
-				else if (FlxG.keys.pressed("L") && stamina >= ROLL_STAM_COST)
+				else if (FlxG.keys.pressed("L") )
 				{
-					executeAction(ActorAction.ROLL, ActorState.ROLLING);
-					stamina -= ROLL_STAM_COST;
+					if (stamina < ROLL_STAM_COST)
+					{
+						flashStaminaBar();
+					}
+					else
+					{
+						executeAction(ActorAction.ROLL, ActorState.ROLLING);
+						stamina -= ROLL_STAM_COST;
+					}
 				}
 				else if (FlxG.keys.pressed("SPACE") && (isTouching(FlxObject.LEFT) || isTouching(FlxObject.RIGHT)))
 				{
@@ -659,6 +671,11 @@ package people.players
 					executeAction(ActorAction.STOP, ActorState.IDLE);
 				}
 			}
+		}
+		
+		public function flashStaminaBar() : void
+		{
+			(getManager(UIObjectManager) as UIObjectManager).flashStaminaBar(1);
 		}
 		
 		/**

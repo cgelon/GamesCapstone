@@ -25,6 +25,8 @@ package UI.Bars
 		/** The initial x the bar is placed. */
 		private var _initialX : Number;
 		
+		private var _staminaBar : FlxSprite;
+		
 		/** The image represents the player's stamina. */
 		[Embed(source = '../../../assets/hud/stamina_bar.png')] private var staminaBarPNG : Class;
 		/** A bar to be displayed behind the stamina so it isn't just transparent. */
@@ -41,6 +43,7 @@ package UI.Bars
 			var staminaBar : FlxSprite = new FlxSprite(x, y, staminaBarPNG);
 			staminaBar.scrollFactor = new FlxPoint(0, 0);
 			add(staminaBar);
+			_staminaBar = staminaBar;
 			
 			_initialX = x;
 		}
@@ -64,6 +67,11 @@ package UI.Bars
 		private function get stamina() : Number
 		{
 			return ((FlxG.state as GameState).getManager(PlayerManager) as PlayerManager).player.stamina;
+		}
+		
+		public function get staminaBar() : FlxSprite
+		{
+			return _staminaBar;
 		}
 	}
 }

@@ -2,8 +2,14 @@ package managers
 {
 	import attacks.Attack;
 	import attacks.EnemyAttack;
+	import attacks.HatThrow;
+	import attacks.LaserAttack;
+	import attacks.GroundSlam;
+	import attacks.ProjectileAttack;
 	import attacks.LightningBolt;
+	import flash.globalization.LastOperationStatus;
 	import org.flixel.FlxGroup;
+	import org.flixel.FlxObject;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxG;
 	import util.Convert;
@@ -15,8 +21,6 @@ package managers
 	 */
 	public class EnemyAttackManager extends Manager 
 	{
-		private static const LIGHTNING_BOLT_DURATION : Number = 1.5;
-		
 		public function attack(x : Number, y : Number) : void
 		{
 			var attack : EnemyAttack = recycle( EnemyAttack ) as EnemyAttack;
@@ -27,7 +31,34 @@ package managers
 		{
 			var attack : LightningBolt = recycle ( LightningBolt ) as LightningBolt;
 			var attackVelocity : FlxPoint = scaleNorm(direction, LightningBolt.LIGHTNING_SPEED);
-			attack.initialize(x, y, 0, Convert.secondsToFrames(LIGHTNING_BOLT_DURATION), attackVelocity);
+			attack.initialize(x, y, 0, Convert.secondsToFrames(LightningBolt.LIGHTNING_DURATION), attackVelocity);
+		}
+		
+		public function throwHat(x : Number, y : Number, direction : uint) : void
+		{
+			var attack : HatThrow = recycle( HatThrow ) as HatThrow;
+			var attackVelocity : FlxPoint = new FlxPoint(1, 0);
+			if (direction == FlxObject.LEFT)
+				attackVelocity.x = -1;
+			attackVelocity = scaleNorm(attackVelocity, HatThrow.HAT_SPEED);
+			attack.initialize(x, y, 0, Attack.PROJECTILE_DURATION, attackVelocity);
+		}
+		
+		public function fireLaser(x : Number, y : Number, direction : uint) : void
+		{
+			var attack : LaserAttack = recycle ( LaserAttack ) as LaserAttack;
+			var newX : Number = (direction == FlxObject.LEFT ? x - LaserAttack.LASER_WIDTH : x);
+			attack.initialize(newX, y);
+		}
+		
+		public function groundSlam(x : Number, y : Number, direction : uint) : void
+		{
+			var attack : GroundSlam = recycle( GroundSlam ) as GroundSlam;
+			var attackVelocity : FlxPoint = new FlxPoint(1, 0);
+			if (direction == FlxObject.LEFT)
+				attackVelocity.x = -1;
+			attackVelocity = scaleNorm(attackVelocity, GroundSlam.SLAM_SPEED);
+			attack.initialize(x, y, 0, Convert.secondsToFrames(GroundSlam.SLAM_DURATION), attackVelocity);
 		}
 		
 		/**

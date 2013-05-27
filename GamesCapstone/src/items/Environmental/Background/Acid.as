@@ -3,6 +3,7 @@ package items.Environmental.Background
 	import items.Environmental.Background.BackgroundItem;
 	import org.flixel.FlxG;
 	import people.Actor;
+	import people.players.Player;
 	import people.players.PlayerStats;
 	import people.states.ActorState;
 	import states.GameState;
@@ -51,10 +52,9 @@ package items.Environmental.Background
 		{
 			if (actor.state != ActorState.DEAD && !actor.touchedAcidThisFrame)
 			{
-				if (FlxG.keys.pressed("Z"))
-					FlxG.log("Dealing damage!");
 				actor.touchedAcidThisFrame = true;
 				actor.dealDamage(ACID_DAMAGE);
+				actor.flickerActor(0.5);
 			}
 		}
 		

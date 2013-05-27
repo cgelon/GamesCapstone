@@ -232,11 +232,6 @@ package people.enemies
 			return (!overlapsAt(x + facing_sign * width, y + 1, (getManager(LevelManager) as LevelManager).map))
 		}
 		
-		protected function get attackManager() : EnemyAttackManager
-		{
-			return getManager(EnemyAttackManager) as EnemyAttackManager;
-		}
-		
 		override public function destroy() : void
 		{
 			kill();

@@ -16,10 +16,13 @@ package UI
 		/** The PNG for the bar. */
 		[Embed(source = '../../assets/hud/hud.png')] private var hudPNG : Class;
 		
+		private var _playerStaminaBar : PlayerStaminaBar;
+		
 		public function PlayerHud() 
 		{
 			var stamina : PlayerStaminaBar = new PlayerStaminaBar(22, 17);
 			add(stamina);
+			_playerStaminaBar = stamina;
 			
 			var hud : FlxSprite = new FlxSprite(0, 0, hudPNG);
 			hud.scrollFactor = new FlxPoint(0, 0);
@@ -27,6 +30,11 @@ package UI
 			
 			var health : PlayerHealthBar = new PlayerHealthBar(8, 6);
 			add(health);
+		}
+		
+		public function get staminaBar() : FlxSprite
+		{
+			return _playerStaminaBar.staminaBar;
 		}
 	}
 }
