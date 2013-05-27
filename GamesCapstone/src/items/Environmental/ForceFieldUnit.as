@@ -13,7 +13,7 @@ package items.Environmental
 	 */
 	public class ForceFieldUnit extends EnvironmentalItem
 	{
-		[Embed(source = '../../../assets/forcefield.png')] private var tileset: Class;
+		[Embed(source = '../../../assets/forcefield2.png')] private var tileset: Class;
 		private var startingX: int;
 		private var startingY: int;
 		
@@ -22,16 +22,22 @@ package items.Environmental
 			super("forcefieldunit");
 			initialize(X, Y);
 			loadGraphic(tileset, true, false, 16, 16, false);
-			addAnimation("lowerVert", [2], 1, true);
-			addAnimation("midVert", [1], 1, true);
-			addAnimation("upperVert", [0], 1, true);
-			addAnimation("leftHoriz", [4], 1, true);
-			addAnimation("midHoriz", [5], 1, true);
-			addAnimation("rightHoriz", [6], 1, true);
-			addAnimation("upperRight", [8], 1, true);
-			addAnimation("upperLeft", [9], 1, true);
-			addAnimation("lowerLeft", [10], 1, true);
-			addAnimation("lowerRight", [11], 1, true);
+			addAnimation("lowerVert", [25], 1, true);
+			addAnimation("midVert", [15], 1, true);
+			addAnimation("upperVert", [10], 1, true);
+			addAnimation("leftHoriz", [11], 1, true);
+			addAnimation("midHoriz", [12], 1, true);
+			addAnimation("rightHoriz", [14], 1, true);
+			
+			addAnimation("top", [1], 1, true);
+			addAnimation("bottom", [5], 1, true);
+			addAnimation("left", [0], 1, true);
+			addAnimation("right", [6], 1, true);
+			
+			addAnimation("upperRight", [3], 1, true);
+			addAnimation("upperLeft", [2], 1, true);
+			addAnimation("lowerLeft", [7], 1, true);
+			addAnimation("lowerRight", [8], 1, true);
 			startingX = X;
 			startingY = Y;
 			
@@ -74,17 +80,17 @@ package items.Environmental
 		
 		private function corner() : void
 		{
-			height = 8;
-			width = 8;
-			offset.x = 4;
-			offset.y = 4;
-			if (startingY == y)
+			height = 16;
+			width = 16;
+			offset.x = 0;
+			offset.y = 0;
+			if (startingY != y)
 			{
-				y = y + 4;
+				y = startingY;
 			}
-			if (startingX == x)
+			if (startingX != x)
 			{
-				x = x + 4;
+				x = startingX;
 			}
 		}
 		
@@ -156,6 +162,30 @@ package items.Environmental
 		{
 			play("upperLeft");
 			corner();
+		}
+		
+		public function top() : void
+		{
+			play("top");
+			vertical();
+		}
+		
+		public function bottom() : void
+		{
+			play ("bottom");
+			vertical();
+		}
+		
+		public function left() : void
+		{
+			play ("left");
+			horizontal();
+		}
+		
+		public function right() : void
+		{
+			play ("right");
+			horizontal();
 		}
 		
 		public function touchedActor(actor: Actor) : void
