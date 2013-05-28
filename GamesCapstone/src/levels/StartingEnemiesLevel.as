@@ -33,7 +33,7 @@ package levels
 			parseEnemies(enemiesCSV, tilePNG);
 			parseObjects(objectsCSV, tilePNG);
 			
-			loadMessage = "Robots... such a buzzkill! Perform weak attacks with J, strong attacks with K, block with L, and dodge with P. Have fun!";
+			loadMessage = "Robots... such a buzzkill! Perform weak attacks with J, strong attacks with K, and roll with L. Have fun!";
 			
 			add(map);
 		}
