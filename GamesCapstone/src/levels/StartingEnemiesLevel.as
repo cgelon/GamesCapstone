@@ -16,6 +16,7 @@ package levels
 		[Embed(source = "../../assets/mapCSV_StartingEnemiesLevel_Map.csv", mimeType = "application/octet-stream")] public var mapCSV : Class;
 		[Embed(source = "../../assets/mapCSV_StartingEnemiesLevel_Player.csv", mimeType = "application/octet-stream")] public var playerCSV : Class;
 		[Embed(source = "../../assets/mapCSV_StartingEnemiesLevel_Enemies.csv", mimeType = "application/octet-stream")] public var enemiesCSV : Class;
+		[Embed(source = "../../assets/mapCSV_StartingEnemiesLevel_Objects.csv", mimeType = "application/octet-stream")] public var objectsCSV : Class;
 		[Embed(source = "../../assets/lab tile arrange.png")] public var tilePNG : Class;
 		
 		public function StartingEnemiesLevel ()
@@ -29,7 +30,8 @@ package levels
 			// Initializes the map
 
 			parsePlayer(playerCSV, tilePNG);
-			parseEnemies(enemiesCSV,  tilePNG);
+			parseEnemies(enemiesCSV, tilePNG);
+			parseObjects(objectsCSV, tilePNG);
 			
 			loadMessage = "Robots... such a buzzkill! Perform weak attacks with J, strong attacks with K, block with L, and dodge with P. Have fun!";
 			

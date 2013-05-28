@@ -461,9 +461,9 @@ package levels
 			if (exitLocs != null)
 			{
 				// there should always be two, on the same x coordinate
-				entryLocs = entryLocs.sortOn("y", Array.NUMERIC);
-				top = entryLocs[0];
-				bottom = entryLocs[1];
+				exitLocs = exitLocs.sortOn("y", Array.NUMERIC);
+				top = exitLocs[0];
+				bottom = exitLocs[1];
 				doorheight = bottom.y - top.y;
 				objectStarts.push(null);
 				objectTypes.push(new BlastDoor(top.x - 8, top.y - 8, doorheight + 16, true));
