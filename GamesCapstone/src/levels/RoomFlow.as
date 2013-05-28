@@ -34,7 +34,8 @@ package levels
 			_rooms.push(ForceFieldIntro);
 			_rooms.push(ForceFieldSwitches);
 			_rooms.push(ForceFieldAndAcid);
-			_rooms.push(BossLair);
+			_rooms.push(EndLevel);
+			//_rooms.push(BossLair);
 			
 			_currentRoomIndex = 0;
 		}

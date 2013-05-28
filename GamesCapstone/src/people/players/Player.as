@@ -305,7 +305,10 @@ package people.players
 							{
 								if (state == ActorState.HURT)
 								{
-									executeAction(ActorAction.STOP, ActorState.IDLE);
+									if (prevState == ActorState.CROUCHING)
+										executeAction(ActorAction.CROUCH, ActorState.CROUCHING);
+									else
+										executeAction(ActorAction.STOP, ActorState.IDLE);
 								}
 							});
 						}
