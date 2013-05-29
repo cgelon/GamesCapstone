@@ -33,9 +33,15 @@ package levels
 			parseEnemies(enemiesCSV, tilePNG);
 			parseObjects(objectsCSV, tilePNG);
 			
-			loadMessage = "Robots... such a buzzkill! Perform weak attacks with J, strong attacks with K, and roll with L. Have fun!";
-			
 			add(map);
+		}
+		
+		override public function checkInformant():void 
+		{
+			if (_informantTalked[0] == null) {
+				informant.talk("Robots... such a buzzkill! Perform weak attacks with J, strong attacks with K, and roll with L. Have fun!");
+				_informantTalked[0] = true;
+			}
 		}
 	}
 }

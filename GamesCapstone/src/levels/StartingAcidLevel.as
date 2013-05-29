@@ -29,9 +29,15 @@ package levels
 			parsePlayer(playerCSV, tilePNG);
 			parseBackground(backgroundCSV, tilePNG);
 			
-			loadMessage = "What is that green stuff? Is that...ACID?! Why would anyone want to make that?";
-			
 			add(map);
+		}
+		
+		override public function checkInformant():void 
+		{
+			if (_informantTalked[0] == null) {
+				informant.talk("What is that green stuff? Is that...ACID?! Why would anyone want to make that?");
+				_informantTalked[0] = true;
+			}
 		}
 	}
 }

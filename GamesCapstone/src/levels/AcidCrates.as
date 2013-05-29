@@ -32,9 +32,15 @@ package levels
 			parseBackground(backgroundCSV, tilePNG);
 			parseObjects(objectsCSV, tilePNG);
 			
-			loadMessage = "Here's a little known fact: crates in this lab resist highly corrosive acid.  Who knew?";
-			
 			add(map);
+		}
+		
+		override public function checkInformant():void 
+		{
+			if (_informantTalked[0] == null) {
+				informant.talk("Here's a little known fact: crates resist highly corrosive acid.  Who knew?");
+				_informantTalked[0] = true;
+			}
 		}
 	}
 }

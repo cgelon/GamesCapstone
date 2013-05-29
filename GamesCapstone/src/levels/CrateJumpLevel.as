@@ -30,9 +30,15 @@ package levels
 			parsePlayer(playerCSV, tilePNG);
 			parseObjects(objectsCSV, tilePNG);
 			
-			loadMessage = "You might be able to move crates by pressing space... if you're strong enough.";
-			
 			add(map);
+		}
+		
+		override public function checkInformant():void 
+		{
+			if (_informantTalked[0] == null) {
+				informant.talk("You might be able to move crates by pressing [SPACE]... if you're strong enough.");
+				_informantTalked[0] = true;
+			}
 		}
 	}
 }

@@ -30,9 +30,15 @@ package levels
 			parsePlayer(playerCSV, tilePNG);
 			parseObjects(objectsCSV, tilePNG);
 			
-			loadMessage = "Seems like there's a block party ahead. Try jumping over the crates.";
-			
 			add(map);
+		}
+		
+		override public function checkInformant():void 
+		{
+			if (_informantTalked[0] == null) {
+				informant.talk("Seems like there's a block party ahead. Try jumping over the crates.");
+				_informantTalked[0] = true;
+			}
 		}
 	}
 }

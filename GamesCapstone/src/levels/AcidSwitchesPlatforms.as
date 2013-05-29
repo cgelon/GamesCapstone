@@ -3,6 +3,8 @@ package levels
 	import items.Environmental.Background.Acid;
 	import items.Environmental.Background.AcidFlow;
 	import items.Environmental.Background.Lever;
+	import managers.Manager;
+	import managers.PlayerManager;
 	import org.flixel.FlxPoint;
 	
 	/**
@@ -31,6 +33,14 @@ package levels
 			backgroundCircuits.push(true);
 			
 			add(map);
+		}
+		
+		override public function checkInformant():void 
+		{
+			if (_informantTalked[0] == null && (Manager.getManager(PlayerManager) as PlayerManager).player.x > 600) {
+				informant.talk("Try hitting [SPACE] near the switch, that might trigger something.");
+				_informantTalked[0] = true;
+			}
 		}
 	}
 }

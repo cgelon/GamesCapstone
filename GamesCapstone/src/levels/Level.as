@@ -1,6 +1,7 @@
 package levels
 {
 	import cutscenes.engine.Cutscene;
+	import cutscenes.TheInformant;
 	import items.Environmental.Background.Acid;
 	import items.Environmental.Background.AcidFlow;
 	import items.Environmental.Background.Lever;
@@ -8,6 +9,7 @@ package levels
 	import items.Environmental.Crate;
 	import items.Environmental.ForceField;
 	import items.Environmental.Generator;
+	import managers.Manager;
 	import org.flixel.FlxG;
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxPoint;
@@ -38,7 +40,7 @@ package levels
 		public var environmentalCircuits: Array;
 		public var cutscene : Cutscene;
 		
-		public var loadMessage : String;
+		protected var _informantTalked : Array;
 		
 		public function Level() 
 		{
@@ -54,8 +56,7 @@ package levels
 			doorLocs = new Array();
 			backgroundCircuits = new Array();
 			environmentalCircuits = new Array();
-			
-			loadMessage = null;
+			_informantTalked = new Array();
 		}
 		
 		public function parsePlayer(playerCSV: Class, tilePNG: Class) : void
@@ -542,6 +543,16 @@ package levels
 					backgroundTypes.push(Lever);
 				}
 			}
+		}
+		
+		/**
+		 * Check to see if an informant speech should be triggered.
+		 */
+		public function checkInformant() : void { }
+		
+		public function get informant() : TheInformant
+		{
+			return (Manager.getManager(TheInformant) as TheInformant);
 		}
 	}
 }

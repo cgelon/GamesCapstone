@@ -31,8 +31,16 @@ package levels
 			// Stores the player start points
 			parseObjects(objectsCSV, tilePNG);
 			environmentalCircuits.push(true);
-			loadMessage = "Red forcefields, how original.";
+
 			add(map);
+		}
+		
+		override public function checkInformant():void 
+		{
+			if (_informantTalked[0] == null) {
+				informant.talk("Red forcefields, how original... why not purple, or magenta?");
+				_informantTalked[0] = true;
+			}
 		}
 	}
 }

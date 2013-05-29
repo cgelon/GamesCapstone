@@ -36,9 +36,15 @@ package levels
 			environmentalCircuits.push(true);
 			environmentalCircuits.push(true);
 			
-			loadMessage = "That generator seems to be powering the forcefield, maybe your fists could break it... Actually, that's a ridiculous notion.";
-			
 			add(map);
+		}
+		
+		override public function checkInformant():void 
+		{
+			if (_informantTalked[0] == null) {
+				informant.talk("That generator seems to be powering the forcefield, maybe your fists could break it... Actually, that's a ridiculous notion.");
+				_informantTalked[0] = true;
+			}
 		}
 	}
 }

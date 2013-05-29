@@ -56,9 +56,6 @@ package states
 		
 		/** True if the player is traveling to this room from the room in front of them, false otherwise. */
 		private var _backward : Boolean;
-		
-		/** True if the informant has already spoken in this level, false otherwise. */
-		private var _informantSpoken : Boolean;
 
 		public function GameState(level : Level = null, backward : Boolean = false)
 		{
@@ -159,12 +156,6 @@ package states
 			addManager(informant);
 			active = true;
 
-			if (_level.loadMessage != null && !_backward)
-			{
-				(Manager.getManager(TheInformant) as TheInformant).talk(_level.loadMessage);
-				_informantSpoken = true;
-			}
-
 			//	Tell flixel how big our game world is
 			FlxG.worldBounds = new FlxRect(0, 0, _level.width, _level.height);
 
@@ -230,7 +221,6 @@ package states
 					add(new ScreenOverlay());
 					FlxG.cutscene = true;
 					(getManager(PlayerManager) as PlayerManager).player.readyToReset = false;
-					FlxG.uploadRecording();
 				}
 				else
 				{
@@ -241,14 +231,7 @@ package states
 			}
 			
 			// Special conditions for when The Informant speaks.
-			if (!_informantSpoken)
-			{
-				if (_level is AcidSwitchesPlatforms && (getManager(PlayerManager) as PlayerManager).player.x > 600)
-				{
-					(getManager(TheInformant) as TheInformant).talk("Try hitting space near the switch, that might trigger something.");
-					_informantSpoken = true;
-				}
-			}
+			_level.checkInformant();
 		}
 
 		/**

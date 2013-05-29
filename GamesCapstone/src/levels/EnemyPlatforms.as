@@ -29,9 +29,7 @@ package levels
 
 			parsePlayer(playerCSV, tilePNG);
 			parseEnemies(enemiesCSV,  tilePNG);
-			
-			loadMessage = "Did you know that attacking while crouching or jumping results in special moves?";
-			
+		
 			add(map);
 		}
 	}
