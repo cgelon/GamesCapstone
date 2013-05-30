@@ -167,7 +167,7 @@ package items.Environmental
 			super.disable();
 			for (var i : int = 0; i < length; i++) 
 			{
-				(members[i] as ForceFieldUnit).exists = false;
+				(members[i] as ForceFieldUnit).turnOff();
 			}
 		}
 	}
