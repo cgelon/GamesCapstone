@@ -36,13 +36,16 @@ package org.flixel.plugin
 		 */
 		override public function update():void
 		{
-			var i:int = _timers.length-1;
-			var timer:FlxTimer;
-			while(i >= 0)
+			if (!FlxG.paused)
 			{
-				timer = _timers[i--] as FlxTimer;
-				if((timer != null) && !timer.paused && !timer.finished && (timer.time > 0))
-					timer.update();
+				var i:int = _timers.length-1;
+				var timer:FlxTimer;
+				while(i >= 0)
+				{
+					timer = _timers[i--] as FlxTimer;
+					if((timer != null) && !timer.paused && !timer.finished && (timer.time > 0))
+						timer.update();
+				}
 			}
 		}
 		
