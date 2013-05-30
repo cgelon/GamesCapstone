@@ -45,7 +45,10 @@ package cutscenes.engine
 				default:
 					throw Error(_action + " not a defined action!");
 			}
-			callback();
+			if (callback != null) 
+			{
+				callback();
+			}
 		}
 		
 		public function follow(object : FlxObject) : void

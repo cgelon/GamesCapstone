@@ -35,10 +35,11 @@ package levels
 		
 		public function get computerCoordinates() : FlxPoint
 		{
-			// Add 24 (a tile and a half) to get to the center of the computer.
+			// Subtract some to get the position the player should be at.
 			// 160 represents the upper left tile of the computer.
 			var location : FlxPoint = map.getTileCoords(160)[0];
-			location.x += 24;
+			location.x -= 5;
+			location.y -= 16;
 			return location;
 		}
 	}

@@ -25,7 +25,15 @@ package cutscenes.engine
 		override public function run(callback:Function):void 
 		{
 			_actor.executeAction(_action, _state);
-			callback();
+			if (callback != null)
+			{
+				callback();
+			}
+		}
+		
+		override public function skip():void 
+		{
+			run(null);
 		}
 		
 		override public function destroy():void 

@@ -31,7 +31,10 @@ package cutscenes.engine
 		
 		private function afterWait(timer : FlxTimer) : void
 		{
-			_callback();
+			if (_callback != null) 
+			{
+				_callback();
+			}
 		}
 		
 		override public function destroy() : void

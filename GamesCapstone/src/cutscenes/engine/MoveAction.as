@@ -40,12 +40,19 @@ package cutscenes.engine
 		 */
 		public function move(object : FlxSprite, endPosition : FlxPoint, time : Number, callback : Function = null) : void
 		{
-			FlxVelocity.moveTowardsPoint(object, endPosition, 0, time * 1000)
+			// Because the way FlxVelocity works.... need to add the origin to the end position.
+			FlxVelocity.moveTowardsPoint(object, 
+					new FlxPoint(endPosition.x + object.origin.x, _endPosition.y + object.origin.y), 
+					0, 
+					time * 1000 + 20);
 			_timer = new FlxTimer();
 			_timer.start(time, 1, stopMovement);
 		}
 		
-		public function stopMovement(timer : FlxTimer) : void
+		/**
+		 * Callback for when the movement should be stopped.
+		 */
+		private function stopMovement(timer : FlxTimer) : void
 		{
 			_object.velocity = new FlxPoint(0, 0);
 			if (_callback != null)
@@ -54,12 +61,22 @@ package cutscenes.engine
 			}
 		}
 		
+		override public function skip() : void
+		{
+			_object.velocity.x = _object.velocity.y = 0;
+			_object.x = _endPosition.x;
+			_object.y = _endPosition.y;
+		}
+		
 		override public function destroy() : void
 		{
 			super.destroy();
 			
 			_object = null;
-			_timer.destroy();
+			if (_timer != null)
+			{
+				_timer.destroy();
+			}
 			_timer = null;
 			_endPosition = null;
 			_callback = null;
