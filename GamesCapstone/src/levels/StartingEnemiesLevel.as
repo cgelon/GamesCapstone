@@ -1,5 +1,6 @@
 package levels
 {
+	import managers.ControlBlockManager;
 	import managers.Manager;
 	import managers.PlayerManager;
 	import org.flixel.FlxG;
@@ -21,9 +22,6 @@ package levels
 		[Embed(source = "../../assets/mapCSV_StartingEnemiesLevel_Enemies.csv", mimeType = "application/octet-stream")] public var enemiesCSV : Class;
 		[Embed(source = "../../assets/mapCSV_StartingEnemiesLevel_Objects.csv", mimeType = "application/octet-stream")] public var objectsCSV : Class;
 		[Embed(source = "../../assets/lab tile arrange.png")] public var tilePNG : Class;
-		
-		/** The learning blocks needed to learn how to attack and roll. */
-		private var _blocks : FlxGroup;
 		
 		public function StartingEnemiesLevel ()
 		{
@@ -47,42 +45,41 @@ package levels
 		 */
 		private function initializeBlocks() : void
 		{
-			_blocks = new FlxGroup();
-			var blockJ : LearningBlock = new LearningBlock(player, new FlxPoint(player.width / 2 - 23, -24), LearningBlock.J);
-			var blockK : LearningBlock = new LearningBlock(player, new FlxPoint(player.width / 2 - 8, -24), LearningBlock.K);
-			var blockL : LearningBlock = new LearningBlock(player, new FlxPoint(player.width / 2 + 7, -24), LearningBlock.L);
-			_blocks.add(blockJ);
-			_blocks.add(blockK);
-			_blocks.add(blockL);
-			add(_blocks);
+			controlBlockManager.addLearningBlock(player, new FlxPoint(player.width / 2 - 23, -24), LearningBlock.J);
+			controlBlockManager.addLearningBlock(player, new FlxPoint(player.width / 2 - 8, -24), LearningBlock.K);
+			controlBlockManager.addLearningBlock(player, new FlxPoint(player.width / 2 + 7, -24), LearningBlock.L);
 		}
 		
 		override public function update():void 
 		{
 			super.update();
-			if (_blocks == null)
+			var jBlock : LearningBlock = controlBlockManager.getLearningBlock(LearningBlock.J);
+			if (jBlock == null)
 			{
 				initializeBlocks();
+				jBlock = controlBlockManager.getLearningBlock(LearningBlock.J);
 			}
-			if (_blocks.exists == true)
+			if (jBlock.exists == true)
 			{
-				if (player.lastAction == ActorAction.ATTACK && player.lastActionIndex == 0)
+				var kBlock : LearningBlock = controlBlockManager.getLearningBlock(LearningBlock.K);
+				var lBlock : LearningBlock = controlBlockManager.getLearningBlock(LearningBlock.L);
+				if (player.lastAction == ActorAction.ATTACK && (player.lastActionIndex == 0 || player.lastActionIndex == 1 || player.lastActionIndex == 2))
 				{
-					(_blocks.members[0] as LearningBlock).complete();
+					jBlock.complete();
 				}
 				if (player.lastAction == ActorAction.ATTACK && player.lastActionIndex == 3)
 				{
-					(_blocks.members[1] as LearningBlock).complete();
+					kBlock.complete();
 				}
 				if (player.state == ActorState.ROLLING)
 				{
-					(_blocks.members[2] as LearningBlock).complete();
+					lBlock.complete();
 				}
-				if ((_blocks.members[0] as LearningBlock).completed &&
-						(_blocks.members[1] as LearningBlock).completed &&
-						(_blocks.members[2] as LearningBlock).completed)
+				if (jBlock.completed && kBlock.completed && lBlock.completed)
 				{
-					_blocks.exists = false;
+					jBlock.exists = false;
+					kBlock.exists = false;
+					lBlock.exists = false;
 				}
 			}
 		}
@@ -90,6 +87,11 @@ package levels
 		private function get player() : Player
 		{
 			return (Manager.getManager(PlayerManager) as PlayerManager).player;
+		}
+		
+		private function get controlBlockManager() : ControlBlockManager
+		{
+			return Manager.getManager(ControlBlockManager) as ControlBlockManager;
 		}
 		
 		override public function checkInformant():void 

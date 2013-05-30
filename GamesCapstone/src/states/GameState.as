@@ -11,6 +11,7 @@ package states
 	import levels.EndLevel;
 	import levels.Level;
 	import managers.BackgroundManager;
+	import managers.ControlBlockManager;
 	import managers.EnemyAttackManager;
 	import managers.EnemyManager;
 	import managers.LevelManager;
@@ -141,6 +142,8 @@ package states
 			_pauseOverlay = new PauseOverlay();
 			_pauseOverlay.exists = false;
 			
+			var controlBlockManager : ControlBlockManager = new ControlBlockManager();
+			
 			// Add the managers in this order:
 			//	level
 			//	background
@@ -162,6 +165,7 @@ package states
 			addManager(enemyAttackManager);
 			addManager(playerAttackManager);
 			addManager(informant);
+			addManager(controlBlockManager);
 			add(_pauseOverlay);
 			active = true;
 

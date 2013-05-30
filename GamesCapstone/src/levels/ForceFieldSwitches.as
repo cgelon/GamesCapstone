@@ -2,10 +2,16 @@ package levels
 {
 	import items.Environmental.ForceField;
 	import items.Environmental.Generator;
+	import managers.ControlBlockManager;
+	import managers.Manager;
+	import managers.PlayerManager;
 	import org.flixel.FlxBasic;
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxTilemap;
+	import people.players.Player;
+	import people.states.ActorAction;
+	import util.LearningBlock;
 	
 	/**
 	 * ...
@@ -34,6 +40,34 @@ package levels
 			environmentalCircuits.push(true);
 			
 			add(map);
+		}
+		
+		override public function update():void 
+		{
+			super.update();
+			var block : LearningBlock = controlBlockManager.getLearningBlock(LearningBlock.J);
+			if (block == null)
+			{
+				block = controlBlockManager.addLearningBlock(player, new FlxPoint(player.width / 2 - 8, -24), LearningBlock.J);
+			}
+			if (block.exists == true)
+			{
+				if (player.lastAction == ActorAction.ATTACK && (player.lastActionIndex == 0 || player.lastActionIndex == 1 || player.lastActionIndex == 2))
+				{
+					block.complete();
+					block.exists = false;
+				}
+			}
+		}
+		
+		private function get player() : Player
+		{
+			return (Manager.getManager(PlayerManager) as PlayerManager).player;
+		}
+		
+		private function get controlBlockManager() : ControlBlockManager
+		{
+			return Manager.getManager(ControlBlockManager) as ControlBlockManager;
 		}
 		
 		override public function checkInformant():void 

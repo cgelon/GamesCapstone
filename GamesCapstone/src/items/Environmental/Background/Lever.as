@@ -1,10 +1,17 @@
 package items.Environmental.Background
 {
 	import items.Environmental.Background.Circuit.Trigger;
+	import managers.ControlBlockManager;
+	import managers.Manager;
+	import managers.PlayerManager;
 	import org.flixel.FlxG;
+	import org.flixel.FlxPoint;
+	import org.flixel.FlxSprite;
 	import people.Actor;
+	import people.players.Player;
 	import states.GameState;
 	import util.Sounds;
+	import util.SpaceBlock;
 
 	/**
 	 * @author Lydia Duncan
@@ -12,6 +19,9 @@ package items.Environmental.Background
 	public class Lever extends Trigger implements BackgroundInterface
 	{
 		[Embed(source = '../../../../assets/switch.png')] private var lever: Class;
+		
+		/** The space displayed above the lever if the player is above it. */
+		private var _space : SpaceBlock;
 		
 		function Lever(X:Number = 0, Y:Number = 0) : void 
 		{
@@ -45,6 +55,27 @@ package items.Environmental.Background
 			}
 		}
 		
+		override public function update():void 
+		{
+			super.update();
+			if (_space == null)
+			{
+				_space = controlBlockManager.addSpaceBlock(this, new FlxPoint(-5, -20));
+				_space.exists = false;
+			}
+			_space.exists = overlaps(player);
+		}
+		
+		private function get player() : Player
+		{
+			return (Manager.getManager(PlayerManager) as PlayerManager).player;
+		}
+		
+		private function get controlBlockManager() : ControlBlockManager
+		{
+			return Manager.getManager(ControlBlockManager) as ControlBlockManager;
+		}
+		
 		public function playStart() : void 
 		{
 			
@@ -58,6 +89,13 @@ package items.Environmental.Background
 		override public function disable() : void {
 			play("down");
 			super.disable();
+		}
+		
+		override public function destroy():void 
+		{
+			super.destroy();
+			
+			_space = null;
 		}
 	}	
 }

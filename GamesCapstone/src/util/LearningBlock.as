@@ -53,10 +53,19 @@ package util
 		/** The offset from the target that this block will be placed. */
 		private var _offset : FlxPoint;
 		
+		/** The type of this learning block. */
+		private var _type : int;
+		/** The type of this learning block. */
+		public function get type():int 
+		{
+			return _type;
+		}
+		
 		public function LearningBlock(target : FlxSprite, offset : FlxPoint, type : int) 
 		{
 			super();
 			
+			_type = type;
 			switch(type)
 			{
 				case W:
@@ -90,12 +99,17 @@ package util
 			allowCollisions = FlxObject.NONE;
 		}
 		
-		override public function update():void 
+		override public function postUpdate() : void
 		{
-			super.update();
+			super.postUpdate();
 			
 			x = _target.x + _offset.x;
 			y = _target.y + _offset.y;
+		}
+		
+		override public function update():void 
+		{
+			super.update();
 			
 			if (increasingColor)
 			{

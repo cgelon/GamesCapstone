@@ -1,6 +1,7 @@
 package levels 
 {
 	import cutscenes.BeginningCutscene;
+	import managers.ControlBlockManager;
 	import managers.Manager;
 	import managers.PlayerManager;
 	import org.flixel.FlxG;
@@ -20,9 +21,6 @@ package levels
 		[Embed(source = "../../assets/room_beginning.csv", mimeType = "application/octet-stream")] public var _csv : Class;
 		[Embed(source = "../../assets/lab tile arrange.png")] public var _tilesetPNG : Class;
 		
-		/** The learning blocks needed to learn how to move. */
-		private var _blocks : FlxGroup;
-		
 		public function BeginningRoom() 
 		{
 			super();
@@ -37,10 +35,9 @@ package levels
 			playerStart = map.getTileCoords(132)[0];
 			playerEnd = new FlxPoint(368, 168);
 			
-			
 			add(map);
 			
-			cutscene = new BeginningCutscene(initializeBlocks);
+			cutscene = new BeginningCutscene();
 			add(cutscene);
 		}
 		
@@ -49,45 +46,49 @@ package levels
 		 */
 		private function initializeBlocks() : void
 		{
-			_blocks = new FlxGroup();
-			var blockW : LearningBlock = new LearningBlock(player, new FlxPoint(player.width / 2 - 8, -39), LearningBlock.W);
-			var blockA : LearningBlock = new LearningBlock(player, new FlxPoint(player.width / 2 - 23, -24), LearningBlock.A);
-			var blockS : LearningBlock = new LearningBlock(player, new FlxPoint(player.width / 2 - 8, -24), LearningBlock.S);
-			var blockD : LearningBlock = new LearningBlock(player, new FlxPoint(player.width / 2 + 7, -24), LearningBlock.D);
-			_blocks.add(blockW);
-			_blocks.add(blockA);
-			_blocks.add(blockS);
-			_blocks.add(blockD);
-			add(_blocks);
+			controlBlockManager.addLearningBlock(player, new FlxPoint(player.width / 2 - 8, -39), LearningBlock.W);
+			controlBlockManager.addLearningBlock(player, new FlxPoint(player.width / 2 - 23, -24), LearningBlock.A);
+			controlBlockManager.addLearningBlock(player, new FlxPoint(player.width / 2 - 8, -24), LearningBlock.S);
+			controlBlockManager.addLearningBlock(player, new FlxPoint(player.width / 2 + 7, -24), LearningBlock.D);
 		}
 		
 		override public function update():void 
 		{
 			super.update();
-			if (cutscene.finished && _blocks.exists == true)
+
+			var wBlock : LearningBlock = controlBlockManager.getLearningBlock(LearningBlock.W);
+			if (cutscene.finished && wBlock == null)
 			{
+				initializeBlocks();
+				wBlock = controlBlockManager.getLearningBlock(LearningBlock.W);
+			}
+			if (cutscene.finished && wBlock.exists == true)
+			{
+				var aBlock : LearningBlock = controlBlockManager.getLearningBlock(LearningBlock.A);
+				var sBlock : LearningBlock = controlBlockManager.getLearningBlock(LearningBlock.S);
+				var dBlock : LearningBlock = controlBlockManager.getLearningBlock(LearningBlock.D);
 				if (player.state == ActorState.JUMPING)
 				{
-					(_blocks.members[0] as LearningBlock).complete();
+					wBlock.complete();
 				}
 				if (FlxG.keys.justPressed("A") || FlxG.keys.justPressed("LEFT"))
 				{
-					(_blocks.members[1] as LearningBlock).complete();
+					aBlock.complete();
 				}
 				if (player.state == ActorState.CROUCHING)
 				{
-					(_blocks.members[2] as LearningBlock).complete();
+					sBlock.complete();
 				}
 				if (FlxG.keys.justPressed("D") || FlxG.keys.justPressed("RIGHT"))
 				{
-					(_blocks.members[3] as LearningBlock).complete();
+					dBlock.complete();
 				}
-				if ((_blocks.members[0] as LearningBlock).completed &&
-						(_blocks.members[1] as LearningBlock).completed &&
-						(_blocks.members[2] as LearningBlock).completed &&
-						(_blocks.members[3] as LearningBlock).completed)
+				if (wBlock.completed && aBlock.completed && sBlock.completed && dBlock.completed)
 				{
-					_blocks.exists = false;
+					wBlock.exists = false;
+					aBlock.exists = false;
+					sBlock.exists = false;
+					dBlock.exists = false;
 				}
 			}
 		}
@@ -95,6 +96,11 @@ package levels
 		private function get player() : Player
 		{
 			return (Manager.getManager(PlayerManager) as PlayerManager).player;
+		}
+		
+		private function get controlBlockManager() : ControlBlockManager
+		{
+			return Manager.getManager(ControlBlockManager) as ControlBlockManager;
 		}
 		
 		public function get computerCoordinates() : FlxPoint
@@ -105,13 +111,6 @@ package levels
 			location.x -= 5;
 			location.y -= 16;
 			return location;
-		}
-		
-		override public function destroy():void 
-		{
-			super.destroy();
-		
-			_blocks = null;
 		}
 	}
 }
