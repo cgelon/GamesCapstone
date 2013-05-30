@@ -18,6 +18,11 @@ package cutscenes.engine
 	 */
 	public class MessageBox extends FlxGroup
 	{
+		/** The font to be displayed. */
+		private static const FONT : String = null;
+		/** The size of the font to be displayed. */
+		private static const FONT_SIZE : Number = 8;
+		
 		/** The FlxTexts that will display the lines. */
 		private var _textLines : Array;
 		/** The FlxText that displays the name. */
@@ -37,10 +42,6 @@ package cutscenes.engine
 		/** The line index that is the start of this current set of lines. */
 		private var _startLineIndex : int;
 		
-		/** The font used for the text. */
-		private var _font : String;
-		/** The size of the font. */
-		private var _size : Number;
 		/** The color of the text. */
 		private var _color : uint;
 		/** The color of the name. */
@@ -69,7 +70,17 @@ package cutscenes.engine
 		/** The function to call when the text is done being displayed. */
 		private var _callback : Function;
 		
-		public function MessageBox()
+		/**
+		 * Creates a one-time use message box with the specified attributes.
+		 * @param	x	Where the left-side of the textbox should go.
+		 * @param	y	Where the upper-side of the textbox should go.
+		 * @param	width	The width of the message box.
+		 * @param	color	The color of the text.
+		 * @param	nameColor	The color of the name.
+		 * @param	numLines	The number of lines to be displayed at one time.
+		 * @param	nameAlignment	Where the name is aligned in the message box.
+		 */
+		public function MessageBox(x : Number = 0, y : Number = 120, width : uint = 160, color : uint = Color.WHITE, nameColor : uint = Color.BLUE, numLines : int = 3, nameAlignment : String = "left")
 		{
 			// Set up the box graphic.
 			_box = new FlxSprite(0, 0);
@@ -77,9 +88,14 @@ package cutscenes.engine
 			add(_box);
 			
 			// Set up the lines, and the format!
-			_x = 0;
-			_y = 120;
-			setFormat();
+			_x = x;
+			_y = y;
+			_color = color;
+			_nameColor = nameColor;
+			_width = width;
+			_numLines = numLines;
+			_nameAlignment = nameAlignment;
+			createLines();
 			
 			// Set up the timers.
 			_timer = new FlxTimer();
@@ -88,45 +104,19 @@ package cutscenes.engine
 			_spaceReleased = false;
 		}
 		
-		/**
-		 * Sets the format for the text.
-		 * @param	font	The font to be displayed.
-		 * @param	size	The size of the font.
-		 * @param	color	The color of the text.
-		 * @param	nameColor	The color of the name.
-		 * @param	width	The width of the message box.
-		 * @param	numLines	The number of lines to be displayed at one time.
-		 * @param	nameAlignment	Where the name is aligned in the message box.
-		 */
-		public function setFormat(font : String = null, size : Number = 8, color : uint = Color.WHITE, 
-				nameColor : uint = Color.BLUE, width : uint = 320, numLines : int = 3, nameAlignment : String = "left") : void
+		public static function getHeight(numLines : int = 3) : Number 
 		{
-			_font = font;
-			_size = size;
-			_color = color;
-			_nameColor = nameColor;
-			_width = width;
-			_numLines = numLines;
-			_nameAlignment = nameAlignment;
-			
-			recreateLines();
+			var dummyText : FlxText = new FlxText(0, 0, 320, " ", true);
+			dummyText.setFormat(FONT, FONT_SIZE);
+			var height : Number = dummyText.height * (numLines + 1);
+			dummyText.destroy();
+			return height;
 		}
 		
 		/**
-		 * Sets the position of the message box to the specified x and y coordinates.
+		 * Creates the textbox for each line, in addition to the box surrounding the text.
 		 */
-		public function setPosition(x : Number = 0, y : Number = 120) : void
-		{
-			_x = x;
-			_y = y;
-			
-			recreateLines();
-		}
-		
-		/**
-		 * Recreates the textbox for each line, in addition to the box surrounding the text.
-		 */
-		private function recreateLines() : void
+		private function createLines() : void
 		{
 			// Get rid of the old text lines if there were any.
 			for each(var textLine : FlxText in _textLines)
@@ -138,7 +128,7 @@ package cutscenes.engine
 			
 			// Create a dummy text to gauge where the other texts should be.
 			var dummyText : FlxText = new FlxText(0, 0, _width, " ", true);
-			dummyText.setFormat(_font, _size, _color, "left", Color.BLACK);
+			dummyText.setFormat(FONT, FONT_SIZE, _color, "left", Color.BLACK);
 			
 			// Create the name text.
 			if (_nameTextLine != null)
@@ -147,7 +137,7 @@ package cutscenes.engine
 				_nameTextLine.destroy();
 			}
 			_nameTextLine = new FlxText(_x, _y, _width, "", true);
-			_nameTextLine.setFormat(_font, _size, _nameColor, _nameAlignment, Color.BLACK);
+			_nameTextLine.setFormat(FONT, FONT_SIZE, _nameColor, _nameAlignment, Color.BLACK);
 			_nameTextLine.scrollFactor = new FlxPoint(0, 0);
 			add(_nameTextLine);
 			
@@ -155,7 +145,7 @@ package cutscenes.engine
 			for (var i : int = 0; i < _numLines; i++)
 			{
 				var text : FlxText = new FlxText(_x, _y + (i + 1) * (dummyText.height - 4), _width, "", true);
-				text.setFormat(_font, _size, _color, "left", Color.BLACK);
+				text.setFormat(FONT, FONT_SIZE, _color, "left", Color.BLACK);
 				text.scrollFactor = new FlxPoint(0, 0);
 				_textLines.push(text);
 				add(text);
@@ -165,6 +155,8 @@ package cutscenes.engine
 			_box.makeGraphic(_width, (_numLines + 1) * (dummyText.height - 4) + 4, Color.DARK_GRAY, true);
 			_box.x = _x;
 			_box.y = _y;
+			
+			dummyText.destroy();
 			FlxG.clearBitmapCache();
 		}
 		
@@ -201,7 +193,7 @@ package cutscenes.engine
 			var start : int = 0;
 			var lines : Array = new Array();
 			var dummyText : FlxText = new FlxText(0, 0, _width, "", true);
-			dummyText.setFormat(_font, _size, _color, "left");
+			dummyText.setFormat(FONT, FONT_SIZE, _color, "left");
 			
 			// Go through the enter text.
 			while (counter < text.length)
@@ -220,6 +212,8 @@ package cutscenes.engine
 			}
 			// Push the last line to the array.
 			lines.push(text.substring(start, text.length));
+			
+			dummyText.destroy();
 			return lines;
 		}
 		
@@ -355,7 +349,6 @@ package cutscenes.engine
 			
 			_timer.destroy();
 			_timer = null;
-			_currentIndex = 0;
 			
 			for each (var line : String in _lines)
 			{
@@ -366,20 +359,11 @@ package cutscenes.engine
 			_lineIndex = 0;
 			_startLineIndex = 0;
 			
-			_font = null;
-			_size = 0;
-			_color = 0;
-			_nameColor = 0;
 			_nameAlignment = null;
-			_numLines = 0;
-			_width = 0;
-			_x = 0;
-			_y = 0;
 			
 			_callback = null;
 			
 			_auto = false;
-			_autoCloseTime = 0;
 			_autoTimer.destroy();
 			_autoTimer = null;
 		}

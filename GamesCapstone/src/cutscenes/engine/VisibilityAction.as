@@ -23,5 +23,12 @@ package cutscenes.engine
 			_object.visible = _visible;
 			callback();
 		}
+		
+		override public function destroy():void 
+		{
+			super.destroy();
+			
+			_object = null;
+		}
 	}
 }

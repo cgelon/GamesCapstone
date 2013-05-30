@@ -23,5 +23,12 @@ package cutscenes.engine
 			_object.exists = _exist;
 			callback();
 		}
+		
+		override public function destroy():void 
+		{
+			super.destroy();
+			
+			_object = null;
+		}
 	}
 }

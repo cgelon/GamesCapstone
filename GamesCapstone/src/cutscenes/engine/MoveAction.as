@@ -61,6 +61,7 @@ package cutscenes.engine
 			_object = null;
 			_timer.destroy();
 			_timer = null;
+			_endPosition = null;
 			_callback = null;
 		}
 	}
