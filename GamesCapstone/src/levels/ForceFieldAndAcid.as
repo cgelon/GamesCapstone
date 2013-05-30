@@ -18,7 +18,6 @@ package levels
 	{
 		[Embed(source = "../../assets/mapCSV_ForcefieldsAndAcid_Map.csv", mimeType = "application/octet-stream")] public var mapCSV : Class;
 		[Embed(source = "../../assets/mapCSV_ForcefieldsAndAcid_Player.csv", mimeType = "application/octet-stream")] public var playerCSV : Class;
-		[Embed(source = "../../assets/mapCSV_ForcefieldsAndAcid_Enemies.csv", mimeType = "application/octet-stream")] public var enemiesCSV : Class;
 		[Embed(source = "../../assets/mapCSV_ForcefieldsAndAcid_Background.csv", mimeType = "application/octet-stream")] public var BackgroundCSV : Class;
 		[Embed(source = "../../assets/mapCSV_ForcefieldsAndAcid_Objects.csv", mimeType = "application/octet-stream")] public var ObjectsCSV : Class;
 		[Embed(source = "../../assets/lab tile arrange.png")] public var tilePNG : Class;
@@ -34,7 +33,6 @@ package levels
 			// Initializes the map
 			parsePlayer(playerCSV, tilePNG);
 			// Stores the player start points
-			parseEnemies(enemiesCSV, tilePNG);
 			parseObjects(ObjectsCSV, tilePNG);
 			// Add the Forcefields and Generators 
 			environmentalCircuits.push(true);
