@@ -14,6 +14,7 @@ package levels
 		[Embed(source = "../../assets/mapCSV_StartingAcid_Map.csv", mimeType = "application/octet-stream")] public var mapCSV : Class;
 		[Embed(source = "../../assets/mapCSV_StartingAcid_Player.csv", mimeType = "application/octet-stream")] public var playerCSV : Class;
 		[Embed(source = "../../assets/mapCSV_StartingAcid_Background.csv", mimeType = "application/octet-stream")] public var backgroundCSV : Class;
+		[Embed(source = "../../assets/mapCSV_StartingAcid_Objects.csv", mimeType = "application/octet-stream")] public var objectsCSV : Class;
 		[Embed(source = "../../assets/lab tile arrange.png")] public var tilePNG : Class;
 		
 		public function StartingAcidLevel ()
@@ -28,6 +29,7 @@ package levels
 			
 			parsePlayer(playerCSV, tilePNG);
 			parseBackground(backgroundCSV, tilePNG);
+			parseObjects(objectsCSV, tilePNG);
 			
 			add(map);
 		}
