@@ -26,6 +26,15 @@ package cutscenes.engine
 		private var _actions : Array;
 		/** The index of the current action being executed. */
 		private var _index : int;
+		/** True if the cutscene has finished, false otherwise. */
+		private var _finished : Boolean;
+		/** True if the cutscene has finished, false otherwise. */
+		public function get finished() : Boolean 
+		{
+			return _finished;
+		}
+		/** The function to be called when the cutscene finishes. */
+		private var _callback : Function;
 		
 		/** Fading text that tells the player to press enter to skip the cutscene. */
 		private var _fadingText : FadingText;
@@ -33,7 +42,7 @@ package cutscenes.engine
 		/**
 		 * Creates a cutscene with no actions.
 		 */
-		public function Cutscene()
+		public function Cutscene(callback : Function = null)
 		{
 			_actions = new Array();
 			
@@ -42,8 +51,9 @@ package cutscenes.engine
 			_fadingText.setFormat(null, 8, Color.WHITE, "center", Color.BLACK);
 			_fadingText.scrollFactor.x = _fadingText.scrollFactor.y = 0;
 			_fadingText.exists = false;
-			
 			add(_fadingText);
+			
+			_callback = callback;
 		}
 		
 		/**
@@ -143,10 +153,18 @@ package cutscenes.engine
 		 */
 		private function finish() : void
 		{
-			FlxG.camera.follow(_trackedObject, FlxCamera.STYLE_PLATFORMER);
-			FlxG.camera.zoom = _zoom;
-			FlxG.cutscene = false;
-			_fadingText.exists = false;
+			if (!finished)
+			{
+				FlxG.camera.follow(_trackedObject, FlxCamera.STYLE_PLATFORMER);
+				FlxG.camera.zoom = _zoom;
+				FlxG.cutscene = false;
+				_fadingText.exists = false;
+				_finished = true;
+				if (_callback != null)
+				{
+					_callback();
+				}
+			}
 		}
 		
 		override public function destroy() : void

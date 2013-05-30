@@ -30,6 +30,8 @@ package people
 		public var prevState : ActorState;
 		/** The last action this actor took. */
 		public var lastAction : ActorAction;
+		/** The index of the last action this actor took. */
+		public var lastActionIndex : int;
 		
 		/** True if the actor is on the ground, false otherwise. */
 		public function get onGround() : Boolean
@@ -214,6 +216,7 @@ package people
 				playSequence(_animationsToAction[action][index]);
 			}
 			lastAction = action;
+			lastActionIndex = index;
 			
 			// If we are transitioning to a new state, do so.
 			if (newState != null && newState != state)
