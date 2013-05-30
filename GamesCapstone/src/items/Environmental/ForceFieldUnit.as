@@ -167,25 +167,69 @@ package items.Environmental
 		public function top() : void
 		{
 			play("top");
-			vertical();
+			height = 8;
+			width = 16;
+			offset.x = 0;
+			offset.y = 0;
+			if (startingY != y)
+			{
+				y = startingY;
+			}
+			if (startingX != x)
+			{
+				x = startingX;
+			}
 		}
 		
 		public function bottom() : void
 		{
 			play ("bottom");
-			vertical();
+			height = 8;
+			width = 16;
+			offset.x = 0;
+			offset.y = 8;
+			if (startingY == y)
+			{
+				y = y + 8;
+			}
+			if (startingX != x)
+			{
+				x = startingX;
+			}
 		}
 		
 		public function left() : void
 		{
 			play ("left");
-			horizontal();
+			height = 16;
+			width = 8;
+			offset.x = 0;
+			offset.y = 0;
+			if (startingX != x)
+			{
+				x = startingX;
+			}
+			if (startingY != y)
+			{
+				y = startingY;
+			}
 		}
 		
 		public function right() : void
 		{
 			play ("right");
-			horizontal();
+			height = 16;
+			width = 8;
+			offset.x = 8;
+			offset.y = 0;
+			if (startingX == x)
+			{
+				x = x + 8;
+			}
+			if (startingY != y)
+			{
+				y = startingY;
+			}
 		}
 		
 		public function touchedActor(actor: Actor) : void
