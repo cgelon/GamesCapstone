@@ -22,18 +22,18 @@ package levels
 			_rooms.push(BeginningRoom);
 			_rooms.push(StartingLevel);
 			_rooms.push(PlatformLevel);
-			_rooms.push(CrateJumpLevel); 
+			_rooms.push(CrateJumpLevel);
+			_rooms.push(ForceFieldIntro);
+			_rooms.push(ForceFieldSwitches);
 			_rooms.push(StartingEnemiesLevel);
 			_rooms.push(EnemyPlatforms);
 			_rooms.push(StartingAcidLevel);
 			_rooms.push(AcidPlatformLevel);
 			_rooms.push(AcidSwitchesPlatforms);
 			_rooms.push(AcidSwitches);
+			_rooms.push(ForceFieldAndAcid);
 			_rooms.push(EvilLabVatLevel);
 			_rooms.push(AcidCrates);
-			_rooms.push(ForceFieldIntro);
-			_rooms.push(ForceFieldSwitches);
-			_rooms.push(ForceFieldAndAcid);
 			_rooms.push(EndLevel);
 			//_rooms.push(BossLair);
 			

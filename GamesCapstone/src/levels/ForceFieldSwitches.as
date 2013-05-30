@@ -6,7 +6,6 @@ package levels
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxTilemap;
-	import people.enemies.LightningRobot;
 	
 	/**
 	 * ...
@@ -16,8 +15,7 @@ package levels
 	{
 		[Embed(source = "../../assets/mapCSV_ForcefieldSwitches_Map.csv", mimeType = "application/octet-stream")] public var mapCSV : Class;
 		[Embed(source = "../../assets/mapCSV_ForcefieldSwitches_Player.csv", mimeType = "application/octet-stream")] public var playerCSV : Class;
-		[Embed(source = "../../assets/mapCSV_ForcefieldSwitches_Objects.csv", mimeType = "application/octet-stream")] public var objectCSV : Class;
-		[Embed(source = "../../assets/mapCSV_ForcefieldSwitches_Enemies.csv", mimeType = "application/octet-stream")] public var enemiesCSV : Class;		
+		[Embed(source = "../../assets/mapCSV_ForcefieldSwitches_Objects.csv", mimeType = "application/octet-stream")] public var objectCSV : Class;		
 		[Embed(source = "../../assets/lab tile arrange.png")] public var tilePNG : Class;
 		
 		public function ForceFieldSwitches ()
@@ -31,7 +29,6 @@ package levels
 			// Initializes the map
 			
 			parsePlayer(playerCSV, tilePNG);
-			parseEnemies(enemiesCSV, tilePNG);
 			parseObjects(objectCSV, tilePNG);	
 			environmentalCircuits.push(true);
 			environmentalCircuits.push(true);

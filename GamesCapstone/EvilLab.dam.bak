@@ -247,7 +247,7 @@
         <row>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</row>
       </maplayer>
     </group>
-    <group name="AcidSwitches" id="20" xScroll="1" yScroll="1" visible="false" open="false" locked="false" exports="true">
+    <group name="AcidSwitches" id="20" xScroll="1" yScroll="1" visible="false" open="false" locked="false" exports="false">
       <maplayer name="Map" id="10" xScroll="1" yScroll="1" x="-136" y="2275" width="70" height="19" tileset="assets/lab tile arrange.png" tileWidth="16" tileHeight="16" visible="true" hasHits="false" drawIdx="1" collideIdx="1" eraseIdx="0" locked="false" exports="true" tileSpacingX="16" tileSpacingY="16" xStagger="0" tileOffsetX="0" tileOffsetY="0" isMaster="false" mapType="2d" hasHeight="false" repeatX="false" repeatY="false">
         <row>355,356,357,352,353,354,355,356,357,352,353,354,355,356,357,352,353,354,355,356,357,352,353,354,355,356,357,352,353,354,355,356,357,352,353,354,355,356,357,352,353,354,355,356,357,352,353,354,355,356,357,352,353,354,355,356,357,352,353,354,355,356,357,352,353,354,355,356,357,352</row>
         <row>387,388,389,384,385,386,387,388,389,384,385,386,387,388,389,384,385,386,387,388,389,384,385,386,387,388,389,384,385,386,128,129,256,257,256,257,128,129,256,257,256,257,128,256,33,34,35,36,257,129,256,257,256,257,128,129,256,257,256,257,128,129,256,257,256,257,128,129,256,257</row>
