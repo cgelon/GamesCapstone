@@ -156,7 +156,7 @@ package levels
 				// Watch out, this is going to get complicated.  
 				while (verts < topVert.length && horizs < leftHoriz.length)
 				{
-					objectStarts[objectStarts.length] = null;
+					objectStarts.push(null);
 					if (topVert[verts].x < leftHoriz[horizs].x) 
 					{
 						if (upperLeftCorner != null && 
@@ -241,7 +241,7 @@ package levels
 							height = height / 16;
 							width = 1;
 							// The -8 is because DAME is a bitch, not a dame.  Same with the + 1
-							objectTypes[objectTypes.length] = new ForceField(sides, topVert[verts].x - 8, topVert[verts].y - 8, height + 1, width);
+							objectTypes.push(new ForceField(sides, topVert[verts].x - 8, topVert[verts].y - 8, height + 1, width + 1));
 							verts++;
 						}
 						else
@@ -261,7 +261,7 @@ package levels
 								height = height + 2;
 								// Need to offset the y coordinate from topVert[verts].y because it is not the actual corner
 								// The -8 is because DAME is a bitch, not a dame.
-								objectTypes[objectTypes.length] = new ForceField(sides, topVert[verts].x - 8, leftHoriz[horizs].y - 8, height + 1, width);
+								objectTypes.push(new ForceField(sides, topVert[verts].x - 8, leftHoriz[horizs].y - 8, height + 1, width + 1));
 							}
 							else
 							{
@@ -269,12 +269,12 @@ package levels
 								if (sides[0])
 								{
 									// The -8 is because DAME is a bitch, not a dame.
-									objectTypes[objectTypes.length] = new ForceField(sides, topVert[verts].x - 8, leftHoriz[horizs].y - 8, height + 1, width);
+									objectTypes.push(new ForceField(sides, topVert[verts].x - 8, leftHoriz[horizs].y - 8, height + 1, width + 1));
 								}
 								else 
 								{
 									// The -8 is because DAME is a bitch, not a dame.
-									objectTypes[objectTypes.length] = new ForceField(sides, topVert[verts].x - 8, topVert[verts].y - 8, height + 1, width);
+									objectTypes.push(new ForceField(sides, topVert[verts].x - 8, topVert[verts].y - 8, height + 1, width + 1));
 								}
 							}							
 							// We know that the left side exists, so utilize its starting x and y coordinate
@@ -351,7 +351,7 @@ package levels
 							height = 1;
 							width = rightHoriz[horizs].x - leftHoriz[horizs].x;
 							width = width / 16;
-							objectTypes[objectTypes.length] = new ForceField(sides, leftHoriz[horizs].x, leftHoriz[horizs].y, height + 1, width);
+							objectTypes.push(new ForceField(sides, leftHoriz[horizs].x, leftHoriz[horizs].y, height, width + 1));
 							horizs++;
 						}
 						else
@@ -373,13 +373,13 @@ package levels
 								// Since we can't assume that leftHoriz[horizs] is the top side, we must utilize the right side we know
 								// we have for the y coordinate.
 								// The -8 is because DAME is a bitch, not a dame.
-								objectTypes[objectTypes.length] = new ForceField(sides, leftHoriz[horizs].x - 8, topVert[verts].y - 24, height + 1, width);
+								objectTypes.push(new ForceField(sides, leftHoriz[horizs].x - 8, topVert[verts].y - 24, height + 1, width + 1));
 							}
 							else
 							{
 								// We don't have a top side, so no need to modify verts' y coordinate								
 								// The -8 is because DAME is a bitch, not a dame.
-								objectTypes[objectTypes.length] = new ForceField(sides, leftHoriz[horizs].x - 8, topVert[verts].y - 8, height + 1, width);
+								objectTypes.push(new ForceField(sides, leftHoriz[horizs].x - 8, topVert[verts].y - 8, height + 1, width + 1));
 							}
 							verts++;
 							if (sides[0] && sides[2])
@@ -411,13 +411,13 @@ package levels
 					// We only have one side, call it the right one
 					for (var k: int = 0; k < topVert.length; k++)
 					{
+						objectStarts.push(null);					
 						var h1: int = bottomVert[k].y - topVert[k].y;
 						h1 = h1 / 16;
 						var w1: int = 1;
-						objectStarts[objectStarts.length] = null;
 						
 						// The -8 is because DAME is a bitch, not a dame.
-						objectTypes[objectTypes.length] = new ForceField(s1, topVert[k].x - 8, topVert[k].y - 8, h1 + 1, w1);
+						objectTypes.push(new ForceField(s1, topVert[k].x - 8, topVert[k].y - 8, h1 + 1, w1));
 					}
 					
 				}
@@ -430,14 +430,14 @@ package levels
 					
 					var s2: Array = [true, false, false, false]; 
 					// We only have one side, call it the top one
-					for (var l: int = 0; l < topVert.length; l++)
+					for (var l: int = 0; l < leftHoriz.length; l++)
 					{
+						objectStarts.push(null);					
 						var h2: int = 1;
 						var w2: int = rightHoriz[l].x - leftHoriz[l].x;
 						w2 = w2 / 16;
-						objectStarts[l * 2] = null;
 						// The -8 is because DAME is a bitch, not a dame.
-						objectTypes[l * 2] = new ForceField(s2, leftHoriz[l].x - 8, leftHoriz[l].y - 8, h2 + 1, w2);
+						objectTypes.push(new ForceField(s2, leftHoriz[l].x - 8, leftHoriz[l].y - 8, h2 + 1, w2 + 1));
 					}
 				}
 			}
