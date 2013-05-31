@@ -13,6 +13,7 @@ package people.states
 		public static const FALLING : ActorState = new ActorState();
 		public static const ROLLING : ActorState = new ActorState();
 		public static const ATTACKING : ActorState = new ActorState();
+		public static const CROUCH_ATTACKING : ActorState = new ActorState();
 		public static const HURT : ActorState = new ActorState();
 		public static const DEAD : ActorState = new ActorState();
 		public static const BLOCKING : ActorState = new ActorState();
@@ -50,6 +51,8 @@ package people.states
 					return "computer";
 				case REPELLED:
 					return "repelled";
+				case CROUCH_ATTACKING:
+					return "crouch attack";
 			}
 			return "NAME THIS FREAKING STATE";
 		}
