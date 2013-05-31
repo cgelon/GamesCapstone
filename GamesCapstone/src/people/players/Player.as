@@ -285,6 +285,7 @@ package people.players
 
 						velocity.x = ((facing == FlxObject.RIGHT) ? 1 : -1) * maxVelocity.x;
 						break;
+					case ActorState.CROUCH_ATTACKING:
 					case ActorState.ATTACKING:
 						if (onGround)
 						{
@@ -443,13 +444,13 @@ package people.players
 			if (FlxG.keys.pressed("A") || FlxG.keys.pressed("LEFT"))
 			{
 				acceleration.x = -maxVelocity.x * 10;
-				if (state != ActorState.ATTACKING)
+				if (state != ActorState.ATTACKING && state != ActorState.CROUCH_ATTACKING)
 					facing = FlxObject.LEFT;
 			}
 			else if (FlxG.keys.pressed("D") || FlxG.keys.pressed("RIGHT"))
 			{
 				acceleration.x = maxVelocity.x * 10;
-				if (state != ActorState.ATTACKING)
+				if (state != ActorState.ATTACKING && state != ActorState.CROUCH_ATTACKING)
 					facing = FlxObject.RIGHT;
 			}
 			
@@ -460,7 +461,7 @@ package people.players
 			}
 			
 			// If the player is pressing the jump button and still has jumps left, jump.
-			if (state != ActorState.ATTACKING && (FlxG.keys.justPressed("W") || FlxG.keys.justPressed("UP")) && _jumpReleased && _jumpCount < 1)
+			if (state != ActorState.ATTACKING && state != ActorState.CROUCH_ATTACKING && (FlxG.keys.justPressed("W") || FlxG.keys.justPressed("UP")) && _jumpReleased && _jumpCount < 1)
 			{
 				velocity.y = -maxVelocity.y / 2.5;
 				
@@ -490,7 +491,7 @@ package people.players
 				}
 				else if (state == ActorState.CROUCHING)
 				{
-					executeAction(ActorAction.WINDUP, ActorState.ATTACKING, 2);
+					executeAction(ActorAction.WINDUP, ActorState.CROUCH_ATTACKING, 2);
 					actionTimer.start(WEAK_LOW_ATTACK_WINDUP, 1, weakWindupCallback);
 				}
 				else
@@ -518,7 +519,7 @@ package people.players
 					}
 					else if (state == ActorState.CROUCHING)
 					{
-						executeAction(ActorAction.WINDUP, ActorState.ATTACKING, 3);
+						executeAction(ActorAction.WINDUP, ActorState.CROUCH_ATTACKING, 3);
 						actionTimer.start(STRONG_LOW_ATTACK_WINDUP, 1, strongWindupCallback);
 					}
 					else
@@ -599,12 +600,12 @@ package people.players
 		 */
 		private function weakWindupCallback(timer : FlxTimer) : void
 		{
-			if (state == ActorState.ATTACKING)
+			if (state == ActorState.ATTACKING || state == ActorState.CROUCH_ATTACKING)
 			{
 				if (prevState == ActorState.CROUCHING)
 				{
 					attackManager.weakAttack(facing, AttackType.LOW);
-					executeAction(ActorAction.ATTACK, ActorState.ATTACKING, 2);
+					executeAction(ActorAction.ATTACK, ActorState.CROUCH_ATTACKING, 2);
 					actionTimer.start(WEAK_LOW_ATTACK_DELAY, 1, attackCallback);
 				}
 				else if (prevState == ActorState.JUMPING || prevState == ActorState.FALLING)
@@ -627,12 +628,12 @@ package people.players
 		 */
 		private function strongWindupCallback(timer : FlxTimer) : void
 		{
-			if (state == ActorState.ATTACKING)
+			if (state == ActorState.ATTACKING || state == ActorState.CROUCH_ATTACKING)
 			{
 				if (prevState == ActorState.CROUCHING)
 				{
 					attackManager.strongAttack(facing, AttackType.LOW);
-					executeAction(ActorAction.ATTACK, ActorState.ATTACKING, 2);
+					executeAction(ActorAction.ATTACK, ActorState.CROUCH_ATTACKING, 2);
 					actionTimer.start(STRONG_LOW_ATTACK_DELAY, 1, attackCallback);
 				}
 				else if (prevState == ActorState.JUMPING || prevState == ActorState.FALLING)
@@ -658,11 +659,7 @@ package people.players
 		{
 			if (state == ActorState.ATTACKING)
 			{
-				if (prevState == ActorState.CROUCHING && _crouching)
-				{
-					executeAction(ActorAction.CROUCH, ActorState.CROUCHING);
-				}
-				else if (!onGround && (prevState == ActorState.JUMPING || prevState == ActorState.FALLING))
+				if (!onGround && (prevState == ActorState.JUMPING || prevState == ActorState.FALLING))
 				{
 					if (velocity.y > 0)
 						executeAction(ActorAction.FALL, ActorState.FALLING);
@@ -673,6 +670,13 @@ package people.players
 				{
 					executeAction(ActorAction.STOP, ActorState.IDLE);
 				}
+			}
+			else if (state == ActorState.CROUCH_ATTACKING)
+			{
+				if (FlxG.keys.pressed("S") || FlxG.keys.pressed("DOWN"))
+					executeAction(ActorAction.CROUCH, ActorState.CROUCHING);
+				else
+					executeAction(ActorAction.STOP, ActorState.IDLE);
 			}
 		}
 		
@@ -710,7 +714,7 @@ package people.players
 			
 			// Change the bounding box for the player if they're crouching, or
 			// standing up from crouching.
-			if (_crouching && ActorStateGroup.CROUCH.contains(newState) && !ActorStateGroup.CROUCH.contains(oldState))
+			if (ActorStateGroup.CROUCH.contains(newState) && !ActorStateGroup.CROUCH.contains(oldState))
 			{
 				width = CROUCHING_HITBOX.x;
 				height = CROUCHING_HITBOX.y;
@@ -718,7 +722,7 @@ package people.players
 				offset.y += NORMAL_HITBOX.y - CROUCHING_HITBOX.y;
 				y += NORMAL_HITBOX.y - CROUCHING_HITBOX.y;
 			}
-			else if (!_crouching && _prevCrouching)
+			else if (!ActorStateGroup.CROUCH.contains(newState) && ActorStateGroup.CROUCH.contains(oldState))
 			{
 				width = NORMAL_HITBOX.x;
 				height = NORMAL_HITBOX.y;

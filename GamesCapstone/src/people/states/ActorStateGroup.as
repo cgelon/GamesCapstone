@@ -11,7 +11,7 @@ package people.states
 		public static const GROUND : ActorStateGroup = new ActorStateGroup([ActorState.IDLE, ActorState.RUNNING, ActorState.ROLLING, ActorState.BLOCKING, ActorState.CROUCHING]);
 		
 		/** Valid crouching state. */
-		public static const CROUCH : ActorStateGroup = new ActorStateGroup([ActorState.CROUCHING, ActorState.ATTACKING, ActorState.HURT]);
+		public static const CROUCH : ActorStateGroup = new ActorStateGroup([ActorState.CROUCHING, ActorState.CROUCH_ATTACKING, ActorState.HURT]);
 		
 		private var _states : Array;
 		

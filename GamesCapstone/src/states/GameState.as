@@ -192,12 +192,11 @@ package states
 				moveToPreviousRoom();
 			}
 			
-			/*
 			if (FlxG.keys.justPressed("NINE"))
 				moveToPreviousRoom();
 			else if (FlxG.keys.justPressed("ZERO"))
 				moveToNextRoom();
-			*/
+			
 			playerHitThisFrame = false;
 			movedRoomsThisFrame = false;
 
