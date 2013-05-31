@@ -19,14 +19,14 @@ package levels
 		public function RoomFlow()
 		{
 			_rooms = new Array();
-			/*_rooms.push(BeginningRoom);
+			_rooms.push(BeginningRoom);
 			_rooms.push(StartingLevel);
 			_rooms.push(PlatformLevel);
 			_rooms.push(CrateJumpLevel);
 			_rooms.push(ForceFieldIntro);
 			_rooms.push(ForceFieldSwitches);
-			_rooms.push(StartingEnemiesLevel); */
-			_rooms.push(ForceFieldClimb);
+			_rooms.push(StartingEnemiesLevel);
+			//_rooms.push(ForceFieldClimb);
 			_rooms.push(EnemyPlatforms);
 			_rooms.push(StartingAcidLevel);
 			_rooms.push(AcidPlatformLevel);
