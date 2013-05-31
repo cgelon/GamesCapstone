@@ -1,9 +1,14 @@
 package items.Environmental
 {
+	import managers.ControlBlockManager;
 	import managers.Manager;
 	import managers.PlayerManager;
 	import org.flixel.FlxG;
+	import org.flixel.FlxObject;
+	import org.flixel.FlxPoint;
+	import org.flixel.FlxSprite;
 	import people.players.Player;
+	import util.SpaceBlock;
 
 	/**
 	 * @author Lydia Duncan
@@ -24,7 +29,7 @@ package items.Environmental
 		private const ANTI_SLIDE:Number = 0.25;	// factor to reduce slide by (multiplied by velocity and added to friction)
 		// 0 means slippery (just use MIN_FRICTION). 0.5-1 is "normal" slide.  2+ is very little slide
 		
-		
+		private var _space : SpaceBlock;
 		
 		public function Crate(X:Number,Y:Number):void
 		{
@@ -52,6 +57,14 @@ package items.Environmental
 				if (FlxG.keys.pressed("Z"))
 					FlxG.log("NOT BEING PUSHED!");
 			}
+			
+			if (_space == null)
+			{
+				_space = (Manager.getManager(ControlBlockManager) as ControlBlockManager).addSpaceBlock(this, new FlxPoint(-5, -20));
+			}
+			var player : Player = (Manager.getManager(PlayerManager) as PlayerManager).player;
+			_space.exists = isLocked && overlaps(player) 
+					&& !((y + height - 1 < player.y) || (player.y + player.height - height / 2 < y));
 			
 			// post update (reset flags)
 			beingPushed = false;
@@ -94,6 +107,13 @@ package items.Environmental
 			immovable = false;
 			moves = true;
 			acceleration.y = GRAVITY;
+		}
+		
+		override public function destroy():void 
+		{
+			super.destroy();
+			
+			_space = null;
 		}
 	}
 }

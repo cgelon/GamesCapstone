@@ -19,6 +19,7 @@ package cutscenes.engine
 		private var _title : String;
 		private var _message : String;
 		private var _object : FlxObject;
+		private var _messageBox : MessageBox;
 		
 		public function MessageAction(type : String, title : String, message : String, object : FlxObject)
 		{
@@ -43,33 +44,38 @@ package cutscenes.engine
 		
 		private function displayAboveActor(callback : Function = null) : void
 		{
-			var messageBox : MessageBox = new MessageBox();
-			messageBox = new MessageBox();
-			messageBox.setFormat(null, 8, Color.WHITE, Color.GREEN, 160, 3);
 			// Set the position of the box to be right above the object.
 			var position : FlxPoint = new FlxPoint();
 			_object.getScreenXY(position, FlxG.camera);
-			messageBox.setPosition(Math.max(position.x + _object.width / 2 - messageBox.width / 2, 0),
-					Math.max(position.y - messageBox.height, 0));
-			add(messageBox);
-			messageBox.displayText(_title, _message, callback);
+			_messageBox = new MessageBox(Math.max(position.x + _object.width / 2 - 80, 0),
+					Math.max(position.y - MessageBox.getHeight(), 0), 160, Color.WHITE, Color.GREEN);
+			add(_messageBox);
+			_messageBox.displayText(_title, _message, callback);
 		}
 		
 		private function displayInformant(callback : Function = null) : void
 		{
-			var messageBox : MessageBox = new MessageBox();
-			messageBox = new MessageBox();
-			messageBox.setFormat(null, 8, Color.WHITE, Color.BLUE, 160, 3);
-			messageBox.setPosition(160, 0);
-			add(messageBox);
-			messageBox.displayText(_title, _message, callback);
+			_messageBox = new MessageBox(160, 0, 160, Color.WHITE, Color.BLUE);
+			add(_messageBox);
+			_messageBox.displayText(_title, _message, callback);
+		}
+		
+		override public function skip():void 
+		{
+			if (_messageBox != null) 
+			{
+				_messageBox.kill();
+			}
 		}
 		
 		override public function destroy() : void
 		{
 			super.destroy();
-						_message = null;
+			
+			_message = null;
 			_object = null;
+			_title = null;
+			_type = null;
 		}
 	}
 }

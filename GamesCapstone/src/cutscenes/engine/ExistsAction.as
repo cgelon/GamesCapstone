@@ -21,7 +21,22 @@ package cutscenes.engine
 		override public function run(callback : Function) : void
 		{
 			_object.exists = _exist;
-			callback();
+			if (callback != null)
+			{
+				callback();
+			}
+		}
+		
+		override public function skip() : void
+		{
+			run(null);
+		}
+		
+		override public function destroy():void 
+		{
+			super.destroy();
+			
+			_object = null;
 		}
 	}
 }

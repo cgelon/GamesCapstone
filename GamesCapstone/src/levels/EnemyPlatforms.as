@@ -15,6 +15,7 @@ package levels
 		[Embed(source = "../../assets/mapCSV_EnemyPlatforms_Map.csv", mimeType = "application/octet-stream")] public var mapCSV : Class;
 		[Embed(source = "../../assets/mapCSV_EnemyPlatforms_Player.csv", mimeType = "application/octet-stream")] public var playerCSV : Class;
 		[Embed(source = "../../assets/mapCSV_EnemyPlatforms_Enemies.csv", mimeType = "application/octet-stream")] public var enemiesCSV : Class;
+		[Embed(source = "../../assets/mapCSV_EnemyPlatforms_Objects.csv", mimeType = "application/octet-stream")] public var objectsCSV : Class;
 		[Embed(source = "../../assets/lab tile arrange.png")] public var tilePNG : Class;
 		
 		public function EnemyPlatforms ()
@@ -28,10 +29,9 @@ package levels
 			// Initializes the map
 
 			parsePlayer(playerCSV, tilePNG);
-			parseEnemies(enemiesCSV,  tilePNG);
-			
-			loadMessage = "Did you know that attacking while crouching or jumping results in special moves?";
-			
+			parseEnemies(enemiesCSV, tilePNG);
+			parseObjects(objectsCSV, tilePNG);
+		
 			add(map);
 		}
 	}

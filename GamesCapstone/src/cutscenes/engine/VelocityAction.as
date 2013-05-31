@@ -22,7 +22,10 @@ package cutscenes.engine
 		override public function run(callback : Function) : void
 		{
 			apply(_object, _velocity);
-			callback();
+			if (callback != null) 
+			{
+				callback();
+			}
 		}
 		
 		public function apply(object : FlxObject, velocity : FlxPoint) : void

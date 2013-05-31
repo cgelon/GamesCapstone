@@ -493,7 +493,7 @@ package org.flixel
 		static public function uploadRecording():void
 		{
 			// Only upload recordings when we are on a non-debug release.
-			if (FlxG.debug)
+			if (_game._recording == false)
 			{
 				return;
 			}

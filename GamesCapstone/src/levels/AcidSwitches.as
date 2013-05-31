@@ -15,6 +15,7 @@ package levels
 		[Embed(source = "../../assets/mapCSV_AcidSwitches_Map.csv", mimeType = "application/octet-stream")] public var mapCSV : Class;
 		[Embed(source = "../../assets/mapCSV_AcidSwitches_Player.csv", mimeType = "application/octet-stream")] public var playerCSV : Class;
 		[Embed(source = "../../assets/mapCSV_AcidSwitches_Background.csv", mimeType = "application/octet-stream")] public var backgroundCSV : Class;
+		[Embed(source = "../../assets/mapCSV_AcidSwitches_Objects.csv", mimeType = "application/octet-stream")] public var objectsCSV : Class;
 		[Embed(source = "../../assets/lab tile arrange.png")] public var tilePNG : Class;
 		
 		public function AcidSwitches ()
@@ -31,6 +32,7 @@ package levels
 			parseBackground(backgroundCSV, tilePNG);
 			backgroundCircuits.push(true);
 			backgroundCircuits.push(true);
+			parseObjects(objectsCSV, tilePNG);
 			
 			add(map);
 		}

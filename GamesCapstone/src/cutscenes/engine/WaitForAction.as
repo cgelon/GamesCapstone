@@ -20,7 +20,7 @@ package cutscenes.engine
 		{
 			super.update();
 			
-			if (cutscene != null && cutscene.numActionsRunning == 0)
+			if (_callback != null && cutscene != null && cutscene.numActionsRunning == 0)
 			{
 				_callback();
 			}

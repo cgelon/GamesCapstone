@@ -167,46 +167,103 @@ package items.Environmental
 		public function top() : void
 		{
 			play("top");
-			vertical();
+			height = 8;
+			width = 16;
+			offset.x = 0;
+			offset.y = 0;
+			if (startingY != y)
+			{
+				y = startingY;
+			}
+			if (startingX != x)
+			{
+				x = startingX;
+			}
 		}
 		
 		public function bottom() : void
 		{
 			play ("bottom");
-			vertical();
+			height = 8;
+			width = 16;
+			offset.x = 0;
+			offset.y = 8;
+			if (startingY == y)
+			{
+				y = y + 8;
+			}
+			if (startingX != x)
+			{
+				x = startingX;
+			}
 		}
 		
 		public function left() : void
 		{
 			play ("left");
-			horizontal();
+			height = 16;
+			width = 8;
+			offset.x = 0;
+			offset.y = 0;
+			if (startingX != x)
+			{
+				x = startingX;
+			}
+			if (startingY != y)
+			{
+				y = startingY;
+			}
 		}
 		
 		public function right() : void
 		{
 			play ("right");
-			horizontal();
+			height = 16;
+			width = 8;
+			offset.x = 8;
+			offset.y = 0;
+			if (startingX == x)
+			{
+				x = x + 8;
+			}
+			if (startingY != y)
+			{
+				y = startingY;
+			}
 		}
 		
 		public function touchedActor(actor: Actor) : void
 		{
-			actor.acceleration.x = 0;
-			actor.velocity.x = ((actor.x - x < 0) ? -1 : 1) * actor.maxVelocity.x * 2;
+			if (_curAnim.name == "lowerVert" || _curAnim.name == "midVert" || _curAnim.name == "upperVert" ||
+				_curAnim.name == "leftHoriz" || _curAnim.name == "midHoriz" || _curAnim.name == "rightHoriz")
+				{
+					actor.acceleration.x = 0;
+					actor.velocity.x = ((actor.x - x < 0) ? -1 : 1) * actor.maxVelocity.x * 2;
 			
-			// If the player is pinned against a wall, make the fly the other direction.
-			if ((actor.isTouching(FlxObject.RIGHT) && actor.velocity.x > 0)
-				|| (actor.isTouching(FlxObject.LEFT) && actor.velocity.x < 0))
-			{
-				actor.velocity.x = -actor.velocity.x;
-			}
-			// Currently only animates repelled when the player is the one colliding.  This
-			// is bad because without the enemies recognizing that they shouldn't touch the
-			// forcefield, they may just run into it over and over again and that would look
-			// stupid.
-			if (actor is Player) 
-			{
-				actor.state = ActorState.REPELLED;			
-			}
+					// If the player is pinned against a wall, make the fly the other direction.
+					if ((actor.isTouching(FlxObject.RIGHT) && actor.velocity.x > 0)
+						|| (actor.isTouching(FlxObject.LEFT) && actor.velocity.x < 0))
+					{
+						actor.velocity.x = -actor.velocity.x;
+					}
+					// Currently only animates repelled when the player is the one colliding.  This
+					// is bad because without the enemies recognizing that they shouldn't touch the
+					// forcefield, they may just run into it over and over again and that would look
+					// stupid.
+					if (actor is Player) 
+					{
+						actor.state = ActorState.REPELLED;			
+					}
+				}
+		}
+		
+		public function turnOff() : void
+		{
+			if (_curAnim.name == "lowerVert" || _curAnim.name == "midVert" || _curAnim.name == "upperVert" ||
+				_curAnim.name == "leftHoriz" || _curAnim.name == "midHoriz" || _curAnim.name == "rightHoriz")
+				{
+					exists = false;
+				}
 		}
 		
 	}

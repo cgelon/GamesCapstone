@@ -410,7 +410,7 @@ package people.players
 				}
 			}
 			
-			if (_crouching && (FlxG.keys.justReleased("S") || FlxG.keys.justReleased("DOWN")))
+			if (_crouching && (!FlxG.keys.pressed("S") || !FlxG.keys.pressed("DOWN")))
 			{
 				_crouching = false;
 				if (state == ActorState.CROUCHING)

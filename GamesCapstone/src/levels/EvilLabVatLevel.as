@@ -19,6 +19,7 @@ package levels
 		[Embed(source = "../../assets/mapCSV_EvilLabVat_Player.csv", mimeType = "application/octet-stream")] public var playerCSV : Class;
 		[Embed(source = "../../assets/mapCSV_EvilLabVat_Enemies.csv", mimeType = "application/octet-stream")] public var enemyCSV : Class;
 		[Embed(source = "../../assets/mapCSV_EvilLabVat_Background.csv", mimeType = "application/octet-stream")] public var backgroundCSV : Class;
+		[Embed(source = "../../assets/mapCSV_EvilLabVat_Objects.csv", mimeType = "application/octet-stream")] public var objectsCSV : Class;
 		[Embed(source = "../../assets/lab tile arrange.png")] public var tilePNG : Class;
 			
 		
@@ -42,14 +43,21 @@ package levels
 			backgroundCircuits.push(false);
 			backgroundCircuits.push(false);
 			backgroundCircuits.push(false);
-			
-			loadMessage = "Acid, acid, and more acid. This obsession with acid is getting a little out of control.";
+			parseObjects(objectsCSV, tilePNG);
 			
 			// Stores the acid locations for the floor
 			//doorLocs[0] = new FlxPoint(16, 112);
 			//doorLocs[1] = new FlxPoint(2112, 48);
 			// Stores the door locations for this level
 			add(map);
+		}
+		
+		override public function checkInformant():void 
+		{
+			if (_informantTalked[0] == null) {
+				informant.talk("Acid, acid, and more acid. This obsession with acid is getting a little out of control.");
+				_informantTalked[0] = true;
+			}
 		}
 	}
 }

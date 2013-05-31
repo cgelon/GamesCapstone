@@ -22,6 +22,11 @@ package cutscenes
 	 */
 	public class BeginningCutscene extends Cutscene
 	{
+		public function BeginningCutscene(callback : Function = null)
+		{
+			super(callback);
+		}
+		
 		override public function run() : void
 		{
 			var player : Player = (Manager.getManager(PlayerManager) as PlayerManager).player;

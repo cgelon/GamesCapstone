@@ -8,10 +8,10 @@ package states
 	import items.Environmental.EnvironmentalItem;
 	import items.Environmental.ForceFieldUnit;
 	import items.Environmental.Generator;
-	import levels.AcidSwitchesPlatforms;
 	import levels.EndLevel;
 	import levels.Level;
 	import managers.BackgroundManager;
+	import managers.ControlBlockManager;
 	import managers.EnemyAttackManager;
 	import managers.EnemyManager;
 	import managers.LevelManager;
@@ -32,6 +32,7 @@ package states
 	import people.players.PlayerStats;
 	import people.states.ActorState;
 	import util.Music;
+	import util.PauseOverlay;
 	import util.ScreenOverlay;
 
 	/**
@@ -57,8 +58,8 @@ package states
 		/** True if the player is traveling to this room from the room in front of them, false otherwise. */
 		private var _backward : Boolean;
 		
-		/** True if the informant has already spoken in this level, false otherwise. */
-		private var _informantSpoken : Boolean;
+		/** Displayed when the game is paused. */
+		private var _pauseOverlay : PauseOverlay;
 
 		public function GameState(level : Level = null, backward : Boolean = false)
 		{
@@ -138,6 +139,11 @@ package states
 
 			var informant : TheInformant = new TheInformant();
 
+			_pauseOverlay = new PauseOverlay();
+			_pauseOverlay.exists = false;
+			
+			var controlBlockManager : ControlBlockManager = new ControlBlockManager();
+			
 			// Add the managers in this order:
 			//	level
 			//	background
@@ -147,6 +153,8 @@ package states
 			//	ui
 			//	enemy attack
 			//	player attack
+			//	informant
+			//	pause overlay
 			active = false;
 			addManager(levelManager);
 			addManager(backgroundManager);
@@ -157,13 +165,9 @@ package states
 			addManager(enemyAttackManager);
 			addManager(playerAttackManager);
 			addManager(informant);
+			addManager(controlBlockManager);
+			add(_pauseOverlay);
 			active = true;
-
-			if (_level.loadMessage != null && !_backward)
-			{
-				(Manager.getManager(TheInformant) as TheInformant).talk(_level.loadMessage);
-				_informantSpoken = true;
-			}
 
 			//	Tell flixel how big our game world is
 			FlxG.worldBounds = new FlxRect(0, 0, _level.width, _level.height);
@@ -179,9 +183,27 @@ package states
 				levelManager.level.cutscene.run();
 			}
 		}
+		
+		override public function preUpdate():void 
+		{
+			if (!FlxG.paused)
+			{
+				super.preUpdate();
+			}
+		}
 
 		override public function update() : void
 		{
+			if (FlxG.keys.justPressed("ESCAPE"))
+			{
+				FlxG.paused = !FlxG.paused;
+				_pauseOverlay.exists = FlxG.paused;
+			}
+			if (FlxG.paused)
+			{
+				return;
+			}
+			
 			super.update();
 
 			if ((getManager(PlayerManager) as PlayerManager).player.x > _level.map.width) {
@@ -229,7 +251,6 @@ package states
 					add(new ScreenOverlay());
 					FlxG.cutscene = true;
 					(getManager(PlayerManager) as PlayerManager).player.readyToReset = false;
-					FlxG.uploadRecording();
 				}
 				else
 				{
@@ -240,13 +261,14 @@ package states
 			}
 			
 			// Special conditions for when The Informant speaks.
-			if (!_informantSpoken)
+			_level.checkInformant();
+		}
+		
+		override public function postUpdate():void 
+		{
+			if (!FlxG.paused)
 			{
-				if (_level is AcidSwitchesPlatforms && (getManager(PlayerManager) as PlayerManager).player.x > 600)
-				{
-					(getManager(TheInformant) as TheInformant).talk("Try hitting space near the switch, that might trigger something.");
-					_informantSpoken = true;
-				}
+				super.postUpdate();
 			}
 		}
 
@@ -435,6 +457,7 @@ package states
 		{
 			super.destroy();
 			_level = null;
+			_pauseOverlay = null;
 		}
 	}
 }
