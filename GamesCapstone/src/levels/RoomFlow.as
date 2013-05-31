@@ -26,7 +26,7 @@ package levels
 			_rooms.push(ForceFieldIntro);
 			_rooms.push(ForceFieldSwitches);
 			_rooms.push(StartingEnemiesLevel);
-			//_rooms.push(ForceFieldClimb);
+			_rooms.push(ForceFieldClimb);
 			_rooms.push(EnemyPlatforms);
 			_rooms.push(StartingAcidLevel);
 			_rooms.push(AcidPlatformLevel);

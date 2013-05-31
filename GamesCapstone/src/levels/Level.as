@@ -241,7 +241,7 @@ package levels
 							height = height / 16;
 							width = 1;
 							// The -8 is because DAME is a bitch, not a dame.  Same with the + 1
-							objectTypes.push(new ForceField(sides, topVert[verts].x - 8, topVert[verts].y - 8, height + 1, width + 1));
+							objectTypes.push(new ForceField(sides, topVert[verts].x - 8, topVert[verts].y - 8, height + 1, width));
 							verts++;
 						}
 						else
@@ -351,7 +351,8 @@ package levels
 							height = 1;
 							width = rightHoriz[horizs].x - leftHoriz[horizs].x;
 							width = width / 16;
-							objectTypes.push(new ForceField(sides, leftHoriz[horizs].x, leftHoriz[horizs].y, height, width + 1));
+							// The -8 is because DAME is a bitch, not a dame.
+							objectTypes.push(new ForceField(sides, leftHoriz[horizs].x - 8, leftHoriz[horizs].y - 8, height, width + 1));
 							horizs++;
 						}
 						else
@@ -394,6 +395,30 @@ package levels
 							}
 						}
 					}
+					sides = [false, false, false, false];
+				}
+				// Handles the case where the last forcefield is isolated rather than part of a box
+				if (verts < topVert.length)
+				{
+					// We have a single vertical forcefield.
+					// We're going to pretend it is on the right side
+					objectStarts.push(null);					
+					sides[1] = true;
+					height = bottomVert[verts].y - topVert[verts].y;
+					height = height / 16;
+					width = 1;
+					// The -8 is because DAME is a bitch, not a dame.  Same with the + 1
+					objectTypes.push(new ForceField(sides, topVert[verts].x - 8, topVert[verts].y - 8, height + 1, width));
+				}
+				else if (horizs < leftHoriz.length)
+				{
+					// We have a single horizontal forcefield. We're going to pretend it is on the top side
+					objectStarts.push(null);					
+					sides[0] = true;
+					height = 1;
+					width = rightHoriz[horizs].x - leftHoriz[horizs].x;
+					width = width / 16;
+					objectTypes.push(new ForceField(sides, leftHoriz[horizs].x, leftHoriz[horizs].y, height, width + 1));
 				}
 			}
 			else
