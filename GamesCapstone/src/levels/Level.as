@@ -14,6 +14,7 @@ package levels
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxTilemap;
+	import people.enemies.BossEnemy;
 	import people.enemies.LightningRobot;
 	import people.enemies.Robot;
 	
@@ -520,6 +521,17 @@ package levels
 				{
 					enemyStarts.push(lightningRobotLocs[i]);
 					enemyTypes.push(LightningRobot);
+				}
+			}
+			
+			var bossLocs : Array = enemiesMap.getTileCoords(554);
+			if (bossLocs != null)
+			{
+				bossLocs = bossLocs.sortOn("x", Array.NUMERIC);
+				for (i = 0; i < bossLocs.length; i++)
+				{
+					enemyStarts.push(bossLocs[i]);
+					enemyTypes.push(BossEnemy);
 				}
 			}
 		}

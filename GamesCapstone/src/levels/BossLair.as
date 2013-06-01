@@ -13,6 +13,7 @@ package levels
 	{
 		[Embed(source = "../../assets/mapCSV_BossLair_Map.csv", mimeType = "application/octet-stream")] public var mapCSV : Class;
 		[Embed(source = "../../assets/mapCSV_BossLair_Player.csv", mimeType = "application/octet-stream")] public var playerCSV : Class;
+		[Embed(source = "../../assets/mapCSV_BossLair_Enemies.csv", mimeType = "application/octet-stream")] public var enemiesCSV : Class;
 		[Embed(source = "../../assets/lab tile arrange.png")] public var tilePNG : Class;
 		
 		public function BossLair ()
@@ -26,6 +27,7 @@ package levels
 			// Initializes the map
 			
 			parsePlayer(playerCSV, tilePNG);
+			parseEnemies(enemiesCSV, tilePNG);
 			
 			add(map);
 		}
