@@ -16,7 +16,7 @@ package items.Environmental.Background
 		private var maxheight: Number;
 		public var velocity: Number;
 		
-		public function AcidPool(X: Number = 0, Y: Number = 0, width: Number = 18 * 16, maxheight: Number = 13 * 16) 
+		public function AcidPool(X: Number = 0, Y: Number = 0, width: Number = 18 * 16, maxheight: Number = 18 * 16) 
 		{
 			super(X, Y + 16);
 			this.started = false;
@@ -31,6 +31,7 @@ package items.Environmental.Background
 			var acid : Acid = recycle( Acid ) as Acid;
 			acid.initialize(X, Y);
 			add(acid);
+			acid.alpha = 0.85;
 			acid.playStart();
 		}
 		

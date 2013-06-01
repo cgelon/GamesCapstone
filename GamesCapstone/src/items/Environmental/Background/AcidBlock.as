@@ -29,6 +29,8 @@ package items.Environmental.Background
 			
 			makeGraphic(width, height, 0xFF98ED67, true);
 			FlxG.clearBitmapCache();
+			
+			alpha = 0.85
 		}
 		
 		override public function update() : void
