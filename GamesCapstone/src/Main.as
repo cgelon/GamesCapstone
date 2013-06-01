@@ -12,8 +12,8 @@ package
 	{
 		public function Main()
 		{
-			FlxG.debug = false;
-			super( 320, 240, MainMenuState, 2, 30, 30 );
+			FlxG.debug = true;
+			super( 320, 240, GameState, 2, 30, 30 );
 			//if (!FlxG.debug)
 			//{
 				//FlxG.recordReplay();

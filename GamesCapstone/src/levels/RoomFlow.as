@@ -19,7 +19,7 @@ package levels
 		public function RoomFlow()
 		{
 			_rooms = new Array();
-			_rooms.push(BeginningRoom);
+			/*_rooms.push(BeginningRoom);
 			_rooms.push(StartingLevel);
 			_rooms.push(PlatformLevel);
 			_rooms.push(CrateJumpLevel);
@@ -37,8 +37,8 @@ package levels
 			_rooms.push(LightningIntro);
 			_rooms.push(EvilLabVatLevel);
 			_rooms.push(AcidCrates);
-			_rooms.push(EndLevel);
-			//_rooms.push(BossLair);
+			//_rooms.push(EndLevel);*/
+			_rooms.push(BossLair);
 			
 			_currentRoomIndex = 0;
 		}
