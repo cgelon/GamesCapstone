@@ -11,12 +11,15 @@ package people.states
 		public static const SHOOT_LASER : BossAction = new BossAction();
 		public static const SLAM_GROUND : BossAction = new BossAction();
 		
+		
 		override public function get name() : String
 		{
 			switch (this) 
 			{
 				case THROW_HAT:
 					return "throw hat";
+				case CATCH_HAT:
+					return "catch hat";
 				case SHOOT_LASER:
 					return "shoot laser"
 				case SLAM_GROUND:
