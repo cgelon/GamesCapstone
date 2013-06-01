@@ -7,6 +7,7 @@ package people.states
 	public class BossAction extends ActorAction
 	{
 		public static const THROW_HAT : BossAction = new BossAction();
+		public static const CATCH_HAT : BossAction = new BossAction();
 		public static const SHOOT_LASER : BossAction = new BossAction();
 		public static const SLAM_GROUND : BossAction = new BossAction();
 		

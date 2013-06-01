@@ -351,13 +351,12 @@ package states
 		 */
 		private function playerAttacked(player : Player, attack : Attack) : void
 		{
-			if (!attack.hasHitActor(player))
-			{
-				attack.hitActor(player);
-				(getManager(PlayerManager) as PlayerManager).HurtPlayer(attack);
-				playerHitThisFrame = true;
+			(getManager(PlayerManager) as PlayerManager).HurtPlayer(attack);
+			playerHitThisFrame = true;
 
-				if ((getManager(PlayerManager) as PlayerManager).player.state != ActorState.ROLLING)
+			if ((getManager(PlayerManager) as PlayerManager).player.state != ActorState.ROLLING)
+			{
+				if (attack.killOnHit)
 					attack.kill();
 			}
 		}

@@ -710,7 +710,7 @@ package people.players
 		{
 			var oldState : ActorState = state;
 			super.executeAction(action, newState, index);
-			Registry.addAction(action, index, 1);
+			//Registry.addAction(action, index, 1);
 			
 			// Change the bounding box for the player if they're crouching, or
 			// standing up from crouching.
@@ -732,6 +732,7 @@ package people.players
 				
 				_standingUp = true;
 			}
+			
 			_prevCrouching = _crouching;
 		}
 		

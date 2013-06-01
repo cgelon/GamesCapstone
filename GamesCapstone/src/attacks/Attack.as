@@ -34,12 +34,16 @@ package attacks
 		
 		private var _actorsHit : Array;
 		
+		protected var _killOnHit : Boolean;
+		public function get killOnHit() : Boolean { return _killOnHit; }
+		
 		public function Attack (attackWidth : Number, attackHeight : Number, damage : Number, type : AttackType)
 		{
 			width = attackWidth;
 			height = attackHeight;
 			_baseDamage = damage;
 			_type = type;
+			_killOnHit = true;
 		}
 		
 		public function initialize(x : Number, y : Number, bonusDamage : Number = 0, duration : int = 3, attackVelocity : FlxPoint = null) : void

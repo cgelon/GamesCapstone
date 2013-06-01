@@ -210,6 +210,7 @@ package people
 			{
 				(_soundsToAction[action] as SoundEffect).play();
 			}
+			
 			// Play the animation associated with the action.
 			if (_animationsToAction[action] != null)
 			{

@@ -13,8 +13,8 @@ package attacks
 	 */
 	public class HatThrow extends ProjectileAttack
 	{
-		public static const HAT_WIDTH : Number = 10;
-		public static const HAT_HEIGHT : Number = 10;
+		public static const HAT_WIDTH : Number = 17;
+		public static const HAT_HEIGHT : Number = 14;
 		public static const HAT_DAMAGE : Number = 2;
 		public static const HAT_SPEED : Number = 225;
 		
@@ -29,42 +29,35 @@ package attacks
 		 *  Phase 3: Hat comes back.
 		 */ 
 		private var _phase : uint;
-		public function get phase() : uint
-		{
-			return _phase;
-		}
 		
 		private var _initVelocity : FlxPoint;
 		
 		private var phaseTimer : FlxTimer;
 		
-		
-		public function get vel() : String
-		{
-			return "<" + velocity.x + ", " + velocity.y + ">";
-		}
+		[Embed(source = '../../assets/hat.png')] private var hatPNG : Class;
 		
 		public function HatThrow() 
 		{
 			super(HAT_WIDTH, HAT_HEIGHT, HAT_DAMAGE);
 			phaseTimer = new FlxTimer();
 			
-			FlxG.watch(this, "phase", "phase");
-			FlxG.watch(this, "vel", "vel");
+			loadGraphic(hatPNG, false, false, 17, 14);
+			
+			_killOnHit = false;
 		}
 		
 		override public function initialize(x : Number, y : Number, bonusDamage : Number = 0, duration : int = 3, attackVelocity : FlxPoint = null) : void
 		{
+			maxVelocity = new FlxPoint(Math.abs(attackVelocity.x), Math.abs(attackVelocity.y));
 			super.initialize(x, y, bonusDamage, duration, attackVelocity);
 			
 			if (attackVelocity == null || attackVelocity.x < 0)
 				_direction = FlxObject.LEFT;
 			else
 				_direction = FlxObject.RIGHT;
-				
+			
 			_phase = 1;
 			_initVelocity = new FlxPoint(attackVelocity.x, attackVelocity.y);
-			
 		}
 		
 		override public function update() : void
@@ -100,6 +93,16 @@ package attacks
 					}
 					break;
 			}
+		}
+		
+		public function get vel() : String
+		{
+			return "<" + velocity.x + ", " + velocity.y + ">";
+		}
+		
+		public function get phase() : uint
+		{
+			return _phase;
 		}
 	}
 

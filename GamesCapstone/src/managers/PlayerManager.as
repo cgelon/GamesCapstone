@@ -2,6 +2,7 @@ package managers
 {
 	import attacks.Attack;
 	import attacks.EnemyAttack;
+	import attacks.GroundSlam;
 	import levels.EndLevel;
 	import org.flixel.FlxText;
 	import people.players.Player;
@@ -49,6 +50,11 @@ package managers
 					|| (player.isTouching(FlxObject.LEFT) && player.velocity.x < 0))
 				{
 					player.velocity.x = -player.velocity.x;
+				}
+				
+				if (attack is GroundSlam)
+				{
+					player.velocity.y = -player.maxVelocity.y / 2;
 				}
 				
 				player.hurt(attack.damage);

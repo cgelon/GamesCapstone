@@ -9,22 +9,25 @@ package attacks
 	 * ...
 	 * @author ...
 	 */
-	public class LaserAttack extends Attack
+	public class LaserAttack extends ProjectileAttack
 	{
-		public static const LASER_WIDTH : Number = 200;
-		public static const LASER_HEIGHT : Number = 3;
+		public static const LASER_WIDTH : Number = 32;
+		public static const LASER_HEIGHT : Number = 4;
 		public static const LASER_DAMAGE : Number = 2;
 		
-		public static const LASER_WINDUP_DURATION : Number = 0.75;
-		public static const LASER_FIRE_DURATION : Number = 0.25;
-		
-		private var _phase : uint;
+		public static const LASER_SPEED : Number = 225;
+		public static const LASER_DURATION : Number = 1;
 		
 		private var _laserTimer : FlxTimer;
 		
+		[Embed(source = '../../assets/laser.png')] private var laserPNG : Class;
+		
 		public function LaserAttack() 
 		{
-			super(LASER_WIDTH, LASER_HEIGHT, LASER_DAMAGE, AttackType.NORMAL);
+			super(LASER_WIDTH, LASER_HEIGHT, LASER_DAMAGE);
+			
+			loadGraphic(laserPNG, true, false, LASER_WIDTH, LASER_HEIGHT);
+			addAnimation("fire", [0, 1], 16, true);
 			_laserTimer = new FlxTimer();
 		}
 		
@@ -32,9 +35,10 @@ package attacks
 		{
 			super.initialize(x, y, bonusDamage, duration, attackVelocity);
 			
-			_phase = 1;
+			play("fire");
 		}
 		
+		/*
 		override public function update() : void
 		{
 			switch (_phase)
@@ -65,6 +69,7 @@ package attacks
 					break;
 			}
 		}
+		*/
 		
 	}
 
