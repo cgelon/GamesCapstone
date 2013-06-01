@@ -34,6 +34,7 @@ package levels
 			_rooms.push(AcidSwitches);
 			_rooms.push(AcidDeath);
 			_rooms.push(ForceFieldAndAcid);
+			_rooms.push(LightningIntro);
 			_rooms.push(EvilLabVatLevel);
 			_rooms.push(AcidCrates);
 			_rooms.push(EndLevel);
