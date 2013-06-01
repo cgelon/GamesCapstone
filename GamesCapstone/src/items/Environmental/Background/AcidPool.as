@@ -12,12 +12,16 @@ package items.Environmental.Background
 	{
 		private var started: Boolean;
 		private var width: Number;
+		private const baseVelocity: Number = -30;
+		public var velocity: Number;
 		
 		public function AcidPool(X: Number = 0, Y: Number = 0, width: Number = 18 * 16) 
 		{
 			super(X, Y + 16);
 			this.started = false;
 			this.width = width;
+			this.velocity = 0;
+			//FlxG.watch(this, "velocity");
 		}
 		
 		public function addAcid(X:Number, Y:Number)  : void
@@ -25,18 +29,48 @@ package items.Environmental.Background
 			var acid : Acid = recycle( Acid ) as Acid;
 			acid.initialize(X, Y);
 			add(acid);
-			acid.velocity.y = -30;
 			acid.playStart();
+		}
+		
+		override public function update() : void
+		{
+			super.update();
+			if (started) {
+				if (members[0].onScreen())
+				{
+					velocity = baseVelocity;
+					setVelocity(baseVelocity);
+				}
+				else
+				{
+					velocity = baseVelocity * 2;
+					setVelocity(baseVelocity * 2);
+				}
+			}
 		}
 		
 		public function start() : void
 		{
 			if (!started) {
 				started = true;
-				add(new AcidBlock(x, y, width));
+				var block: AcidBlock = new AcidBlock(x, y, width);
+				add(block);
 				for (var i: int = 0; i < width; i = i+16)
 				{
 					addAcid(x + i, y - (16));
+				}
+				velocity = baseVelocity;
+				setVelocity(baseVelocity);
+			}
+		}
+		
+		private function setVelocity(velocity: Number) : void
+		{
+			for (var i:int = 0; i < length; i++)
+			{
+				if (members[i] != null)
+				{
+					members[i].velocity.y = velocity;
 				}
 			}
 		}

@@ -15,6 +15,7 @@ package items.Environmental.Background
 		private const ACID_DAMAGE_PERCENT : Number = 150;
 		/** Damage dealt by acid every frame. */
 		private const ACID_DAMAGE : Number = (ACID_DAMAGE_PERCENT / 100)  * PlayerStats.MAX_HEALTH / FlxG.framerate;
+		private var originalY: Number;
 
 		public function AcidBlock(X: Number, Y: Number, width: Number) 
 		{
@@ -23,6 +24,7 @@ package items.Environmental.Background
 			this.y = Y;
 			this.width = width;
 			this.height = 1;
+			this.originalY = Y;
 			immovable = true;
 			
 			makeGraphic(width, height, 0xFF98ED67, true);
@@ -32,8 +34,7 @@ package items.Environmental.Background
 		override public function update() : void
 		{
 			super.update();
-			height++;
-			this.y--;
+			height = originalY - y + 1
 			makeGraphic(width, height, 0xFF98ED67, true);
 			FlxG.clearBitmapCache();
 		}
