@@ -12,7 +12,7 @@ package
 	{
 		public function Main()
 		{
-			FlxG.debug = false;
+			FlxG.debug = true;
 			super( 320, 240, MainMenuState, 2, 30, 30 );
 			//if (!FlxG.debug)
 			//{
