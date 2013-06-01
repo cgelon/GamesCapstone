@@ -2,6 +2,8 @@ package states
 {
 	import attacks.Attack;
 	import attacks.AttackType;
+	import attacks.GroundSlam;
+	import attacks.ProjectileAttack;
 	import cutscenes.TheInformant;
 	import items.Environmental.Background.Door;
 	import items.Environmental.Crate;
@@ -14,12 +16,14 @@ package states
 	import managers.ControlBlockManager;
 	import managers.EnemyAttackManager;
 	import managers.EnemyManager;
+	import managers.GroundSlamManager;
 	import managers.LevelManager;
 	import managers.Manager;
 	import managers.ObjectManager;
 	import managers.PlayerAttackManager;
 	import managers.PlayerManager;
 	import managers.UIObjectManager;
+	import org.flixel.FlxBasic;
 	import org.flixel.FlxCamera;
 	import org.flixel.FlxG;
 	import org.flixel.FlxObject;
@@ -135,6 +139,7 @@ package states
 			}
 
 			var enemyAttackManager : EnemyAttackManager = new EnemyAttackManager();
+			var groundSlamManager : GroundSlamManager = new GroundSlamManager();
 			var playerAttackManager : PlayerAttackManager = new PlayerAttackManager();
 
 			var informant : TheInformant = new TheInformant();
@@ -163,6 +168,7 @@ package states
 			addManager(objectManager);
 			addManager(uiObjectManager);
 			addManager(enemyAttackManager);
+			addManager(groundSlamManager);
 			addManager(playerAttackManager);
 			addManager(informant);
 			addManager(controlBlockManager);
@@ -243,6 +249,7 @@ package states
 
 			//FlxG.overlap(getManager(PlayerManager), getManager(EnemyManager), playerHit);
 			FlxG.overlap(getManager(PlayerManager), getManager(EnemyAttackManager), playerAttacked);
+			FlxG.overlap(getManager(PlayerManager), getManager(GroundSlamManager), playerAttacked);
 
 			if ((getManager(PlayerManager) as PlayerManager).player.readyToReset)
 			{
@@ -414,7 +421,7 @@ package states
 				FlxG.switchState(new GameState(previousRoom, true));
 			}
 		}
-
+	
 		public function attackHitLevel(attack : Attack, level : FlxTilemap) : void
 		{
 			if (attack.type == AttackType.PROJECTILE)

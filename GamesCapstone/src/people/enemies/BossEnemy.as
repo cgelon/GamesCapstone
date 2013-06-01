@@ -4,6 +4,8 @@ package people.enemies
 	import attacks.StrongAttack;
 	import attacks.HatThrow;
 	import managers.EnemyAttackManager;
+	import managers.GroundSlamManager;
+	import managers.Manager;
 	import org.flixel.FlxG;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxTimer;
@@ -149,7 +151,8 @@ package people.enemies
 							if (!actionTimer.running)
 							{
 								actionTimer.start(2 * SLAM_HIT_DURATION, 1, function(timer : FlxTimer) : void {
-									attackManager.groundSlam(x, y, playerDirection);
+									var attackX : Number = facing == FlxObject.RIGHT ? x : x + width;
+									(Manager.getManager(GroundSlamManager) as GroundSlamManager).groundSlam(attackX, y + height, playerDirection);
 									actionTimer.start(2, 1, function(timer : FlxTimer) : void {
 										executeAction(ActorAction.STOP, ActorState.IDLE)
 									});
@@ -157,9 +160,6 @@ package people.enemies
 							}
 							break;
 					}
-					//velocity.x = 0;
-					//attackManager.groundSlam(x, y + height - GroundSlam.SLAM_HEIGHT, playerDirection);
-					//executeAction(ActorAction.STOP, ActorState.IDLE)
 					break;
 				case ActorState.RUNNING:
 					velocity.x = maxVelocity.x * (playerDirection == FlxObject.LEFT ? -1 : 1);
@@ -174,15 +174,17 @@ package people.enemies
 							var randNum : Number = Math.random();
 							if (randNum < 1)
 							{
-								//if (randNum < 0.33)
-									//executeAction(BossAction.THROW_HAT, ActorState.ATTACKING);
-								//else if (randNum < 0.67)
-									//executeAction(BossAction.SHOOT_LASER, ActorState.ATTACKING);
-								//else
+								if (randNum < 0.33)
+									executeAction(BossAction.THROW_HAT, ActorState.ATTACKING);
+								else if (randNum < 0.67)
+									executeAction(BossAction.SHOOT_LASER, ActorState.ATTACKING);
+								else
 									executeAction(BossAction.SLAM_GROUND, ActorState.ATTACKING);
 							}
 						});
 					}
+					
+					
 					break;
 				case ActorState.HURT:
 					if (!actionTimer.running)

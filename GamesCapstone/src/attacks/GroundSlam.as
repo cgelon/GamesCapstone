@@ -1,7 +1,10 @@
 package attacks 
 {
+	import managers.LevelManager;
+	import org.flixel.FlxObject;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxG;
+	import org.flixel.FlxTilemap;
 	/**
 	 * ...
 	 * @author ...
@@ -11,7 +14,7 @@ package attacks
 		public static const SLAM_WIDTH : Number = 5;
 		public static const SLAM_HEIGHT : Number = 45;
 		public static const SLAM_DAMAGE : Number = 2;
-		public static const SLAM_SPEED : Number = 125;
+		public static const SLAM_SPEED : Number = 100;
 		public static const SLAM_DURATION : Number = 1;
 		
 		/** Delay (in seconds) between parts of the slam attack. */
@@ -23,8 +26,11 @@ package attacks
 		
 		private var _prevFrame : int;
 		private var _initHeight : Number;
+		private var _initVelocity : FlxPoint;
 		
 		[Embed(source = '../../assets/slam.png')] private var slamPNG : Class;
+		
+		public function get xVel() : Number { return _curFrame; }
 		
 		public function GroundSlam() 
 		{
@@ -36,20 +42,27 @@ package attacks
 			width = SLAM_WIDTH;
 			
 			_killOnHit = false;
+			_killOnLevelCollide = false;
 			
-			//FlxG.watch(this, "finished", "finished");
+			drag.x = 0;
+			FlxG.watch(this, "xVel", "xVel");
 		}
 		
 		override public function initialize(x : Number, y : Number, bonusDamage : Number = 0, duration : int = 3, attackVelocity : FlxPoint = null) : void
 		{
-			super.initialize(x, y + SLAM_HEIGHT - _frameHeights[0], bonusDamage, duration, attackVelocity);
+			super.initialize(x, y - SLAM_HEIGHT, bonusDamage, duration, attackVelocity);
 			
 			height = _frameHeights[0];
-			_prevFrame = 0;
 			_initHeight = y;
-			offset.y = SLAM_HEIGHT - height;
-			//y = _initHeight; // + SLAM_HEIGHT; // - _frameHeights[0];
+			//_initVelocity = attackVelocity;
+			
+			offset.y = SLAM_HEIGHT - height + 1;
+			this.y += SLAM_HEIGHT - _frameHeights[0];
+			
 			play("rise");
+			_prevFrame = _curFrame;
+			
+			allowCollisions = FlxObject.RIGHT | FlxObject.LEFT;
 		}
 		
 		override public function update() : void
@@ -59,17 +72,16 @@ package attacks
 			if (_prevFrame != _curFrame)
 			{
 				height = _frameHeights[_curFrame];
-				offset.y -= _frameHeights[_curFrame] - _frameHeights[_prevFrame];
-				//y = _initHeight + SLAM_HEIGHT - _frameHeights[_curFrame];
 				y -= _frameHeights[_curFrame] - _frameHeights[_prevFrame];
+				offset.y -= _frameHeights[_curFrame] - _frameHeights[_prevFrame];
+				
 				_prevFrame = _curFrame;
 			}
-			
 		}
 		
 		override public function kill() : void
 		{
-			_prevFrame = 0;
+			super.kill();
 		}
 		
 	}
