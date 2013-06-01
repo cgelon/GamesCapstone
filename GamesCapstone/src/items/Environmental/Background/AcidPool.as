@@ -12,14 +12,16 @@ package items.Environmental.Background
 	{
 		private var started: Boolean;
 		private var width: Number;
-		private const baseVelocity: Number = -30;
+		private const baseVelocity: Number = -20;
+		private var maxheight: Number;
 		public var velocity: Number;
 		
-		public function AcidPool(X: Number = 0, Y: Number = 0, width: Number = 18 * 16) 
+		public function AcidPool(X: Number = 0, Y: Number = 0, width: Number = 18 * 16, maxheight: Number = 11 * 16) 
 		{
 			super(X, Y + 16);
 			this.started = false;
 			this.width = width;
+			this.maxheight = maxheight;
 			this.velocity = 0;
 			//FlxG.watch(this, "velocity");
 		}
@@ -36,15 +38,15 @@ package items.Environmental.Background
 		{
 			super.update();
 			if (started) {
-				if (members[0].onScreen())
+				if (members[0].y <= maxheight)
 				{
-					velocity = baseVelocity;
-					setVelocity(baseVelocity);
+					setVelocity(0);
 				}
 				else
 				{
-					velocity = baseVelocity * 2;
-					setVelocity(baseVelocity * 2);
+					var acidDist: Number = (FlxG.camera.height - members[0].getScreenXY().y);
+					acidDist = (acidDist < 0) ? acidDist : 0;
+					setVelocity(baseVelocity + -Math.pow(1.2, -acidDist));
 				}
 			}
 		}
@@ -59,13 +61,13 @@ package items.Environmental.Background
 				{
 					addAcid(x + i, y - (16));
 				}
-				velocity = baseVelocity;
 				setVelocity(baseVelocity);
 			}
 		}
 		
 		private function setVelocity(velocity: Number) : void
 		{
+			this.velocity = velocity;
 			for (var i:int = 0; i < length; i++)
 			{
 				if (members[i] != null)
