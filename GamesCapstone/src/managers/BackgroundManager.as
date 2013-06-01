@@ -2,8 +2,6 @@ package managers
 {
 	import items.Environmental.Background.BackgroundInterface;
 	import items.Environmental.Background.Circuit.Circuit;
-	import items.Environmental.Background.Circuit.Reactor;
-	import items.Environmental.Background.Circuit.Trigger;
 	import org.flixel.FlxBasic;
 	import org.flixel.FlxPoint;
 	
@@ -45,6 +43,26 @@ package managers
 				remove(reactors[numCircuits]);
 			}
 			numCircuits++;
+		}
+		
+		public function getCircuit(index : int) : Circuit
+		{
+			var circuitsSeen : int = 0;
+			for each (var obj : FlxBasic in members)
+			{
+				if (obj != null && obj is Circuit)
+				{
+					if (circuitsSeen == index)
+					{
+						return obj as Circuit;
+					}
+					else
+					{
+						circuitsSeen++;
+					}
+				}
+			}
+			return null;
 		}
 	}	
 }

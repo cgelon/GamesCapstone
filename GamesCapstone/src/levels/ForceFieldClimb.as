@@ -1,16 +1,8 @@
 package levels
 {
-	import items.Environmental.Background.AcidFlow;
-	import items.Environmental.Background.Lever;
-	import items.Environmental.ForceField;
-	import items.Environmental.Generator;
 	import managers.Manager;
+	import managers.ObjectManager;
 	import managers.PlayerManager;
-	import org.flixel.FlxBasic;
-	import org.flixel.FlxGroup;
-	import org.flixel.FlxPoint;
-	import org.flixel.FlxTilemap;
-	import people.enemies.Robot;
 	
 	/**
 	 * ...
@@ -46,15 +38,18 @@ package levels
 		
 		override public function checkInformant():void 
 		{
-			if (_informantTalked[0] == null && (Manager.getManager(PlayerManager) as PlayerManager).player.x >  224) {
-				informant.talk("You can put your soccer skills to the test by attacking [J or K] while crouching");
+			if (_informantTalked[0] == null 
+					&& (Manager.getManager(PlayerManager) as PlayerManager).player.x >  224
+					&& (Manager.getManager(ObjectManager) as ObjectManager).getCircuit(1).enabled)
+			{
+				informant.talk("That generator is in a tricky spot... do you have any soccer skills? Try attacking when you are low to the ground.");
 				_informantTalked[0] = true;
 			} 
 			else if (_informantTalked[1] == null && 
 					 (Manager.getManager(PlayerManager) as PlayerManager).player.x < 512 &&
 					 (Manager.getManager(PlayerManager) as PlayerManager).player.y < 256) 
 			{
-				informant.talk("You can also attack from above when you're falling");
+				informant.talk("More generators placed in awkward spots. If you have a fancy air kick, you might be able to get at it.");
 				_informantTalked[1] = true;
 			}
 		}
