@@ -32,7 +32,7 @@ package levels
 			_rooms.push(AcidPlatformLevel);
 			_rooms.push(AcidSwitchesPlatforms);
 			_rooms.push(AcidSwitches);
-			_rooms.push(AcidDeath);
+			//_rooms.push(AcidDeath);
 			_rooms.push(ForceFieldAndAcid);
 			_rooms.push(EvilLabVatLevel);
 			_rooms.push(AcidCrates);
