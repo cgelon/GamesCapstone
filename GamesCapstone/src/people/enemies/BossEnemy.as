@@ -106,7 +106,7 @@ package people.enemies
 		
 		override public function initialize(x : Number, y : Number, health : Number = 6) : void
 		{
-			super.initialize(x, y, 30);
+			super.initialize(x, y, 50);
 			state = ActorState.IDLE;
 			_phase = 1;
 			_direction = FlxObject.LEFT;
@@ -137,20 +137,6 @@ package people.enemies
 					
 					switch(lastAction)
 					{
-						/*
-						case ActorAction.ATTACK:
-							if (!actionTimer.running)
-							{
-								actionTimer.start(ATTACK_WINDUP, 1, function(timer : FlxTimer) : void {
-									var startX : Number = (facing == FlxObject.RIGHT ? x - EnemyAttack.ENEMY_ATTACK_WIDTH: x + width);
-									attackManager.attack(startX, y);
-									actionTimer.start(ATTACK_DURATION, 1, function(timer : FlxTimer) : void {
-										executeAction(ActorAction.STOP, ActorState.IDLE);
-									});
-								});
-							}
-							break;
-						*/
 						case BossAction.THROW_HAT:
 							if (!actionTimer.running)
 							{
@@ -265,27 +251,12 @@ package people.enemies
 		public function randomAttack() : void
 		{
 			var randNum : Number = Math.random();
-			if (xToPlayer < EnemyAttack.ENEMY_ATTACK_WIDTH)
-			{
-				if (randNum < 0.5)
-					executeAction(BossAction.SLAM_GROUND, ActorState.ATTACKING);
-				else
-				{
-					if (randNum < 0.75)
-						executeAction(BossAction.THROW_HAT, ActorState.ATTACKING);
-					else
-						executeAction(BossAction.SHOOT_LASER, ActorState.ATTACKING);
-				}
-			}
+			if (randNum < 0.33)
+				executeAction(BossAction.THROW_HAT, ActorState.ATTACKING);
+			else if (randNum < 0.67)
+				executeAction(BossAction.SHOOT_LASER, ActorState.ATTACKING);
 			else
-			{
-				if (randNum < 0.33)
-					executeAction(BossAction.THROW_HAT, ActorState.ATTACKING);
-				else if (randNum < 0.67)
-					executeAction(BossAction.SHOOT_LASER, ActorState.ATTACKING);
-				else
-					executeAction(BossAction.SLAM_GROUND, ActorState.ATTACKING);
-			}
+				executeAction(BossAction.SLAM_GROUND, ActorState.ATTACKING);
 		}
 		
 		public function get xToPlayer() : Number 

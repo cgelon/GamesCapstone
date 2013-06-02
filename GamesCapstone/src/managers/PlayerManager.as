@@ -3,6 +3,8 @@ package managers
 	import attacks.Attack;
 	import attacks.EnemyAttack;
 	import attacks.GroundSlam;
+	import attacks.HatThrow;
+	import attacks.LaserAttack;
 	import levels.EndLevel;
 	import org.flixel.FlxText;
 	import people.players.Player;
@@ -42,21 +44,32 @@ package managers
 			// moving out of the attack's hitbox.
 			if (!(player.state == ActorState.ROLLING || (player.state == ActorState.HURT /**&& !((getManager(LevelManager) as LevelManager).level is EndLevel)*/) || player.state == ActorState.DEAD))
 			{
-				player.acceleration.x = 0;
-				player.velocity.x = ((player.x - attack.x < 0) ? -1 : 1) * player.maxVelocity.x * 2;
-				
-				// If the player is pinned against a wall, make the fly the other direction.
-				if ((player.isTouching(FlxObject.RIGHT) && player.velocity.x > 0)
-					|| (player.isTouching(FlxObject.LEFT) && player.velocity.x < 0))
-				{
-					player.velocity.x = -player.velocity.x;
-				}
-				
 				if (attack is GroundSlam)
 				{
 					player.velocity.y = -player.maxVelocity.y / 2;
 				}
+				else if (attack is LaserAttack || attack is HatThrow)
+				{
+					player.velocity.y = -player.maxVelocity.y / 4;
+					player.velocity.x = player.maxVelocity.x;
+					if (attack.velocity.x < 0)
+						player.velocity.x = -player.velocity.x;
+				}
+				else
+				{
+					player.acceleration.x = 0;
+					player.velocity.x = ((player.x - attack.x < 0) ? -1 : 1) * player.maxVelocity.x * 2;
+					
+					// If the player is pinned against a wall, make the fly the other direction.
+					if ((player.isTouching(FlxObject.RIGHT) && player.velocity.x > 0)
+						|| (player.isTouching(FlxObject.LEFT) && player.velocity.x < 0))
+					{
+						player.velocity.x = -player.velocity.x;
+					}
+				}
 				
+				
+				player.acceleration.x = 0;
 				player.hurt(attack.damage);
 			}
 		}
