@@ -19,6 +19,7 @@ package levels
 		[Embed(source = "../../assets/mapCSV_BossLair_Player.csv", mimeType = "application/octet-stream")] public var playerCSV : Class;
 		[Embed(source = "../../assets/mapCSV_BossLair_Enemies.csv", mimeType = "application/octet-stream")] public var enemiesCSV : Class;
 		[Embed(source = "../../assets/mapCSV_BossLair_Background.csv", mimeType = "application/octet-stream")] public var backgroundCSV : Class;
+		[Embed(source = "../../assets/mapCSV_BossLair_Objects.csv", mimeType = "application/octet-stream")] public var objectsCSV : Class;
 		[Embed(source = "../../assets/lab tile arrange.png")] public var tilePNG : Class;
 		
 		public function BossLair ()
@@ -36,6 +37,7 @@ package levels
 			parseBackground(backgroundCSV, tilePNG);
 			backgroundStarts.push(new FlxPoint(38 * 16, 76 * 16));
 			backgroundTypes.push(AcidPool);
+			parseObjects(objectsCSV, tilePNG);
 			
 			add(map);
 		}

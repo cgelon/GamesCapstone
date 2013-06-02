@@ -17,6 +17,7 @@ package items.Environmental
 		private var Y : Number;
 		private var height : Number;
 		private var endDoor : Boolean;
+		public var state: String;
 		
 		function BlastDoor(X:Number = 0, Y:Number = 0, Height:Number = 1, endDoor:Boolean = false) : void 
 		{	
@@ -30,38 +31,55 @@ package items.Environmental
 			{
 				add(new Wall(X, Y + i - height));
 			}
+			close();
 		}
 		
-		private function open() : void
+		public function open() : void
 		{
 			for (var i: int = 0; i < length; i++)
 			{
 				FlxVelocity.moveTowardsPoint(members[i], new FlxPoint(X + 8, Y + 16 * i + 8 - height), 100, 200);
+				if (members[i].velocity.y == 0)
+				{
+					state = "open";
+				} else
+				{
+					state = "opening";
+				}
 			}
 		}
 		
-		private function close() : void
+		public function close() : void
 		{
 			for (var i: int = 0; i < length; i++)
 			{
 				FlxVelocity.moveTowardsPoint(members[i], new FlxPoint(X + 8, Y + 16 * i + 8), 100, 250);
-			}
-		}
-		
-		private function act(): void
-		{
-			if ((getManager(EnemyManager) as EnemyManager).allEnemiesDead() && endDoor)
-			{
-				open();
-			} else {
-				close();
+				if (members[i].velocity.y == 0)
+				{
+					state = "closed";
+				} else
+				{
+					state = "closing";
+				}
 			}
 		}
 		
 		override public function update() : void
 		{
 			super.update();
-			act();
+			if ((getManager(EnemyManager) as EnemyManager).allEnemiesDead() && endDoor)
+			{
+				state = "opening";
+			}
+			
+			if (state == "closing")
+			{
+				close();
+			}
+			else if (state == "opening")
+			{
+				open();
+			}
 		}
 		
 		/**
