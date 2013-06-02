@@ -10,6 +10,7 @@ package states
 	import items.Environmental.EnvironmentalItem;
 	import items.Environmental.ForceFieldUnit;
 	import items.Environmental.Generator;
+	import levels.BossLair;
 	import levels.EndLevel;
 	import levels.Level;
 	import managers.BackgroundManager;
@@ -73,13 +74,20 @@ package states
 
 		override public function create() : void
 		{
-			if (FlxG.music == null || !FlxG.music.active)
+			if (_level is BossLair)
 			{
-				FlxG.playMusic(Music.CREEPY, 1.0);
+				FlxG.playMusic(Music.BOSS);
 			}
-			if (_level is EndLevel)
+			else
 			{
-				FlxG.music.fadeOut(3);
+				if (FlxG.music == null || !FlxG.music.active)
+				{
+					FlxG.playMusic(Music.CREEPY);
+				}
+				if (_level is EndLevel)
+				{
+					FlxG.music.fadeOut(3);
+				}
 			}
 			
 			// Set up all the managers before adding them to the state.

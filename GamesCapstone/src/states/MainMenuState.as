@@ -60,7 +60,7 @@ package states
 			// If the player presses space, play a sound, fade out, and then go to the first room.
 			if (!_spacePressed && FlxG.keys.justPressed("SPACE"))
 			{
-				FlxG.fade(Color.BLACK, 3, function() : void
+				FlxG.fade(Color.BLACK, 2, function() : void
 				{
 					FlxG.switchState(new GameState(Registry.roomFlow.getCurrentRoom()));
 				});
