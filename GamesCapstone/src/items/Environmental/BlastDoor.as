@@ -13,8 +13,8 @@ package items.Environmental
 	 */
 	public class BlastDoor extends EnvironmentalGroup
 	{
-		private var X : Number;
-		private var Y : Number;
+		public var X : Number;
+		public var Y : Number;
 		private var height : Number;
 		private var endDoor : Boolean;
 		public var state: String;

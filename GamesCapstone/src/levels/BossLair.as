@@ -1,8 +1,10 @@
 package levels
 {
 	import items.Environmental.Background.AcidPool;
+	import items.Environmental.BlastDoor;
 	import managers.BackgroundManager;
 	import managers.Manager;
+	import managers.ObjectManager;
 	import managers.PlayerManager;
 	import org.flixel.FlxG;
 	import org.flixel.FlxPoint;
@@ -46,6 +48,10 @@ package levels
 		{
 			super.update();
 			var player: Player = (getManager(PlayerManager) as PlayerManager).player;
+			if (player.x > 16 * 38)
+			{
+				getBlastDoor(0).close();
+			}
 			if (player.x > 16 * 38 && player.y < 73 * 16)
 			{
 				startAcid();
@@ -63,6 +69,21 @@ package levels
 					acidPool.start();
 				}
 			}
+		}
+		
+		public function getBlastDoor(index: Number): BlastDoor
+		{
+			var blastDoors: Array = [];
+			var objects: Array = (getManager(ObjectManager) as ObjectManager).members;
+			for (var i: int = 0; i < objects.length; i++)
+			{
+				var blastDoor: BlastDoor = (objects[i] as BlastDoor);
+				if (blastDoor != null)
+				{
+					blastDoors.push(blastDoor);
+				}
+			}
+			return blastDoors.sortOn("X", Array.NUMERIC)[index];
 		}
 		
 		/**
