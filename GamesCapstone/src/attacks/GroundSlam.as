@@ -13,7 +13,7 @@ package attacks
 	{
 		public static const SLAM_WIDTH : Number = 5;
 		public static const SLAM_HEIGHT : Number = 45;
-		public static const SLAM_DAMAGE : Number = 2;
+		public static const SLAM_DAMAGE : Number = 1;
 		public static const SLAM_SPEED : Number = 100;
 		public static const SLAM_DURATION : Number = 1;
 		

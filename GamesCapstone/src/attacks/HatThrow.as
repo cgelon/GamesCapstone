@@ -15,7 +15,7 @@ package attacks
 	{
 		public static const HAT_WIDTH : Number = 17;
 		public static const HAT_HEIGHT : Number = 14;
-		public static const HAT_DAMAGE : Number = 2;
+		public static const HAT_DAMAGE : Number = 1;
 		public static const HAT_SPEED : Number = 225;
 		
 		public static const PHASE_TIME : Number = .5;

@@ -13,9 +13,9 @@ package attacks
 	 */
 	public class EnemyAttack extends Attack
 	{
-		private const ENEMY_ATTACK_DAMAGE : Number = 1;
-		private const ENEMY_ATTACK_WIDTH : Number = 20;
-		private const ENEMY_ATTACK_HEIGHT : Number = 60;
+		public static const ENEMY_ATTACK_DAMAGE : Number = 1;
+		public static const ENEMY_ATTACK_WIDTH : Number = 20;
+		public static const ENEMY_ATTACK_HEIGHT : Number = 60;
 		
 		public function EnemyAttack()
 		{
