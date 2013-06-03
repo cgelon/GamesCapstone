@@ -1,5 +1,6 @@
 package managers 
 {
+	import org.flixel.FlxBasic;
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxG;
 	import states.GameState;
@@ -14,6 +15,22 @@ package managers
 		public function Manager() 
 		{
 			
+		}
+		
+		/**
+		 * Returns the first instance of the specified class in this manager, or null if none exist.
+		 */
+		public function getFirstOfClass(c : Class) : FlxBasic
+		{
+			for (var i : int = 0; i < members.length; i++)
+			{
+				var basic : FlxBasic = members[i];
+				if (basic != null && basic.exists && basic.alive)
+				{
+					return basic;
+				}
+			}
+			return null;
 		}
 		
 		/**

@@ -106,7 +106,7 @@ package people.enemies
 		
 		override public function initialize(x : Number, y : Number, health : Number = 6) : void
 		{
-			super.initialize(x, y, 50);
+			super.initialize(x, y, 40);
 			state = ActorState.IDLE;
 			_phase = 1;
 			_direction = FlxObject.LEFT;
@@ -117,134 +117,155 @@ package people.enemies
 		
 		override public function update():void 
 		{
-			switch (state)
+			if (FlxG.cutscene)
 			{
-				case ActorState.IDLE:
-					velocity.x = 0;
-					facing = playerDirection == FlxObject.LEFT ? FlxObject.RIGHT : FlxObject.LEFT;
-					if (!actionTimer.running)
-					{
-						actionTimer.start(IDLE_DURATION, 1, function(timer : FlxTimer) : void {
-							executeAction(ActorAction.RUN, ActorState.RUNNING);
-						});
-					}
-					break;
-				case ActorState.ATTACKING:
-					velocity.x = 0;
-					
-					if (!actionTimer.running)
+				updateCutsceneStates();
+				drag.x = 0;
+			}
+			else
+			{
+				switch (state)
+				{
+					case ActorState.IDLE:
+						velocity.x = 0;
 						facing = playerDirection == FlxObject.LEFT ? FlxObject.RIGHT : FlxObject.LEFT;
-					
-					switch(lastAction)
-					{
-						case BossAction.THROW_HAT:
-							if (!actionTimer.running)
-							{
-								actionTimer.start(HAT_WINDUP, 1, function(timer : FlxTimer) : void {
-									var attackDirection : uint = facing == FlxObject.LEFT ? FlxObject.RIGHT : FlxObject.LEFT;
-									var startX : Number = (facing == FlxObject.RIGHT ? x - HatThrow.HAT_WIDTH : x + width);
-									attackManager.throwHat(startX, y, attackDirection);
-									actionTimer.start(3*HatThrow.PHASE_TIME, 1, function(timer : FlxTimer) : void {
-										executeAction(BossAction.CATCH_HAT, ActorState.ATTACKING)
-									});
-								});
-							}
-							break;
-						case BossAction.CATCH_HAT:
-							if (finished)
-								executeAction(ActorAction.STOP, ActorState.IDLE);
-							break;
-						case BossAction.SHOOT_LASER:
-							if (!actionTimer.running)
-							{
-								actionTimer.start(LASER_WINDUP, 1, function(timer : FlxTimer) : void {
-									var attackDirection : uint = facing == FlxObject.LEFT ? FlxObject.RIGHT : FlxObject.LEFT;
-									var newX : Number = facing == FlxObject.RIGHT ? x + 2 : x + width - 2;
-									attackManager.fireLaser(newX, y + 20, attackDirection);
-									actionTimer.start(.25, 1, function(timer : FlxTimer) : void {
-										attackManager.fireLaser(newX, y + 20, attackDirection);
-										executeAction(ActorAction.STOP, ActorState.IDLE);
-									});
-								});
-							}
-							break;
-						case BossAction.SLAM_GROUND:
-							if (!actionTimer.running)
-							{
-								actionTimer.start(2 * ATTACK_WINDUP, 1, function(timer : FlxTimer) : void {
-									var attackDirection : uint = facing == FlxObject.LEFT ? FlxObject.RIGHT : FlxObject.LEFT;
-									var attackX : Number = facing == FlxObject.RIGHT ? x : x + width;
-									(Manager.getManager(GroundSlamManager) as GroundSlamManager).groundSlam(attackX, y + height, attackDirection);
-									actionTimer.start(SLAM_HIT_DURATION, 1, function(timer : FlxTimer) : void {
-										executeAction(ActorAction.STOP, ActorState.IDLE)
-									});
-								});
-							}
-							break;
-					}
-					break;
-				case ActorState.RUNNING:
-					if (isTouching(FlxObject.RIGHT) && isTouching(FlxObject.LEFT))
-						velocity.y = -maxVelocity.y / 2;
-					else if (isTouching(FlxObject.RIGHT))
-					{
-						_direction = FlxObject.LEFT;
-						if (_directionCount < MIN_DIRECTION_FRAMES)
+						if (!actionTimer.running)
 						{
-							if (actionTimer.running)
-								actionTimer.stop();
-							randomAttack();
-							break;
+							actionTimer.start(IDLE_DURATION, 1, function(timer : FlxTimer) : void {
+								executeAction(ActorAction.RUN, ActorState.RUNNING);
+							});
 						}
-						_directionCount = 0;
-					}
-					else if (isTouching(FlxObject.LEFT))
-					{
-						_direction = FlxObject.RIGHT;
-						if (_directionCount < MIN_DIRECTION_FRAMES)
-						{
-							if (actionTimer.running)
-								actionTimer.stop();
-							randomAttack();
-							break;
-						}
-						_directionCount = 0;
-					}
+						break;
+					case ActorState.ATTACKING:
+						velocity.x = 0;
 						
-					velocity.x = maxVelocity.x * (_direction == FlxObject.LEFT ? -1 : 1);
-					
-					if (velocity.x < 0)
-						facing = FlxObject.RIGHT;
-					else
-						facing = FlxObject.LEFT;
-					
-					if (!actionTimer.running)
-					{
-						actionTimer.start(MOVE_DURATION, 1, function(timer : FlxTimer) : void {
-							if (state == ActorState.RUNNING)
+						if (!actionTimer.running)
+							facing = playerDirection == FlxObject.LEFT ? FlxObject.RIGHT : FlxObject.LEFT;
+						
+						switch(lastAction)
+						{
+							case BossAction.THROW_HAT:
+								if (!actionTimer.running)
+								{
+									actionTimer.start(HAT_WINDUP, 1, function(timer : FlxTimer) : void {
+										var attackDirection : uint = facing == FlxObject.LEFT ? FlxObject.RIGHT : FlxObject.LEFT;
+										var startX : Number = (facing == FlxObject.RIGHT ? x - HatThrow.HAT_WIDTH : x + width);
+										attackManager.throwHat(startX, y, attackDirection);
+										actionTimer.start(3*HatThrow.PHASE_TIME, 1, function(timer : FlxTimer) : void {
+											executeAction(BossAction.CATCH_HAT, ActorState.ATTACKING)
+										});
+									});
+								}
+								break;
+							case BossAction.CATCH_HAT:
+								if (finished)
+									executeAction(ActorAction.STOP, ActorState.IDLE);
+								break;
+							case BossAction.SHOOT_LASER:
+								if (!actionTimer.running)
+								{
+									actionTimer.start(LASER_WINDUP, 1, function(timer : FlxTimer) : void {
+										var attackDirection : uint = facing == FlxObject.LEFT ? FlxObject.RIGHT : FlxObject.LEFT;
+										var newX : Number = facing == FlxObject.RIGHT ? x + 2 : x + width - 2;
+										attackManager.fireLaser(newX, y + 20, attackDirection);
+										actionTimer.start(.25, 1, function(timer : FlxTimer) : void {
+											attackManager.fireLaser(newX, y + 20, attackDirection);
+											executeAction(ActorAction.STOP, ActorState.IDLE);
+										});
+									});
+								}
+								break;
+							case BossAction.SLAM_GROUND:
+								if (!actionTimer.running)
+								{
+									actionTimer.start(2 * ATTACK_WINDUP, 1, function(timer : FlxTimer) : void {
+										var attackDirection : uint = facing == FlxObject.LEFT ? FlxObject.RIGHT : FlxObject.LEFT;
+										var attackX : Number = facing == FlxObject.RIGHT ? x : x + width;
+										(Manager.getManager(GroundSlamManager) as GroundSlamManager).groundSlam(attackX, y + height, attackDirection);
+										actionTimer.start(SLAM_HIT_DURATION, 1, function(timer : FlxTimer) : void {
+											executeAction(ActorAction.STOP, ActorState.IDLE)
+										});
+									});
+								}
+								break;
+						}
+						break;
+					case ActorState.RUNNING:
+						if (isTouching(FlxObject.RIGHT) && isTouching(FlxObject.LEFT))
+							velocity.y = -maxVelocity.y / 2;
+						else if (isTouching(FlxObject.RIGHT))
+						{
+							_direction = FlxObject.LEFT;
+							if (_directionCount < MIN_DIRECTION_FRAMES)
+							{
+								if (actionTimer.running)
+									actionTimer.stop();
 								randomAttack();
-						});
-					}
-					
-					_directionCount++;
-					break;
-				case ActorState.HURT:
-					if (!actionTimer.running)
-					{
-						actionTimer.start(HURT_DURATION, 1, function(timer : FlxTimer) : void {
-							executeAction(ActorAction.STOP, ActorState.IDLE);
-						});
-					}
-					break;
-				case ActorState.DEAD:
-					velocity.x = 0;
-					if (!actionTimer.running)
-					{
-						actionTimer.start(FLASH_DURATION, 1, function(timer : FlxTimer) : void {
-							kill();
-						});
-					}
-					break;
+								break;
+							}
+							_directionCount = 0;
+						}
+						else if (isTouching(FlxObject.LEFT))
+						{
+							_direction = FlxObject.RIGHT;
+							if (_directionCount < MIN_DIRECTION_FRAMES)
+							{
+								if (actionTimer.running)
+									actionTimer.stop();
+								randomAttack();
+								break;
+							}
+							_directionCount = 0;
+						}
+							
+						velocity.x = maxVelocity.x * (_direction == FlxObject.LEFT ? -1 : 1);
+						
+						if (velocity.x < 0)
+							facing = FlxObject.RIGHT;
+						else
+							facing = FlxObject.LEFT;
+						
+						if (!actionTimer.running)
+						{
+							actionTimer.start(MOVE_DURATION, 1, function(timer : FlxTimer) : void {
+								if (state == ActorState.RUNNING)
+									randomAttack();
+							});
+						}
+						
+						_directionCount++;
+						break;
+					case ActorState.HURT:
+						if (!actionTimer.running)
+						{
+							actionTimer.start(HURT_DURATION, 1, function(timer : FlxTimer) : void {
+								executeAction(ActorAction.STOP, ActorState.IDLE);
+							});
+						}
+						break;
+					case ActorState.DEAD:
+						velocity.x = 0;
+						if (!actionTimer.running)
+						{
+							actionTimer.start(FLASH_DURATION, 1, function(timer : FlxTimer) : void {
+								kill();
+							});
+						}
+						break;
+				}
+			}
+		}
+		
+		private function updateCutsceneStates() : void
+		{
+			// These states can only be triggered when the player is on the ground.
+			if (velocity.x != 0 && state == ActorState.IDLE)
+			{
+				executeAction(ActorAction.RUN, ActorState.RUNNING);
+			}
+			else if (velocity.x == 0 && state == ActorState.RUNNING)
+			{
+				executeAction(ActorAction.STOP, ActorState.IDLE);
 			}
 		}
 		

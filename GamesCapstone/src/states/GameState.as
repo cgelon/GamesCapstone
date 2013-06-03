@@ -29,6 +29,7 @@ package states
 	import org.flixel.FlxState;
 	import org.flixel.FlxTilemap;
 	import people.Actor;
+	import people.enemies.BossEnemy;
 	import people.enemies.Enemy;
 	import people.players.Player;
 	import people.players.PlayerStats;
@@ -140,9 +141,13 @@ package states
 			
 			var uiObjectManager:UIObjectManager = new UIObjectManager();
 			uiObjectManager.createPlayerHud();
+			if (_level is BossLair)
+			{
+				uiObjectManager.createBossHud();
+			}
 			for (i = 0; i < enemyManager.members.length; ++i)
 			{
-				if (enemyManager.members[i] != null)
+				if (enemyManager.members[i] != null && !enemyManager.members[i] is BossEnemy)
 				{
 					uiObjectManager.addHealthBar((enemyManager.members[i] as Actor), 10, 10, 25, 5, true, true);
 				}

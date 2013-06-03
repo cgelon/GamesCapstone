@@ -97,6 +97,7 @@ package cutscenes.engine
 						(action as WaitForAction).cutscene = this;
 					case WaitAction:
 					case MessageAction:
+					case BossHealthBarAction:
 						action.run(nextAction);
 						break;
 					default:
