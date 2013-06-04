@@ -130,6 +130,10 @@ package people.enemies
 				((FlxG.state as GameState).level as BossLair).getBlastDoor(0).open();
 				((FlxG.state as GameState).level as BossLair).getBlastDoor(1).open();
 			}
+			else if (health == maxHealth)
+			{
+				((FlxG.state as GameState).level as BossLair).getBlastDoor(0).close();
+			}
 			
 			if (FlxG.cutscene)
 			{
@@ -305,7 +309,8 @@ package people.enemies
 		override public function getHit(attack : Attack) : void
 		{
 			// Bosses don't get knocked back.
-			dealDamage(attack.damage);
+			if (state != ActorState.DEAD && state != ActorState.HURT)
+				dealDamage(attack.damage);
 			
 			/*
 			if (state != ActorState.DEAD && state != ActorState.HURT)

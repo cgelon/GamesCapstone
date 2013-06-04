@@ -42,7 +42,6 @@ package people.enemies
 		{
 			super.initialize(x, y, health);
 			
-			(Manager.getManager(UIObjectManager) as UIObjectManager).addHealthBar(this as Actor, 100, 1150, 25, 5, true, true);
 			this.health = maxHealth / 2;
 			_enrageMultiplier = 1;
 			_enrageSet = false;
