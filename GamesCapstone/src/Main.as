@@ -13,7 +13,7 @@ package
 	{
 		public function Main()
 		{
-			FlxG.debug = true;
+			FlxG.debug = false;
 			super(320, 240, MainMenuState, 2, 30, 30);
 			SpeedRunTime.load();
 			//if (!FlxG.debug)
