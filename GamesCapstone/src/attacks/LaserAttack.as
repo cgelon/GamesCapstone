@@ -15,8 +15,8 @@ package attacks
 		public static const LASER_HEIGHT : Number = 4;
 		public static const LASER_DAMAGE : Number = 1;
 		
-		public static const LASER_SPEED : Number = 225;
-		public static const LASER_DURATION : Number = 1;
+		public static const LASER_SPEED : Number = 275;
+		public static const LASER_DURATION : Number = .75;
 		
 		private var _laserTimer : FlxTimer;
 		

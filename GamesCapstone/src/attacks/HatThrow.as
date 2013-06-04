@@ -16,9 +16,9 @@ package attacks
 		public static const HAT_WIDTH : Number = 17;
 		public static const HAT_HEIGHT : Number = 14;
 		public static const HAT_DAMAGE : Number = 1;
-		public static const HAT_SPEED : Number = 225;
+		public static const HAT_SPEED : Number = 275;
 		
-		public static const PHASE_TIME : Number = .5;
+		public static const PHASE_TIME : Number = .25;
 		
 		/** Direction that the hat is flying initially. */
 		private var _direction : uint;

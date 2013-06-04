@@ -14,11 +14,11 @@ package attacks
 		public static const SLAM_WIDTH : Number = 5;
 		public static const SLAM_HEIGHT : Number = 45;
 		public static const SLAM_DAMAGE : Number = 1;
-		public static const SLAM_SPEED : Number = 100;
-		public static const SLAM_DURATION : Number = 1;
+		public static const SLAM_SPEED : Number = 133;
+		public static const SLAM_DURATION : Number = .75;
 		
 		/** Delay (in seconds) between parts of the slam attack. */
-		public static const SLAM_DELAY : Number = .1;
+		public static const SLAM_DELAY : Number = .075;
 		/** Number of slams in the slam attack. */
 		public static const NUMBER_SLAMS : int = 10;
 		

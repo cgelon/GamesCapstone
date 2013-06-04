@@ -22,10 +22,12 @@ package managers
 	public class GroundSlamManager extends EnemyAttackManager
 	{
 		private var attackTimer : FlxTimer;
+		private var secondTimer : FlxTimer;
 		
 		public function GroundSlamManager() 
 		{
 			attackTimer = new FlxTimer();
+			secondTimer = new FlxTimer();
 		}
 		
 		public function groundSlam(x : Number, y : Number, direction : uint) : void
@@ -40,6 +42,13 @@ package managers
 			if (!attackTimer.running)
 			{
 				attackTimer.start(GroundSlam.SLAM_DELAY, GroundSlam.NUMBER_SLAMS - 1, function(timer : FlxTimer) : void {
+					var newAttack : GroundSlam = recycle( GroundSlam ) as GroundSlam;
+					newAttack.initialize(x, y, 0, Convert.secondsToFrames(GroundSlam.SLAM_DURATION), attackVelocity);
+				});
+			}
+			else if (!secondTimer.running)
+			{
+				secondTimer.start(GroundSlam.SLAM_DELAY, GroundSlam.NUMBER_SLAMS - 1, function(timer : FlxTimer) : void {
 					var newAttack : GroundSlam = recycle( GroundSlam ) as GroundSlam;
 					newAttack.initialize(x, y, 0, Convert.secondsToFrames(GroundSlam.SLAM_DURATION), attackVelocity);
 				});

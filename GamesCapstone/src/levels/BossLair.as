@@ -1,13 +1,16 @@
 package levels
 {
+	import attacks.EnemyAttack;
 	import items.Environmental.Background.AcidPool;
 	import items.Environmental.BlastDoor;
 	import managers.BackgroundManager;
+	import managers.EnemyManager;
 	import managers.Manager;
 	import managers.ObjectManager;
 	import managers.PlayerManager;
 	import org.flixel.FlxG;
 	import org.flixel.FlxPoint;
+	import people.enemies.BossEnemyPhase2;
 	import people.players.Player;
 	import states.GameState;
 	
@@ -23,6 +26,8 @@ package levels
 		[Embed(source = "../../assets/mapCSV_BossLair_Background.csv", mimeType = "application/octet-stream")] public var backgroundCSV : Class;
 		[Embed(source = "../../assets/mapCSV_BossLair_Objects.csv", mimeType = "application/octet-stream")] public var objectsCSV : Class;
 		[Embed(source = "../../assets/lab tile arrange.png")] public var tilePNG : Class;
+		
+		private var _spawnedPhase2 : Boolean;
 		
 		public function BossLair ()
 		{
@@ -41,6 +46,8 @@ package levels
 			backgroundTypes.push(AcidPool);
 			parseObjects(objectsCSV, tilePNG);
 			
+			_spawnedPhase2 = false;
+			
 			add(map);
 		}
 		
@@ -55,6 +62,14 @@ package levels
 			if (player.x > 16 * 38 && player.y < 73 * 16)
 			{
 				startAcid();
+			}
+			
+			// Player has exitied rising acid area, and it is time to spawn boss phase 2.
+			if (!_spawnedPhase2 && player.x > 16 * 58)
+			{
+				(Manager.getManager(EnemyManager) as EnemyManager).addEnemy(new FlxPoint(16 * 74, 226), BossEnemyPhase2);
+				getBlastDoor(1).close();
+				_spawnedPhase2 = true;
 			}
 		}
 		

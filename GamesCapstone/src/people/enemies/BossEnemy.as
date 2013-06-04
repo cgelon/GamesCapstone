@@ -4,17 +4,21 @@ package people.enemies
 	import attacks.StrongAirAttack;
 	import attacks.StrongAttack;
 	import attacks.HatThrow;
+	import levels.BossLair;
 	import managers.EnemyAttackManager;
 	import managers.GroundSlamManager;
 	import managers.Manager;
+	import managers.UIObjectManager;
 	import org.flixel.FlxG;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxTimer;
 	import org.flixel.FlxObject;
+	import people.Actor;
 	import util.Color;
 	import people.states.ActorState
 	import people.states.ActorAction;
 	import people.states.BossAction;
+	import states.GameState;
 	import attacks.Attack;
 	import attacks.GroundSlam;
 	import util.Convert;
@@ -26,35 +30,36 @@ package people.enemies
 	public class BossEnemy extends Enemy
 	{
 		/** Duration (in seconds) that boss is idle during his attack cycle before moving/attacking. */
-		private const IDLE_DURATION : Number = 1.5;
+		protected const IDLE_DURATION : Number = 1.5;
 		/** Duration (in seconds) that boss moves during his attack cycle before attacking. */
-		private const MOVE_DURATION : Number = 1.5;
+		protected const MOVE_DURATION : Number = 1.5;
 		
 		/** Duration that the boss is hurt for when attacked. */
-		private const HURT_DURATION : Number = .5;
+		protected const HURT_DURATION : Number = .5;
 		/** Windup time (in seconds) before basic attacks and ground slams. */
-		private const ATTACK_WINDUP : Number = .5;
+		protected const ATTACK_WINDUP : Number = .5;
 		/** Duration (in seconds) of the boss' windup for basic attacks. */
-		private const ATTACK_DURATION : Number = .5;
+		protected const ATTACK_DURATION : Number = .5;
 		/** Duration of the laser charge-up, in seconds. */
-		private const LASER_WINDUP : Number = .5;
+		protected const LASER_WINDUP : Number = .5;
 		/** Duration of the hat-throw windup, in seconds. */
-		private const HAT_WINDUP : Number = .5;
+		protected const HAT_WINDUP : Number = .5;
 		/** Duration of the slam attack, in seconds. */
-		private const SLAM_HIT_DURATION : Number = .5;
+		protected const SLAM_HIT_DURATION : Number = .5;
 		/** Amount of time (in seconds) that the boss should flash for when it dies. */
-		private const FLASH_DURATION : Number = 3;
+		protected const FLASH_DURATION : Number = 3;
 		
 		/** Amount of time (in frames) that the boss must move in a given direction before
 		 *  he is willing to turn around. 
 		 */
-		private const MIN_DIRECTION_FRAMES : Number = Convert.secondsToFrames(.5);
+		protected const MIN_DIRECTION_FRAMES : Number = Convert.secondsToFrames(.5);
 		
-		private var _phase : int;
-		private var _direction : uint;
+		protected var _direction : uint;
 		
 		/** How many frames the boss has been moving in the current direction. */
-		private var _directionCount : int;
+		protected var _directionCount : int;
+		
+		protected var _madeHpBar : Boolean;
 		
 		/** The PNG for the player. */
 		[Embed(source = '../../../assets/boss.png')] private var bossPNG : Class;
@@ -106,17 +111,33 @@ package people.enemies
 		
 		override public function initialize(x : Number, y : Number, health : Number = 6) : void
 		{
-			super.initialize(x, y, 50);
+			super.initialize(x, y, 20);
 			state = ActorState.IDLE;
-			_phase = 1;
 			_direction = FlxObject.LEFT;
 			_directionCount = 0;
 			
 			maxVelocity = new FlxPoint(100, 500);
+			
+			_madeHpBar = false;
 		}
 		
 		override public function update():void 
 		{
+			if (!_madeHpBar)
+			{
+				(Manager.getManager(UIObjectManager) as UIObjectManager).addHealthBar(this as Actor, 100, 1150, 50, 50, false, true);
+				_madeHpBar = true;
+			}
+			
+			if (health <= maxHealth / 2)
+			{
+				// TRIGGER CUTSCENE HERE.
+				kill();
+				
+				((FlxG.state as GameState).level as BossLair).getBlastDoor(0).open();
+				((FlxG.state as GameState).level as BossLair).getBlastDoor(1).open();
+			}
+			
 			switch (state)
 			{
 				case ActorState.IDLE:
@@ -161,10 +182,7 @@ package people.enemies
 									var attackDirection : uint = facing == FlxObject.LEFT ? FlxObject.RIGHT : FlxObject.LEFT;
 									var newX : Number = facing == FlxObject.RIGHT ? x + 2 : x + width - 2;
 									attackManager.fireLaser(newX, y + 20, attackDirection);
-									actionTimer.start(.25, 1, function(timer : FlxTimer) : void {
-										attackManager.fireLaser(newX, y + 20, attackDirection);
-										executeAction(ActorAction.STOP, ActorState.IDLE);
-									});
+									executeAction(ActorAction.STOP, ActorState.IDLE);
 								});
 							}
 							break;
@@ -184,9 +202,7 @@ package people.enemies
 					}
 					break;
 				case ActorState.RUNNING:
-					if (isTouching(FlxObject.RIGHT) && isTouching(FlxObject.LEFT))
-						velocity.y = -maxVelocity.y / 2;
-					else if (isTouching(FlxObject.RIGHT))
+					if (isTouching(FlxObject.RIGHT))
 					{
 						_direction = FlxObject.LEFT;
 						if (_directionCount < MIN_DIRECTION_FRAMES)
