@@ -9,6 +9,7 @@ package levels
 	import people.players.Player;
 	import people.states.ActorAction;
 	import people.states.ActorState;
+	import people.states.ActorStateGroup;
 	import util.LearningBlock;
 	
 	/**
@@ -63,11 +64,11 @@ package levels
 			{
 				var kBlock : LearningBlock = controlBlockManager.getLearningBlock(LearningBlock.K);
 				var lBlock : LearningBlock = controlBlockManager.getLearningBlock(LearningBlock.L);
-				if (player.lastAction == ActorAction.ATTACK && (player.lastActionIndex == 0 || player.lastActionIndex == 1 || player.lastActionIndex == 2))
+				if (player.lastAction == ActorAction.WINDUP && (player.lastActionIndex == 0 || player.lastActionIndex == 1 || player.lastActionIndex == 2))
 				{
 					jBlock.complete();
 				}
-				if (player.lastAction == ActorAction.ATTACK && player.lastActionIndex == 3)
+				if (player.lastAction == ActorAction.WINDUP && player.lastActionIndex == 3)
 				{
 					kBlock.complete();
 				}

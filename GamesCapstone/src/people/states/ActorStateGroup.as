@@ -13,6 +13,8 @@ package people.states
 		/** Valid crouching state. */
 		public static const CROUCH : ActorStateGroup = new ActorStateGroup([ActorState.CROUCHING, ActorState.CROUCH_ATTACKING, ActorState.HURT]);
 		
+		public static const ATTACK : ActorStateGroup = new ActorStateGroup([ActorState.ATTACKING, ActorState.CROUCH_ATTACKING]);
+		
 		private var _states : Array;
 		
 		public function ActorStateGroup(states : Array)

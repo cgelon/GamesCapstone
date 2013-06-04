@@ -328,7 +328,7 @@ package levels
 						if (lowerRightCorner != null &&
 							lowerRightCorner[lrc].x == topVert[verts].x &&
 							(lowerRightCorner[lrc].y == leftHoriz[horizs].y ||
-							 lowerRightCorner[lrc].y == leftHoriz[horizs + 1].y))
+							 (lowerRightCorner[lrc].y == leftHoriz[horizs + 1].y && sides[0])))
 						{
 							// Because topVert[verts].x >= leftHoriz[horizs].x, we know that if the right side
 							// exists, it must be found at topVert[verts], so we only need to compare that
@@ -339,7 +339,8 @@ package levels
 							sides[2] = true;
 							height = bottomVert[verts].y - topVert[verts].y;
 							height = height / 16;
-							width = rightHoriz[horizs].x - leftHoriz[horizs].x;
+							width = rightHoriz[horizs].x - leftHoriz[horizs].x; 
+							// Either horizs is the right one, or horizs plus 1 is parallel to horizs
 							width = width / 16;
 							lrc++;
 						}

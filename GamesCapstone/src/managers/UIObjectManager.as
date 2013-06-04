@@ -7,6 +7,7 @@ package managers
 	import people.players.Player;
 	import people.players.PlayerStats;
 	import UI.Bars.HealthBar;
+	import UI.BossHud;
 	import UI.PlayerHud;
 	import UI.UIObject;
 	import people.Actor;
@@ -51,6 +52,12 @@ package managers
 			var hud : PlayerHud = new PlayerHud();
 			add(hud);
 			_hud = hud;
+		}
+		
+		public function createBossHud() : void
+		{
+			var hud : BossHud = new BossHud();
+			add(hud);
 		}
 		
 		public function flashStaminaBar(duration : Number) : void

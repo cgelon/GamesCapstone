@@ -1,6 +1,7 @@
 package levels
 {
 	import attacks.EnemyAttack;
+	import cutscenes.BossCutscene1;
 	import items.Environmental.Background.AcidPool;
 	import items.Environmental.BlastDoor;
 	import managers.BackgroundManager;
@@ -49,6 +50,9 @@ package levels
 			_spawnedPhase2 = false;
 			
 			add(map);
+			
+			cutscene = new BossCutscene1();
+			add(cutscene);
 		}
 		
 		override public function update(): void
