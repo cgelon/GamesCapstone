@@ -97,10 +97,10 @@ package items.Environmental
 						(add(new ForceFieldUnit(X + (Width - 1) * 16, Y + (Height - 2) * 16)) as ForceFieldUnit).bottom();
 					} else if (Sides[1] && Height > 1) {
 						// upperVert takes precedence over lowerVert when height = 1						
-						(add(new ForceFieldUnit(X + (Width -1) * 16, Y + (Height - 2) * 16)) as ForceFieldUnit).midVert();
+						(add(new ForceFieldUnit(X + (Width - 1) * 16, Y + (Height - 2) * 16)) as ForceFieldUnit).midVert();
 						
-						(add(new ForceFieldUnit(X + (Width -1) * 16, Y + (Height - 1) * 16)) as ForceFieldUnit).lowerVert();
-						(add(new ForceFieldUnit(X + (Width -1) * 16, Y + (Height - 1) * 16)) as ForceFieldUnit).bottom();
+						(add(new ForceFieldUnit(X + (Width - 1) * 16, Y + (Height - 1) * 16)) as ForceFieldUnit).lowerVert2();
+						(add(new ForceFieldUnit(X + (Width - 1) * 16, Y + (Height - .5) * 16)) as ForceFieldUnit).bottom();
 					} else if (Sides[2] && (Width > 1 || !Sides[3])) {
 						// bottom left corner takes precedence over rightHoriz
 						(add(new ForceFieldUnit(X + (Width - 2) * 16, Y + (Height - 1) * 16)) as ForceFieldUnit).midHoriz();
@@ -155,8 +155,8 @@ package items.Environmental
 						// upperVert takes precedence over lowerVert when height = 1
 						(add(new ForceFieldUnit(X, Y + (Height - 2) * 16)) as ForceFieldUnit).midVert();
 						
-						(add(new ForceFieldUnit(X, Y + (Height - 1) * 16)) as ForceFieldUnit).lowerVert();
-						(add(new ForceFieldUnit(X, Y + (Height - 1) * 16)) as ForceFieldUnit).bottom();
+						(add(new ForceFieldUnit(X, Y + (Height - 1) * 16)) as ForceFieldUnit).lowerVert2();
+						(add(new ForceFieldUnit(X, Y + (Height - .5) * 16)) as ForceFieldUnit).bottom();
 					}
 				}
 			}

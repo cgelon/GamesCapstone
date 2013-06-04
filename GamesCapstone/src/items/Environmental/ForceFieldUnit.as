@@ -23,6 +23,7 @@ package items.Environmental
 			initialize(X, Y);
 			loadGraphic(tileset, true, false, 16, 16, false);
 			addAnimation("lowerVert", [25], 1, true);
+			addAnimation("lowerVert2", [26], 1, true);
 			addAnimation("midVert", [15], 1, true);
 			addAnimation("upperVert", [10], 1, true);
 			addAnimation("leftHoriz", [11], 1, true);
@@ -99,6 +100,23 @@ package items.Environmental
 		{
 			play("lowerVert");
 			vertical();
+		}
+		
+		public function lowerVert2() : void
+		{
+			play("lowerVert2");
+			height = 16;
+			width = 8;
+			offset.x = 0;
+			offset.y = 0;
+			if (startingX != x)
+			{
+				x = startingX;
+			}
+			if (startingY != y)
+			{
+				y = startingY;
+			}
 		}
 		
 		// plays the proper animation and sets the bounding box
@@ -235,7 +253,8 @@ package items.Environmental
 		public function touchedActor(actor: Actor) : void
 		{
 			if (_curAnim.name == "lowerVert" || _curAnim.name == "midVert" || _curAnim.name == "upperVert" ||
-				_curAnim.name == "leftHoriz" || _curAnim.name == "midHoriz" || _curAnim.name == "rightHoriz")
+				_curAnim.name == "leftHoriz" || _curAnim.name == "midHoriz" || _curAnim.name == "rightHoriz" ||
+				_curAnim.name == "lowerVert2")
 				{
 					actor.acceleration.x = 0;
 					actor.velocity.x = ((actor.x - x < 0) ? -1 : 1) * actor.maxVelocity.x * 2;
@@ -260,7 +279,8 @@ package items.Environmental
 		public function turnOff() : void
 		{
 			if (_curAnim.name == "lowerVert" || _curAnim.name == "midVert" || _curAnim.name == "upperVert" ||
-				_curAnim.name == "leftHoriz" || _curAnim.name == "midHoriz" || _curAnim.name == "rightHoriz")
+				_curAnim.name == "leftHoriz" || _curAnim.name == "midHoriz" || _curAnim.name == "rightHoriz" ||
+				_curAnim.name == "lowerVert2")
 				{
 					exists = false;
 				}
