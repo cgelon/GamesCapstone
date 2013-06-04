@@ -32,10 +32,14 @@ package levels
 			parseObjects(objectsCSV, tilePNG);
 			
 			add(map);
+			
+			name = "StartingAcidLevel";
 		}
 		
 		override public function checkInformant():void 
 		{
+			super.checkInformant();
+			
 			if (_informantTalked[0] == null) {
 				informant.talk("What is that green stuff? Is that...ACID?! Why would anyone want to make that?");
 				_informantTalked[0] = true;

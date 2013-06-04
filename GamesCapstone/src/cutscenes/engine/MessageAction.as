@@ -20,13 +20,15 @@ package cutscenes.engine
 		private var _message : String;
 		private var _object : FlxObject;
 		private var _messageBox : MessageBox;
+		private var _color : uint;
 		
-		public function MessageAction(type : String, title : String, message : String, object : FlxObject)
+		public function MessageAction(type : String, title : String, message : String, object : FlxObject, color : uint = Color.GREEN)
 		{
 			_type = type;
 			_title = title;
 			_message = message;
 			_object = object;
+			_color = color;
 		}
 		
 		override public function run(callback : Function) : void
@@ -48,7 +50,7 @@ package cutscenes.engine
 			var position : FlxPoint = new FlxPoint();
 			_object.getScreenXY(position, FlxG.camera);
 			_messageBox = new MessageBox(Math.max(position.x + _object.width / 2 - 80, 0),
-					Math.max(position.y - MessageBox.getHeight(), 0), 160, Color.WHITE, Color.GREEN);
+					Math.max(position.y - MessageBox.getHeight(), 0), 160, Color.WHITE, _color);
 			add(_messageBox);
 			_messageBox.displayText(_title, _message, callback);
 		}

@@ -40,6 +40,8 @@ package levels
 			environmentalCircuits.push(true);
 			
 			add(map);
+			
+			name = "ForceFieldSwitches";
 		}
 		
 		override public function update():void 
@@ -72,6 +74,8 @@ package levels
 		
 		override public function checkInformant():void 
 		{
+			super.checkInformant();
+			
 			if (_informantTalked[0] == null) {
 				informant.talk("That generator seems to be powering the forcefield, maybe your fists could break it... Actually, that's a ridiculous notion.");
 				_informantTalked[0] = true;

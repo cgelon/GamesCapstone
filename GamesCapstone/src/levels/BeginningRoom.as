@@ -39,6 +39,8 @@ package levels
 			
 			cutscene = new BeginningCutscene();
 			add(cutscene);
+			
+			name = "BeginningRoom";
 		}
 		
 		/**

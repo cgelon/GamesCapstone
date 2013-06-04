@@ -33,6 +33,8 @@ package levels
 			parseObjects(objectsCSV, tilePNG);
 			
 			add(map);
+			
+			name = "AcidPlatformLevel";
 		}
 	}
 }

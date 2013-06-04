@@ -10,10 +10,13 @@ package cutscenes
 	import managers.LevelManager;
 	import managers.Manager;
 	import managers.PlayerManager;
+	import org.flixel.FlxG;
 	import org.flixel.FlxPoint;
 	import people.players.Player;
 	import people.states.ActorAction;
 	import people.states.ActorState;
+	import states.GameState;
+	import util.ScreenOverlay;
 	
 	/**
 	 * The beginning cutscene in the game.
@@ -60,7 +63,6 @@ package cutscenes
 			addAction(new MessageAction(MessageAction.INFORMANT, "???", "I'll be helping you throughout this mission. You can call me... The Informant.", null));
 			addAction(new MessageAction(MessageAction.ACTOR, "???", "Well, in that case, call me ???.", player));
 			addAction(new MessageAction(MessageAction.INFORMANT, "The Informant", "Listen here, wisecrack, you might want to move around a little with those WASD keys.", null));
-			
 			super.run();
 		}
 	}

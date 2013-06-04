@@ -70,6 +70,16 @@ package people.players
 			return statManager == null ? 0 : statManager.getCount(action, index);
 		}
 		
+		public function getNumberOfActionTotal(action : ActorAction, index : uint) : uint
+		{
+			var total : uint = 0;
+			for each(var statManager : StatManager in _levelToActionsDict)
+			{
+				statManager.getCount(action, index);
+			}
+			return total;
+		}
+		
 		public function toString() : String
 		{
 			var result : String = "";

@@ -33,12 +33,15 @@ package levels
 			parseObjects(objectsCSV, tilePNG);
 			
 			add(map);
+			name = "AcidCrates";
 		}
 		
 		override public function checkInformant():void 
 		{
+			super.checkInformant();
+			
 			if (_informantTalked[0] == null) {
-				informant.talk("Here's a little known fact: crates resist highly corrosive acid.  Who knew?");
+				informant.talk("Here's a little known fact: crates resist highly corrosive acid. Who knew?");
 				_informantTalked[0] = true;
 			}
 		}

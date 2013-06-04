@@ -76,20 +76,13 @@ package states
 		
 		override public function create():void
 		{
+			if (FlxG.music == null || !FlxG.music.active)
+			{
+				FlxG.playMusic(Music.CREEPY);
+			}
 			if (_level is BossLair)
 			{
-				FlxG.playMusic(Music.BOSS);
-			}
-			else
-			{
-				if (FlxG.music == null || !FlxG.music.active)
-				{
-					FlxG.playMusic(Music.CREEPY);
-				}
-				if (_level is EndLevel)
-				{
-					FlxG.music.fadeOut(3);
-				}
+				FlxG.music.fadeOut(3);
 			}
 			
 			// Set up all the managers before adding them to the state.
@@ -141,13 +134,9 @@ package states
 			
 			var uiObjectManager:UIObjectManager = new UIObjectManager();
 			uiObjectManager.createPlayerHud();
-			if (_level is BossLair)
-			{
-				uiObjectManager.createBossHud();
-			}
 			for (i = 0; i < enemyManager.members.length; ++i)
 			{
-				if (enemyManager.members[i] != null && !enemyManager.members[i] is BossEnemy)
+				if (enemyManager.members[i] != null && !(enemyManager.members[i] is BossEnemy))
 				{
 					uiObjectManager.addHealthBar((enemyManager.members[i] as Actor), 10, 10, 25, 5, true, true);
 				}

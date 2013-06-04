@@ -17,6 +17,7 @@ package levels
 	import people.enemies.BossEnemy;
 	import people.enemies.LightningRobot;
 	import people.enemies.Robot;
+	import people.states.ActorAction;
 	
 	/**
 	 * ...
@@ -40,6 +41,7 @@ package levels
 		public var backgroundCircuits: Array;
 		public var environmentalCircuits: Array;
 		public var cutscene : Cutscene;
+		public var name : String
 		
 		protected var _informantTalked : Array;
 		

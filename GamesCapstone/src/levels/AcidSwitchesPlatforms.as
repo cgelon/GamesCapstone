@@ -35,12 +35,16 @@ package levels
 			parseObjects(objectsCSV, tilePNG);
 			
 			add(map);
+			
+			name = "AcidSwitchesPlatforms";
 		}
 		
 		override public function checkInformant():void 
 		{
+			super.checkInformant();
+			
 			if (_informantTalked[0] == null && (Manager.getManager(PlayerManager) as PlayerManager).player.x > 600) {
-				informant.talk("Try hitting [SPACE] near the switch, that might trigger something.");
+				informant.talk("Switches? This McToggle guy doesn't know how to design evil labs...");
 				_informantTalked[0] = true;
 			}
 		}

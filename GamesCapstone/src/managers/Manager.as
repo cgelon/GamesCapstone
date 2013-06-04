@@ -25,7 +25,7 @@ package managers
 			for (var i : int = 0; i < members.length; i++)
 			{
 				var basic : FlxBasic = members[i];
-				if (basic != null && basic.exists && basic.alive)
+				if (basic != null && basic.exists && basic.alive && basic is c)
 				{
 					return basic;
 				}

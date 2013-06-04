@@ -31,10 +31,13 @@ package levels
 			parseObjects(objectsCSV, tilePNG);
 			
 			add(map);
+			name = "StartingLevel";
 		}
 		
 		override public function checkInformant():void 
 		{
+			super.checkInformant();
+			
 			if (_informantTalked[0] == null) {
 				informant.talk("Seems like there's a block party ahead. Try jumping over the crates.");
 				_informantTalked[0] = true;

@@ -33,10 +33,14 @@ package levels
 			environmentalCircuits.push(true);
 
 			add(map);
+			
+			name = "ForceFieldIntro";
 		}
 		
 		override public function checkInformant():void 
 		{
+			super.checkInformant();
+			
 			if (_informantTalked[0] == null) {
 				informant.talk("Red forcefields, how original... why not purple, or magenta?");
 				_informantTalked[0] = true;

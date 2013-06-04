@@ -31,12 +31,16 @@ package levels
 			parseObjects(objectsCSV, tilePNG);
 			
 			add(map);
+			
+			name = "LightningIntro";
 		}
 		
 		override public function checkInformant():void 
 		{
+			super.checkInformant();
+			
 			if (_informantTalked[0] == null) {
-				informant.talk("Aw man, Lightning Robots?  I hate these guys...");
+				informant.talk("Warning: new enemy ahead! How is it humanly possible to shoot lightning? I didn't know lightning moves that slowly...");
 				_informantTalked[0] = true;
 			}
 		}

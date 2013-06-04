@@ -31,12 +31,16 @@ package levels
 			parseObjects(objectsCSV, tilePNG);
 			
 			add(map);
+			
+			name = "CrateJumpLevel";
 		}
 		
 		override public function checkInformant():void 
 		{
+			super.checkInformant();
+			
 			if (_informantTalked[0] == null) {
-				informant.talk("You might be able to move crates by pressing [SPACE]... if you're strong enough.");
+				informant.talk("You might be able to move crates... if you're strong enough.");
 				_informantTalked[0] = true;
 			}
 		}

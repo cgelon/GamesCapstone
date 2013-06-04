@@ -34,10 +34,14 @@ package levels
 			environmentalCircuits.push(true);
 			
 			add(map);
+			
+			name = "ForceFieldClimb";
 		}
 		
 		override public function checkInformant():void 
 		{
+			super.checkInformant();
+			
 			if (_informantTalked[0] == null 
 					&& (Manager.getManager(PlayerManager) as PlayerManager).player.x >  224
 					&& (Manager.getManager(ObjectManager) as ObjectManager).getCircuit(1).enabled)

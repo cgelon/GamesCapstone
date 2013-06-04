@@ -56,6 +56,8 @@ package levels
 			
 			cutscene = new BossCutscene1();
 			add(cutscene);
+			
+			name = "BossLair";
 		}
 		
 		override public function update(): void

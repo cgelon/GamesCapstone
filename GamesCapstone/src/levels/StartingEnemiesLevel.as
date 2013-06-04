@@ -39,6 +39,8 @@ package levels
 			parseObjects(objectsCSV, tilePNG);
 			
 			add(map);
+			
+			name = "StartingEnemiesLevel";
 		}
 		
 		/**
@@ -97,8 +99,10 @@ package levels
 		
 		override public function checkInformant():void 
 		{
+			super.checkInformant();
+			
 			if (_informantTalked[0] == null) {
-				informant.talk("Robots... such a buzzkill!  Have fun!");
+				informant.talk("Robots... such a buzzkill! Have fun!");
 				_informantTalked[0] = true;
 			}
 		}

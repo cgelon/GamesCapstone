@@ -41,8 +41,8 @@ package cutscenes.engine
 		public function move(object : FlxSprite, endPosition : FlxPoint, time : Number, callback : Function = null) : void
 		{
 			// Because the way FlxVelocity works.... need to add the origin to the end position.
-			FlxVelocity.moveTowardsPoint(object, 
-					new FlxPoint(endPosition.x + object.origin.x, _endPosition.y + object.origin.y), 
+ 			FlxVelocity.moveTowardsPoint(object, 
+					new FlxPoint(endPosition.x + object.origin.x, endPosition.y + object.origin.y), 
 					0, 
 					time * 1000 + 20);
 			_timer = new FlxTimer();

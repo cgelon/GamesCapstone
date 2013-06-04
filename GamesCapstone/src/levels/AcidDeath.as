@@ -44,6 +44,8 @@ package levels
 			backgroundCircuits.push(false);
 			
 			add(map);
+			
+			name = "AcidDeath";
 		}
 	}
 }

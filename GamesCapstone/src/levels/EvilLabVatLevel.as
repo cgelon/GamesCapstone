@@ -50,10 +50,14 @@ package levels
 			//doorLocs[1] = new FlxPoint(2112, 48);
 			// Stores the door locations for this level
 			add(map);
+			
+			name = "EvilLabVatLevel";
 		}
 		
 		override public function checkInformant():void 
 		{
+			super.checkInformant();
+			
 			if (_informantTalked[0] == null) {
 				informant.talk("Acid, acid, and more acid. This obsession with acid is getting a little out of control.");
 				_informantTalked[0] = true;

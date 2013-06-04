@@ -4,9 +4,12 @@ package people.enemies
 	import attacks.StrongAirAttack;
 	import attacks.StrongAttack;
 	import attacks.HatThrow;
+	import cutscenes.BossCutscene2;
+	import cutscenes.engine.Cutscene;
 	import levels.BossLair;
 	import managers.EnemyAttackManager;
 	import managers.GroundSlamManager;
+	import managers.LevelManager;
 	import managers.Manager;
 	import managers.UIObjectManager;
 	import org.flixel.FlxG;
@@ -14,6 +17,8 @@ package people.enemies
 	import org.flixel.FlxTimer;
 	import org.flixel.FlxObject;
 	import people.Actor;
+	import people.PeriodicSound;
+	import people.SoundEffect;
 	import util.Color;
 	import people.states.ActorState
 	import people.states.ActorAction;
@@ -22,6 +27,7 @@ package people.enemies
 	import attacks.Attack;
 	import attacks.GroundSlam;
 	import util.Convert;
+	import util.Sounds;
 	
 	/**
 	 * ...
@@ -107,6 +113,11 @@ package people.enemies
 			associateAnimation(["laser_windup"], BossAction.SHOOT_LASER);
 			associateAnimation(["attack_windup", "ground_slam"], BossAction.SLAM_GROUND);
 			associateAnimation(["attack_windup", "basic_attack"], ActorAction.ATTACK);
+			
+			// Create sound associations with states.
+			associatePeriodicSound(new PeriodicSound(Sounds.PLAYER_WALKING, 0.5, 0.25), ActorState.RUNNING);
+			// Create sound associations with actions.
+			associateSound(new SoundEffect(Sounds.PLAYER_DEATH, 0.25), ActorAction.DIE);
 		}
 		
 		override public function initialize(x : Number, y : Number, health : Number = 6) : void
@@ -124,11 +135,16 @@ package people.enemies
 			if (!FlxG.cutscene && health <= maxHealth / 2)
 			{
 				// TRIGGER CUTSCENE HERE.
-				kill();
-				
+				actionTimer.stop();
+				executeAction(ActorAction.STOP, ActorState.IDLE);
+				velocity.x = velocity.y = 0;
 				(Manager.getManager(UIObjectManager) as UIObjectManager).toggleBossHud();
-				((FlxG.state as GameState).level as BossLair).getBlastDoor(0).open();
-				((FlxG.state as GameState).level as BossLair).getBlastDoor(1).open();
+				var cutscene : Cutscene = new BossCutscene2(function() : void
+					{
+						kill();
+					});
+				(Manager.getManager(LevelManager) as LevelManager).level.add(cutscene);
+				cutscene.run();
 			}
 			else if (health == maxHealth)
 			{
@@ -269,7 +285,7 @@ package people.enemies
 			}
 		}
 		
-		private function updateCutsceneStates() : void
+		protected function updateCutsceneStates() : void
 		{
 			// These states can only be triggered when the player is on the ground.
 			if (velocity.x != 0 && state == ActorState.IDLE)
@@ -279,6 +295,14 @@ package people.enemies
 			else if (velocity.x == 0 && state == ActorState.RUNNING)
 			{
 				executeAction(ActorAction.STOP, ActorState.IDLE);
+			}
+			if (velocity.x < 0) 
+			{
+				facing = RIGHT;
+			}
+			else if (velocity.x > 0)
+			{
+				facing = LEFT;
 			}
 		}
 		
@@ -310,8 +334,10 @@ package people.enemies
 		{
 			// Bosses don't get knocked back.
 			if (state != ActorState.DEAD && state != ActorState.HURT)
+			{
 				dealDamage(attack.damage);
-			
+				FlxG.play(Sounds.PLAYER_HURT, 0.3);
+			}
 			/*
 			if (state != ActorState.DEAD && state != ActorState.HURT)
 				hurt(attack.damage);

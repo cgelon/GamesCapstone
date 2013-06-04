@@ -23,6 +23,7 @@ package cutscenes.engine
 			if (_callback != null && cutscene != null && cutscene.numActionsRunning == 0)
 			{
 				_callback();
+				exists = false;
 			}
 		}
 		

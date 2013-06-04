@@ -36,6 +36,8 @@ package levels
 			parseBackground(backgroundCSV, tilePNG);
 			
 			add(map);
+			
+			name = "DownhillSlope";
 		}
 	}
 }

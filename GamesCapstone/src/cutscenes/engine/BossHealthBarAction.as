@@ -1,10 +1,13 @@
 package cutscenes.engine 
 {
 	import managers.EnemyManager;
+	import managers.Manager;
+	import managers.UIObjectManager;
 	import org.flixel.FlxG;
 	import org.flixel.FlxTimer;
 	import people.enemies.BossEnemy;
 	import states.GameState;
+	import UI.BossHud;
 	import util.Sounds;
 	/**
 	 * Fills up the boss health bar.
@@ -24,13 +27,14 @@ package cutscenes.engine
 		override public function run(callback : Function) : void
 		{
 			boss.health = 0;
+			(Manager.getManager(UIObjectManager) as UIObjectManager).createBossHud();
 			_timer.start(0.1, 41, bossTimerCallback);
 			_callback = callback;
 		}
 		
 		private function bossTimerCallback(timer : FlxTimer) : void
 		{
-			if (timer.loopsLeft == 0)
+			if (timer.loopsLeft == 0 && _callback != null)
 			{
 				_callback();
 			}
@@ -45,6 +49,10 @@ package cutscenes.engine
 		{
 			_timer.stop();
 			boss.health = 40;
+			var uiManager : UIObjectManager = Manager.getManager(UIObjectManager) as UIObjectManager;
+			if (uiManager.getFirstOfClass(BossHud) == null) {
+				uiManager.createBossHud();
+			}
 		}
 		
 		private function get boss() : BossEnemy

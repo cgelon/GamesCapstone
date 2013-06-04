@@ -78,6 +78,8 @@ package cutscenes.engine
 			_index = 0;
 			_fadingText.exists = true;
 			
+			// Always add a wait for action at the end to ensure that everything gets done before the end.
+			add(new WaitForAction());
 			nextAction();
 		}
 		
@@ -98,6 +100,7 @@ package cutscenes.engine
 					case WaitAction:
 					case MessageAction:
 					case BossHealthBarAction:
+					case CameraAction:
 						action.run(nextAction);
 						break;
 					default:
@@ -118,7 +121,7 @@ package cutscenes.engine
 		{
 			super.update();
 			
-			if (FlxG.keys.pressed("ENTER"))
+			if (!finished && FlxG.keys.pressed("ENTER"))
 			{
 				skip();
 			}
@@ -152,7 +155,7 @@ package cutscenes.engine
 		/**
 		 * Finish the cutscene and return the camera to the original place.
 		 */
-		private function finish() : void
+		protected function finish() : void
 		{
 			if (!finished)
 			{

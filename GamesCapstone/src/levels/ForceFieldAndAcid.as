@@ -42,6 +42,20 @@ package levels
 			backgroundCircuits.push(false);
 			
 			add(map);
+			
+			name = "ForceFieldAndAcid";
+		}
+		
+		override public function checkInformant():void 
+		{
+			super.checkInformant();
+			
+			if (_informantTalked[0] == null)
+			{
+				informant.talk("Hmm... it seems like there is a regeneration panel in every sliding door. Very convenient! Dying is a thing of the past.");
+				_informantTalked[0] = true;
+			}
+			
 		}
 	}
 }
