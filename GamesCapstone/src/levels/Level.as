@@ -160,7 +160,7 @@ package levels
 					objectStarts.push(null);
 					if (topVert[verts].x < leftHoriz[horizs].x) 
 					{
-						if (upperLeftCorner != null && 
+						if (upperLeftCorner != null && ulc < upperLeftCorner.length &&
 							upperLeftCorner[ulc].x == topVert[verts].x &&
 							upperLeftCorner[ulc].y == topVert[verts].y - 16)
 						{
@@ -174,18 +174,10 @@ package levels
 							width = width / 16;
 							ulc++;
 						}
-						if (lowerLeftCorner != null &&
-							lowerLeftCorner[llc].x == topVert[verts].x &&
-							(lowerLeftCorner[llc].y == leftHoriz[horizs].y ||
-							 lowerLeftCorner[llc].y == leftHoriz[horizs + 1].y)) 
+						if (lowerLeftCorner != null && llc < lowerLeftCorner.length && // The current loc is not null
+							lowerLeftCorner[llc].x == topVert[verts].x && // the x coordinate matches this vert
+							lowerLeftCorner[llc].y == bottomVert[verts].y + 16) // the y coordinate matches this vert
 						{
-							// We know the vertical edge is the left edge.  There are two
-							// possibilities for the first horizontal edge, though: it
-							// could be the top edge (which means we've already taken care of it
-							// and need to look at the next horizontal edge) or it could be the
-							// bottom edge, in which case we are taking care of it now
-							// Either way, we take the same action
-							
 							sides[3] = true;
 							// The presence of the corner means we have both a left and a bottom edge
 							sides[2] = true;
@@ -193,31 +185,65 @@ package levels
 							// the check for the upper left corner, setting it again should be fine)
 							height = bottomVert[verts].y - topVert[verts].y;
 							height = height / 16;
-							width = rightHoriz[horizs].x - leftHoriz[horizs].x;
-							width = width / 16;
+							// We know the vertical edge is the left edge.  There are two
+							// possibilities for the first horizontal edge, though: it
+							// could be the top edge (which means we've already taken care of it
+							// and need to look at the next horizontal edge) or it could be the
+							// bottom edge, in which case we are taking care of it now
+							// Either way, we take the same action
+							
+							if (lowerLeftCorner[llc].y == leftHoriz[horizs].y  && // corresponds to the first horiz
+								lowerLeftCorner[llc].x == leftHoriz[horizs].x - 16)
+							{
+								width = rightHoriz[horizs].x - leftHoriz[horizs].x;
+								width = width / 16;							 
+							}
+							else if (horizs + 1 < leftHoriz.length &&
+									 lowerLeftCorner[llc].y == leftHoriz[horizs + 1].y && // or corresponds to the next horiz
+									 lowerLeftCorner[llc].x == leftHoriz[horizs + 1].x - 16)
+							{
+								width = rightHoriz[horizs + 1].x - leftHoriz[horizs + 1].x;
+								width = width / 16;						
+							}
+							else
+							{
+								// An error has occurred, but it's the level designer's fault so we should throw a hissy fit
+								Error.throwError(TypeError, 1009);
+							}
+							
 							llc++;
 						}
-						if (upperRightCorner != null &&
-							upperRightCorner[urc].x == topVert[verts + 1].x &&
-							(upperRightCorner[urc].y == leftHoriz[horizs].y ||
-							 upperRightCorner[urc].y == leftHoriz[horizs + 1].y))
+						if (upperRightCorner != null && urc < upperRightCorner.length && // The current loc is not null
+							verts + 1 < topVert.length && // Another vertical bar exists
+							sides[0] && // A top side has already been registered
+							upperRightCorner[urc].x == topVert[verts + 1].x && // the x coordinate matches the next vert
+							upperRightCorner[urc].y == topVert[verts + 1].y - 16) // the y coordinate matches the next vert
 						{
+							sides[1] = true;
 							// Because topVert[verts].x < leftHoriz[horizs].x, we know that if the right side
 							// exists, it must be found at topVert[verts + 1], so we only need to compare that
-							// x coordinate.  We also know that at least one of leftHoriz[horizs] or leftHoriz[horizs+1]
+							// x coordinate.  We also know that at least one of rightHoriz[horizs] or rightHoriz[horizs+1]
 							// is on the top and the other is on the bottom or nonexistant.  Which one it is doesn't matter
 							// because matching at least one means that we have an upper right corner
-							sides[1] = true;
-							sides[0] = true;
+							if (!(upperRightCorner[urc].y == rightHoriz[horizs].y &&
+								  upperRightCorner[urc].x == rightHoriz[horizs].x + 16) &&
+								!(horizs + 1 < rightHoriz.length &&
+								  upperRightCorner[urc].y == rightHoriz[horizs + 1].y &&
+								  upperRightCorner[urc].x == rightHoriz[horizs + 1].x))
+							{
+								// An error has occurred, but it's the level designer's fault so we should throw a hissy fit
+								Error.throwError(TypeError, 1009);
+							}
 							// Because topVert[verts].x < leftHoriz[horizs].x, we know that the height and width must
 							// be set already because we would have encountered the upperLeftCorner (having both a right
 							// side and because we know we have a top side)
 							urc++;
 						}
-						if (lowerRightCorner != null &&
+						if (lowerRightCorner != null && lrc < lowerRightCorner.length &&
+							verts + 1 < topVert.length &&
+							sides[2] && // A bottom side has already been registered
 							lowerRightCorner[lrc].x == topVert[verts + 1].x &&
-							(lowerRightCorner[lrc].y == leftHoriz[horizs].y ||
-							 lowerRightCorner[lrc].y == leftHoriz[horizs + 1].y))
+							lowerRightCorner[lrc].y == bottomVert[verts + 1].y + 16)
 						{
 							// Because topVert[verts].x < leftHoriz[horizs].x, we know that if the right side
 							// exists, it must be found at topVert[verts + 1], so we only need to compare that
@@ -225,7 +251,16 @@ package levels
 							// is on the top or nonexistant and the other is on the bottom.  Which one it is doesn't matter
 							// because matching at least one means that we have an lower right corner
 							sides[1] = true;
-							sides[2] = true;
+							
+							if (!(lowerRightCorner[lrc].y == rightHoriz[horizs].y &&
+								  lowerRightCorner[lrc].x == rightHoriz[horizs].x + 16) &&
+								!(horizs + 1 < rightHoriz.length &&
+								  lowerRightCorner[lrc].y == rightHoriz[horizs + 1].y &&
+								  lowerRightCorner[lrc].x == rightHoriz[horizs + 1].x + 16))
+							{
+								// An error has occurred, but it's the level designer's fault so we should throw a hissy fit
+								Error.throwError(TypeError, 1009);
+							}
 							// Because topVert[verts].x < leftHoriz[horizs].x, we know that the height and width must
 							// be set already because we would have encountered the lowerLeftCorner (having both a right
 							// side and because we know we have a bottom side)
@@ -306,10 +341,9 @@ package levels
 					{
 						// Means we have a horizontal forcefield before a vertical one.  This occurs in one of four
 						// cases out of eleven.
-						if (upperRightCorner != null &&
+						if (upperRightCorner != null && urc < upperRightCorner.length &&
 							upperRightCorner[urc].x == topVert[verts].x &&
-							(upperRightCorner[urc].y == leftHoriz[horizs].y ||
-							 upperRightCorner[urc].y == leftHoriz[horizs + 1].y))
+							upperRightCorner[urc].y == topVert[verts].y - 16)
 						{
 							// Because topVert[verts].x >= leftHoriz[horizs].x, we know that if the right side
 							// exists, it must be found at topVert[verts], so we only need to compare that
@@ -320,15 +354,32 @@ package levels
 							sides[0] = true;
 							height = bottomVert[verts].y - topVert[verts].y;
 							height = height / 16;
-							width = rightHoriz[horizs].x - leftHoriz[horizs].x;
-							width = width / 16;
+							
+							if (upperRightCorner[urc].y == rightHoriz[horizs].y &&
+								upperRightCorner[urc].x == rightHoriz[horizs].x + 16)
+							{
+								width = rightHoriz[horizs].x - leftHoriz[horizs].x;
+								width = width / 16;								
+							}
+							else if (horizs + 1 < rightHoriz.length &&
+									 upperRightCorner[urc].y == rightHoriz[horizs + 1].y &&
+									 upperRightCorner[urc].x == rightHoriz[horizs + 1].x + 16)
+							{
+								width = rightHoriz[horizs + 1].x - leftHoriz[horizs + 1].x;
+								width = width / 16;
+							}
+							else
+							{
+								// An error has occurred, but it's the level designer's fault so we should throw a hissy fit
+								Error.throwError(TypeError, 1009);
+							}
+							
 							urc++;
 						}
 						
-						if (lowerRightCorner != null &&
-							lowerRightCorner[lrc].x == topVert[verts].x &&
-							(lowerRightCorner[lrc].y == leftHoriz[horizs].y ||
-							 (lowerRightCorner[lrc].y == leftHoriz[horizs + 1].y && sides[0])))
+						if (lowerRightCorner != null && lrc < lowerRightCorner.length &&
+							lowerRightCorner[lrc].x == bottomVert[verts].x &&
+							lowerRightCorner[lrc].y == bottomVert[verts].y + 16)
 						{
 							// Because topVert[verts].x >= leftHoriz[horizs].x, we know that if the right side
 							// exists, it must be found at topVert[verts], so we only need to compare that
@@ -339,9 +390,26 @@ package levels
 							sides[2] = true;
 							height = bottomVert[verts].y - topVert[verts].y;
 							height = height / 16;
-							width = rightHoriz[horizs].x - leftHoriz[horizs].x; 
-							// Either horizs is the right one, or horizs plus 1 is parallel to horizs
-							width = width / 16;
+							
+							
+							if (lowerRightCorner[urc].y == rightHoriz[horizs].y &&
+								lowerRightCorner[urc].x == rightHoriz[horizs].x + 16)
+							{
+								width = rightHoriz[horizs].x - leftHoriz[horizs].x;
+								width = width / 16;								
+							}
+							else if (horizs + 1 < rightHoriz.length &&
+									 lowerRightCorner[urc].y == rightHoriz[horizs + 1].y &&
+									 lowerRightCorner[urc].x == rightHoriz[horizs + 1].x + 16)
+							{
+								width = rightHoriz[horizs + 1].x - leftHoriz[horizs + 1].x;
+								width = width / 16;
+							}
+							else
+							{
+								// An error has occurred, but it's the level designer's fault so we should throw a hissy fit
+								Error.throwError(TypeError, 1009);
+							}
 							lrc++;
 						}
 						
