@@ -2,6 +2,7 @@ package cutscenes.engine
 {
 	import flash.text.Font;
 	import org.flixel.FlxGroup;
+	import org.flixel.FlxObject;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxSprite;
 	import org.flixel.FlxText;
@@ -85,6 +86,7 @@ package cutscenes.engine
 			// Set up the box graphic.
 			_box = new FlxSprite(0, 0);
 			_box.scrollFactor = new FlxPoint(0, 0);
+			_box.allowCollisions = FlxObject.NONE;
 			add(_box);
 			
 			// Set up the lines, and the format!
@@ -343,18 +345,27 @@ package cutscenes.engine
 			// The FlxTexts and FlxSprite are already destroyed because 
 			// they are part of the MessageBox FlxGroup (they were being 
 			// displayed).
-			_textLines.length = 0;
+			if (_textLines != null)
+			{
+				_textLines.length = 0;
+			}
 			_textLines = null;
 			_box = null;
 			
-			_timer.destroy();
+			if (_timer != null)
+			{
+				_timer.destroy();
+			}
 			_timer = null;
 			
-			for each (var line : String in _lines)
+			if (_lines != null)
 			{
-				line = null;
+				for each (var line : String in _lines)
+				{
+					line = null;
+				}
+				_lines.length = 0;
 			}
-			_lines.length = 0;
 			_lines = null;
 			_lineIndex = 0;
 			_startLineIndex = 0;
@@ -364,7 +375,10 @@ package cutscenes.engine
 			_callback = null;
 			
 			_auto = false;
-			_autoTimer.destroy();
+			if (_autoTimer != null)
+			{
+				_autoTimer.destroy();
+			}
 			_autoTimer = null;
 		}
 	}

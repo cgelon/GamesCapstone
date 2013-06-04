@@ -62,7 +62,7 @@ package cutscenes
 			addAction(new MessageAction(MessageAction.INFORMANT, "???", "Sounds like he's rich.", null));
 			addAction(new MessageAction(MessageAction.INFORMANT, "???", "I'll be helping you throughout this mission. You can call me... The Informant.", null));
 			addAction(new MessageAction(MessageAction.ACTOR, "???", "Well, in that case, call me ???.", player));
-			addAction(new MessageAction(MessageAction.INFORMANT, "The Informant", "Listen here, wisecrack, you might want to move around a little with those WASD keys.", null));
+			addAction(new MessageAction(MessageAction.INFORMANT, "The Informant", "Listen here, wisecrack, you might want to start moving before this McToogle guy knows your here.", null));
 			super.run();
 		}
 	}

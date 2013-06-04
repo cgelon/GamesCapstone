@@ -38,7 +38,7 @@ package levels
 			_rooms.push(EvilLabVatLevel);
 			_rooms.push(DownhillSlope);
 			_rooms.push(AcidCrates);
-			//_rooms.push(EndLevel);
+			_rooms.push(EndLevel);
 			_rooms.push(BossLair);
 			
 			_currentRoomIndex = 0;

@@ -144,7 +144,7 @@ package people.enemies
 					{
 						kill();
 					});
-				(Manager.getManager(CutsceneManager) as CutsceneManager).addCutscene(cutscene);
+				(Manager.getManager(LevelManager) as LevelManager).level.add(cutscene);
 				cutscene.run();
 			}
 			else if (health == maxHealth)

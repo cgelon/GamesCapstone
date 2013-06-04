@@ -1,6 +1,7 @@
 package managers 
 {
 	import cutscenes.engine.Cutscene;
+	import cutscenes.engine.MessageBox;
 	
 	/**
 	 * Deals with cutscenes.
@@ -12,6 +13,11 @@ package managers
 		public function addCutscene(cutscene : Cutscene) : void
 		{
 			add(cutscene);
+		}
+		
+		public function addMessageBox(message : MessageBox) : void
+		{
+			add(message);
 		}
 	}
 }

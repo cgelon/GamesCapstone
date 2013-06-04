@@ -79,7 +79,7 @@ package states
 		
 		override public function create():void
 		{
-			if (!_level is BossLair && (FlxG.music == null || !FlxG.music.active))
+			if (!(_level is BossLair) && (FlxG.music == null || !FlxG.music.active))
 			{
 				FlxG.playMusic(Music.CREEPY);
 			}
@@ -159,7 +159,7 @@ package states
 			var cutsceneManager : CutsceneManager = new CutsceneManager();
 			if (_level.cutscene != null)
 			{
-				cutsceneManager.addCutscene(_level.cutscene);
+				//cutsceneManager.addCutscene(_level.cutscene);
 			}
 			
 			// Add the managers in this order:

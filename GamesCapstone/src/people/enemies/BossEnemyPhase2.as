@@ -6,6 +6,7 @@ package people.enemies
 	import cutscenes.engine.Cutscene;
 	import managers.CutsceneManager;
 	import managers.GroundSlamManager;
+	import managers.LevelManager;
 	import managers.Manager;
 	import managers.UIObjectManager;
 	import org.flixel.FlxG;
@@ -215,7 +216,7 @@ package people.enemies
 							{
 								kill();
 							});
-						(Manager.getManager(CutsceneManager) as CutsceneManager).addCutscene(cutscene);
+						(Manager.getManager(LevelManager) as LevelManager).level.add(cutscene);
 						cutscene.run();
 						break;
 				}

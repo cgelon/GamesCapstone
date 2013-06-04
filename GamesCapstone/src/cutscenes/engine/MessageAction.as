@@ -1,5 +1,7 @@
 package cutscenes.engine 
 {
+	import managers.CutsceneManager;
+	import managers.Manager;
 	import org.flixel.FlxG;
 	import org.flixel.FlxObject;
 	import org.flixel.FlxPoint;
@@ -52,6 +54,7 @@ package cutscenes.engine
 			_messageBox = new MessageBox(Math.max(position.x + _object.width / 2 - 80, 0),
 					Math.max(position.y - MessageBox.getHeight(), 0), 160, Color.WHITE, _color);
 			add(_messageBox);
+			(Manager.getManager(CutsceneManager) as CutsceneManager).addMessageBox(_messageBox);
 			_messageBox.displayText(_title, _message, callback);
 		}
 		
@@ -59,6 +62,7 @@ package cutscenes.engine
 		{
 			_messageBox = new MessageBox(160, 0, 160, Color.WHITE, Color.BLUE);
 			add(_messageBox);
+			(Manager.getManager(CutsceneManager) as CutsceneManager).addMessageBox(_messageBox);
 			_messageBox.displayText(_title, _message, callback);
 		}
 		

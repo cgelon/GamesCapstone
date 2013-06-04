@@ -205,9 +205,8 @@ package people.players
 			
 			statManager = new StatManager();
 			
-			FlxG.watch(this, "stateName", "State");
-			FlxG.watch(this, "position", "Position");
-			FlxG.watch(this, "crouching", "Crouching")
+			FlxG.watch(this, "x");
+			FlxG.watch(this, "y");
 		}
 		
 		public function get position() : String

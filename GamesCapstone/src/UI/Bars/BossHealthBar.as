@@ -32,6 +32,7 @@ package UI.Bars
 			{
 				var healthBlock : FlxSprite = new FlxSprite(x - i * 4, y, healthBlockPNG);
 				healthBlock.scrollFactor = new FlxPoint(0, 0);
+				healthBlock.visible = false;
 				add(healthBlock);
 			}
 		}
