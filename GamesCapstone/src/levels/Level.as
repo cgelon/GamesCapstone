@@ -342,6 +342,8 @@ package levels
 						// Means we have a horizontal forcefield before a vertical one.  This occurs in one of four
 						// cases out of eleven.
 						if (upperRightCorner != null && urc < upperRightCorner.length &&
+							upperRightCorner[urc].x == rightHoriz[horizs].x + 16 &&
+							upperRightCorner[urc].y == rightHoriz[horizs].y &&
 							upperRightCorner[urc].x == topVert[verts].x &&
 							upperRightCorner[urc].y == topVert[verts].y - 16)
 						{
@@ -354,30 +356,13 @@ package levels
 							sides[0] = true;
 							height = bottomVert[verts].y - topVert[verts].y;
 							height = height / 16;
-							
-							if (upperRightCorner[urc].y == rightHoriz[horizs].y &&
-								upperRightCorner[urc].x == rightHoriz[horizs].x + 16)
-							{
-								width = rightHoriz[horizs].x - leftHoriz[horizs].x;
-								width = width / 16;								
-							}
-							else if (horizs + 1 < rightHoriz.length &&
-									 upperRightCorner[urc].y == rightHoriz[horizs + 1].y &&
-									 upperRightCorner[urc].x == rightHoriz[horizs + 1].x + 16)
-							{
-								width = rightHoriz[horizs + 1].x - leftHoriz[horizs + 1].x;
-								width = width / 16;
-							}
-							else
-							{
-								// An error has occurred, but it's the level designer's fault so we should throw a hissy fit
-								Error.throwError(TypeError, 1009);
-							}
-							
+							width = rightHoriz[horizs].x - leftHoriz[horizs].x;
+							width = width / 16;								
 							urc++;
 						}
 						
 						if (lowerRightCorner != null && lrc < lowerRightCorner.length &&
+							lowerRightCorner[lrc].x == rightHoriz[horizs].x + 16 &&
 							lowerRightCorner[lrc].x == bottomVert[verts].x &&
 							lowerRightCorner[lrc].y == bottomVert[verts].y + 16)
 						{
