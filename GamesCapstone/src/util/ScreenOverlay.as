@@ -111,6 +111,7 @@ package util
 				FlxG.music.fadeOut(1);
 				FlxG.fade(Color.BLACK, 1, function() : void
 				{
+					Registry.reset();
 					FlxG.switchState(new MainMenuState());
 				});
 				_reset = true;
