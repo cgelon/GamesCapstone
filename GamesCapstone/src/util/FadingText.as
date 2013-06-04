@@ -22,6 +22,8 @@ package util
 		public function FadingText( a_x : Number, a_y : Number, a_width : uint, a_text : String = null, a_embeddedFont : Boolean = true)
 		{
 			super( a_x, a_y, a_width, a_text, a_embeddedFont );
+			scrollFactor.make();
+			alpha = 0;
 		}
 		
 		override public function update() : void

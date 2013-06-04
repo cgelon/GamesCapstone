@@ -55,7 +55,6 @@ package levels
 			add(map);
 			
 			cutscene = new BossCutscene1();
-			add(cutscene);
 			
 			name = "BossLair";
 		}

@@ -16,6 +16,7 @@ package cutscenes
 	import states.GameState;
 	import util.Color;
 	import util.Music;
+	import util.ScreenOverlay;
 	
 	/**
 	 * The first cutscene in the boss room. Some witty banter.
@@ -24,6 +25,8 @@ package cutscenes
 	 */
 	public class BossCutscene1 extends Cutscene
 	{
+		private static var bossMusic : Boolean = false;
+		
 		public function BossCutscene1(callback : Function = null)
 		{
 			super(callback);
@@ -34,6 +37,10 @@ package cutscenes
 			var player : Player = (Manager.getManager(PlayerManager) as PlayerManager).player;
 			var boss : BossEnemy = ((FlxG.state as GameState).getManager(EnemyManager) as EnemyManager).getFirstOfClass(BossEnemy) as BossEnemy;
 			
+			if (!bossMusic && FlxG.music != null)
+			{
+				FlxG.music.fadeOut(2);
+			}
 			addAction(new WaitAction(0.5));
 			addAction(new MessageAction(MessageAction.ACTOR, "Wesley McToogle", "You've finally arrived! I'm suprised.", boss, Color.RED));
 			addAction(new MessageAction(MessageAction.ACTOR, "???", "Well, you could have made it a little harder.", player));
@@ -50,7 +57,11 @@ package cutscenes
 		override protected function finish():void 
 		{
 			super.finish();
-			FlxG.playMusic(Music.BOSS, 0.6);
+			if (!bossMusic)
+			{
+				FlxG.playMusic(Music.BOSS, 0.6);
+				bossMusic = true;
+			}
 		}
 	}
 }

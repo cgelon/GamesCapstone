@@ -9,6 +9,7 @@ package states
 	import util.FadingText;
 	import util.ScreenOverlay;
 	import util.Sounds;
+	import util.SpeedRunTime;
 	
 	/**
 	 * Main menu state for playing the game.
@@ -22,6 +23,9 @@ package states
 		
 		/** The fading text that tells the player to press space. */
 		private var _fadingText : FadingText;
+		
+		/** Text to indicate the player's best time to beat the game. */
+		private var _timeText : FlxText;
 		
 		/** True if space has already been pressed, false otherwise. */
 		private var _spacePressed : Boolean;
@@ -45,10 +49,21 @@ package states
 			_fadingText = new FadingText(FlxG.width / 4, 200, FlxG.width / 2, "Press [SPACE] to start!", true);
 			_fadingText.setFormat(null, 8, Color.WHITE, "center");
 			
-			// Add all the texts!
+			// Create the time text.
+			if (SpeedRunTime.time > 0)
+			{
+				var minutes : uint = SpeedRunTime.time / 60;
+				var seconds : uint = SpeedRunTime.time % 60;
+				var milliseconds : uint = (SpeedRunTime.time * 100) % 100;
+				_timeText = new FlxText(0, 170, FlxG.width, "Time to Beat: " + minutes + ":" + ((seconds < 10) ? "0" : "") + seconds + ":" + (milliseconds < 10 ? "0" : "") + milliseconds, true);
+				_timeText.setFormat(null, 16, Color.WHITE, "center", Color.DARK_GRAY);
+			}
+			
+			// Add all of the texts!
 			add(_title);
 			add(_subtitle);
 			add(_fadingText);
+			add(_timeText);
 			
 			_spacePressed = false;
 		}
@@ -84,6 +99,7 @@ package states
 			_title = null;
 			_subtitle = null;
 			_fadingText = null;
+			_timeText = null;
 		}
 	}
 }

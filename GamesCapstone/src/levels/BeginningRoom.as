@@ -38,7 +38,6 @@ package levels
 			add(map);
 			
 			cutscene = new BeginningCutscene();
-			add(cutscene);
 			
 			name = "BeginningRoom";
 		}

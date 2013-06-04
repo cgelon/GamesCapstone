@@ -7,6 +7,7 @@ package people.enemies
 	import cutscenes.BossCutscene2;
 	import cutscenes.engine.Cutscene;
 	import levels.BossLair;
+	import managers.CutsceneManager;
 	import managers.EnemyAttackManager;
 	import managers.GroundSlamManager;
 	import managers.LevelManager;
@@ -143,7 +144,7 @@ package people.enemies
 					{
 						kill();
 					});
-				(Manager.getManager(LevelManager) as LevelManager).level.add(cutscene);
+				(Manager.getManager(CutsceneManager) as CutsceneManager).addCutscene(cutscene);
 				cutscene.run();
 			}
 			else if (health == maxHealth)

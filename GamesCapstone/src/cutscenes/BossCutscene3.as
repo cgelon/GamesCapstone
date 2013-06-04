@@ -25,6 +25,7 @@ package cutscenes
 	import util.Color;
 	import util.Music;
 	import util.ScreenOverlay;
+	import util.SpeedRunTime;
 	
 	/**
 	 * The third cutscene in the boss room. This one has the boss saying his last breaths, and then 
@@ -70,6 +71,7 @@ package cutscenes
 			
 			FlxG.state.add(new ScreenOverlay());
 			FlxG.cutscene = true;
+			SpeedRunTime.time = Registry.getInstance().time;
 		}
 	}
 }

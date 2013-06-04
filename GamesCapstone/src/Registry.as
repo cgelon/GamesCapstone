@@ -6,6 +6,7 @@ package
 	import levels.RoomFlow;
 	import people.players.PlayerStats;
 	import people.states.ActorAction;
+	import util.SpeedRunTime;
 	import util.StatManager;
 	/**
 	 * The registry is used to store global information about the game.
@@ -20,12 +21,14 @@ package
 		private var _playerStats : PlayerStats;
 		/** The flow of rooms in the game. */
 		private var _roomFlow : RoomFlow;
-		
+		/** The amount of time, in seconds, that the player has played the game. */
+		public var time : Number;
 		
 		public function Registry()
 		{
 			_playerStats = new PlayerStats();
-			_roomFlow = new RoomFlow();		
+			_roomFlow = new RoomFlow();
+			time = 0;
 		}
 		
 		/**

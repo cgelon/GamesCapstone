@@ -13,6 +13,7 @@ package states
 	import levels.Level;
 	import managers.BackgroundManager;
 	import managers.ControlBlockManager;
+	import managers.CutsceneManager;
 	import managers.EnemyAttackManager;
 	import managers.EnemyManager;
 	import managers.GroundSlamManager;
@@ -34,9 +35,11 @@ package states
 	import people.players.Player;
 	import people.players.PlayerStats;
 	import people.states.ActorState;
+	import UI.TimeText;
 	import util.Music;
 	import util.PauseOverlay;
 	import util.ScreenOverlay;
+	import util.SpeedRunTime;
 	
 	/**
 	 * Base class for all game states.
@@ -76,13 +79,9 @@ package states
 		
 		override public function create():void
 		{
-			if (FlxG.music == null || !FlxG.music.active)
+			if (!_level is BossLair && (FlxG.music == null || !FlxG.music.active))
 			{
 				FlxG.playMusic(Music.CREEPY);
-			}
-			if (_level is BossLair)
-			{
-				FlxG.music.fadeOut(3);
 			}
 			
 			// Set up all the managers before adding them to the state.
@@ -141,6 +140,10 @@ package states
 					uiObjectManager.addHealthBar((enemyManager.members[i] as Actor), 10, 10, 25, 5, true, true);
 				}
 			}
+			if (SpeedRunTime.time > 0)
+			{
+				uiObjectManager.add(new TimeText());
+			}
 			
 			var enemyAttackManager:EnemyAttackManager = new EnemyAttackManager();
 			var groundSlamManager:GroundSlamManager = new GroundSlamManager();
@@ -151,7 +154,13 @@ package states
 			_pauseOverlay = new PauseOverlay();
 			_pauseOverlay.exists = false;
 			
-			var controlBlockManager:ControlBlockManager = new ControlBlockManager();
+			var controlBlockManager : ControlBlockManager = new ControlBlockManager();
+			
+			var cutsceneManager : CutsceneManager = new CutsceneManager();
+			if (_level.cutscene != null)
+			{
+				cutsceneManager.addCutscene(_level.cutscene);
+			}
 			
 			// Add the managers in this order:
 			//	level
@@ -176,6 +185,7 @@ package states
 			addManager(playerAttackManager);
 			addManager(informant);
 			addManager(controlBlockManager);
+			addManager(cutsceneManager);
 			add(_pauseOverlay);
 			active = true;
 			
@@ -204,7 +214,7 @@ package states
 		
 		override public function update():void
 		{
-			if (FlxG.keys.justPressed("ESCAPE"))
+			if (!FlxG.cutscene && FlxG.keys.justPressed("ESCAPE"))
 			{
 				FlxG.paused = !FlxG.paused;
 				_pauseOverlay.exists = FlxG.paused;
@@ -215,6 +225,12 @@ package states
 			}
 			
 			super.update();
+			
+			// Keep a running total of how much time has passed in the game.
+			if (!FlxG.cutscene)
+			{
+				Registry.getInstance().time += FlxG.elapsed;
+			}
 			
 			if ((getManager(PlayerManager) as PlayerManager).player.x > _level.map.width)
 			{
@@ -242,7 +258,7 @@ package states
 			FlxG.overlap(getManager(PlayerManager), getManager(BackgroundManager), itemNotifyCallback);
 			FlxG.overlap(getManager(EnemyManager), getManager(BackgroundManager), itemNotifyCallback);
 			
-			if ((getManager(PlayerManager) as PlayerManager).player.state != ActorState.ROLLING)
+			if (!FlxG.cutscene && (getManager(PlayerManager) as PlayerManager).player.state != ActorState.ROLLING)
 			{
 				(getManager(EnemyManager) as EnemyManager).setAllImmovable(true);
 				FlxG.overlap(getManager(PlayerManager), getManager(EnemyManager), FlxObject.separateX);

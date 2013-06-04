@@ -1,31 +1,19 @@
 package people.enemies 
 {
-	import attacks.EnemyAttack;
-	import attacks.LaserAttack;
-	import attacks.StrongAirAttack;
-	import attacks.StrongAttack;
 	import attacks.HatThrow;
+	import attacks.LaserAttack;
 	import cutscenes.BossCutscene3;
 	import cutscenes.engine.Cutscene;
-	import levels.BossLair;
-	import managers.EnemyAttackManager;
+	import managers.CutsceneManager;
 	import managers.GroundSlamManager;
-	import managers.LevelManager;
 	import managers.Manager;
 	import managers.UIObjectManager;
 	import org.flixel.FlxG;
-	import org.flixel.FlxPoint;
-	import org.flixel.FlxTimer;
 	import org.flixel.FlxObject;
-	import people.Actor;
-	import util.Color;
-	import people.states.ActorState
+	import org.flixel.FlxTimer;
 	import people.states.ActorAction;
+	import people.states.ActorState;
 	import people.states.BossAction;
-	import states.GameState;
-	import attacks.Attack;
-	import attacks.GroundSlam;
-	import util.Convert;
 	
 	/**
 	 * ...
@@ -227,7 +215,7 @@ package people.enemies
 							{
 								kill();
 							});
-						(Manager.getManager(LevelManager) as LevelManager).level.add(cutscene);
+						(Manager.getManager(CutsceneManager) as CutsceneManager).addCutscene(cutscene);
 						cutscene.run();
 						break;
 				}

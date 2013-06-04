@@ -4,6 +4,7 @@ package
 	import org.flixel.FlxG;
 	import states.MainMenuState;
 	import states.GameState;
+	import util.SpeedRunTime;
 	
 	[SWF(width = "640", height = "480")]
 	[Frame(factoryClass="Preloader")]
@@ -13,7 +14,8 @@ package
 		public function Main()
 		{
 			FlxG.debug = true;
-			super( 320, 240, MainMenuState, 2, 30, 30 );
+			super(320, 240, MainMenuState, 2, 30, 30);
+			SpeedRunTime.load();
 			//if (!FlxG.debug)
 			//{
 				//FlxG.recordReplay();
