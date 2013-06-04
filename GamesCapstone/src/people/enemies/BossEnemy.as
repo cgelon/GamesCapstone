@@ -117,22 +117,20 @@ package people.enemies
 			_directionCount = 0;
 			
 			maxVelocity = new FlxPoint(100, 500);
-			
-			_madeHpBar = false;
 		}
 		
 		override public function update():void 
 		{
-
-			if (health <= maxHealth / 2)
+			if (!FlxG.cutscene && health <= maxHealth / 2)
 			{
 				// TRIGGER CUTSCENE HERE.
 				kill();
 				
+				(Manager.getManager(UIObjectManager) as UIObjectManager).toggleBossHud();
 				((FlxG.state as GameState).level as BossLair).getBlastDoor(0).open();
 				((FlxG.state as GameState).level as BossLair).getBlastDoor(1).open();
 			}
-
+			
 			if (FlxG.cutscene)
 			{
 				updateCutsceneStates();
@@ -204,9 +202,7 @@ package people.enemies
 						}
 						break;
 					case ActorState.RUNNING:
-						if (isTouching(FlxObject.RIGHT) && isTouching(FlxObject.LEFT))
-							velocity.y = -maxVelocity.y / 2;
-						else if (isTouching(FlxObject.RIGHT))
+						if (isTouching(FlxObject.RIGHT))
 						{
 							_direction = FlxObject.LEFT;
 							if (_directionCount < MIN_DIRECTION_FRAMES)

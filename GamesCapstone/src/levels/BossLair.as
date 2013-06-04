@@ -9,6 +9,7 @@ package levels
 	import managers.Manager;
 	import managers.ObjectManager;
 	import managers.PlayerManager;
+	import managers.UIObjectManager;
 	import org.flixel.FlxG;
 	import org.flixel.FlxPoint;
 	import people.enemies.BossEnemyPhase2;
@@ -29,6 +30,7 @@ package levels
 		[Embed(source = "../../assets/lab tile arrange.png")] public var tilePNG : Class;
 		
 		private var _spawnedPhase2 : Boolean;
+		private var _phase : int;
 		
 		public function BossLair ()
 		{
@@ -48,6 +50,7 @@ package levels
 			parseObjects(objectsCSV, tilePNG);
 			
 			_spawnedPhase2 = false;
+			_phase = 1;
 			
 			add(map);
 			
@@ -69,11 +72,13 @@ package levels
 			}
 			
 			// Player has exitied rising acid area, and it is time to spawn boss phase 2.
-			if (!_spawnedPhase2 && player.x > 16 * 58)
+			if (_phase == 1 && player.x > 16 * 58)
 			{
+				_phase = 2;
 				(Manager.getManager(EnemyManager) as EnemyManager).addEnemy(new FlxPoint(16 * 74, 226), BossEnemyPhase2);
 				getBlastDoor(1).close();
 				_spawnedPhase2 = true;
+				(Manager.getManager(UIObjectManager) as UIObjectManager).toggleBossHud();
 			}
 		}
 		

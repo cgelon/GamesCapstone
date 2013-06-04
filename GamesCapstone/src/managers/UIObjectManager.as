@@ -24,6 +24,8 @@ package managers
 		private var _flashTimer : FlxTimer;
 		private var _flashingCount : int;
 		
+		private var _bossHud : BossHud;
+		
 		public function UIObjectManager()
 		{
 			_flashTimer = new FlxTimer();
@@ -58,6 +60,12 @@ package managers
 		{
 			var hud : BossHud = new BossHud();
 			add(hud);
+			_bossHud = hud;
+		}
+		
+		public function toggleBossHud() : void
+		{
+			_bossHud.visible = !_bossHud.visible;
 		}
 		
 		public function flashStaminaBar(duration : Number) : void
