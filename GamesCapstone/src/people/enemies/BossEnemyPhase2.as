@@ -54,7 +54,8 @@ package people.enemies
 			{
 				_enrageMultiplier = .5;
 				
-				color = 0x3FFF0000;
+				//color = 0x3FFF0000;
+				replaceColor(0xFFCCAE9D, 0xFFFF0000);
 				addAnimation("walk_enraged", [32, 33, 34, 35, 36, 37, 38, 39], (1/_enrageMultiplier) * 14, true);
 				
 				addAnimation("attack_windup_enraged", [8, 9], (1/_enrageMultiplier) * 2 / ATTACK_WINDUP, false);
