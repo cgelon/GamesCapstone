@@ -54,7 +54,7 @@ package util
 				_newText.setFormat(null, 16, Color.GREEN, "center", Color.DARK_GRAY);
 				_newText.alpha = 0;
 				_newText.scrollFactor.x = _newText.scrollFactor.y = 0;
-				_otherText = new FlxText(0, FlxG.height / 2 + 40, FlxG.width, (time < oldTime) ? "Congratulations! Keep up the good work!" : "Try better next... :(", true);
+				_otherText = new FlxText(0, FlxG.height / 2 + 40, FlxG.width, (time < oldTime) ? "Congratulations! Keep up the good work!" : "Try better next time... :(", true);
 				_otherText.setFormat(null, 8, Color.WHITE, "center", Color.DARK_GRAY);
 				_otherText.alpha = 0;
 				_otherText.scrollFactor.x = _otherText.scrollFactor.y = 0;
