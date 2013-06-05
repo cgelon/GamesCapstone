@@ -507,6 +507,7 @@ package people.players
 			{
 				if (stamina < STRONG_ATTACK_STAM_COST)
 				{
+					FlxG.play(Sounds.NO_STAMINA, 0.3);
 					flashStaminaBar();
 				}
 				else
@@ -550,6 +551,10 @@ package people.players
 				{
 					if (stamina < ROLL_STAM_COST)
 					{
+						if (!(getManager(UIObjectManager) as UIObjectManager).staminaBarFlashing)
+						{
+							FlxG.play(Sounds.NO_STAMINA, 0.3);
+						}
 						flashStaminaBar();
 					}
 					else

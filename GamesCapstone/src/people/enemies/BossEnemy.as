@@ -118,7 +118,8 @@ package people.enemies
 			// Create sound associations with states.
 			associatePeriodicSound(new PeriodicSound(Sounds.PLAYER_WALKING, 0.5, 0.25), ActorState.RUNNING);
 			// Create sound associations with actions.
-			associateSound(new SoundEffect(Sounds.PLAYER_DEATH, 0.25), ActorAction.DIE);
+			associateSound(new SoundEffect(Sounds.BOSS_GROUND_SLAM_CHARGE, 0.7), BossAction.SLAM_GROUND);
+			associateSound(new SoundEffect(Sounds.BOSS_LASER_CHARGE, 0.5), BossAction.SHOOT_LASER);
 		}
 		
 		override public function initialize(x : Number, y : Number, health : Number = 6) : void
@@ -183,6 +184,7 @@ package people.enemies
 								if (!actionTimer.running)
 								{
 									actionTimer.start(HAT_WINDUP, 1, function(timer : FlxTimer) : void {
+										FlxG.play(Sounds.BOSS_HAT_ATTACK, 0.2);
 										var attackDirection : uint = facing == FlxObject.LEFT ? FlxObject.RIGHT : FlxObject.LEFT;
 										var startX : Number = (facing == FlxObject.RIGHT ? x - HatThrow.HAT_WIDTH : x + width);
 										attackManager.throwHat(startX, y, attackDirection);
@@ -200,6 +202,7 @@ package people.enemies
 								if (!actionTimer.running)
 								{
 									actionTimer.start(LASER_WINDUP, 1, function(timer : FlxTimer) : void {
+										FlxG.play(Sounds.BOSS_LASER, 0.5);
 										var attackDirection : uint = facing == FlxObject.LEFT ? FlxObject.RIGHT : FlxObject.LEFT;
 										var newX : Number = facing == FlxObject.RIGHT ? x + 2 : x + width - 2;
 										attackManager.fireLaser(newX, y + 20, attackDirection);
@@ -211,6 +214,7 @@ package people.enemies
 								if (!actionTimer.running)
 								{
 									actionTimer.start(2 * ATTACK_WINDUP, 1, function(timer : FlxTimer) : void {
+										FlxG.play(Sounds.BOSS_GROUND_SLAM, 0.3);
 										var attackDirection : uint = facing == FlxObject.LEFT ? FlxObject.RIGHT : FlxObject.LEFT;
 										var attackX : Number = facing == FlxObject.RIGHT ? x : x + width;
 										(Manager.getManager(GroundSlamManager) as GroundSlamManager).groundSlam(attackX, y + height, attackDirection);
@@ -310,9 +314,9 @@ package people.enemies
 		public function randomAttack() : void
 		{
 			var randNum : Number = Math.random();
-			if (randNum < 0.33)
+			if (randNum < 0.25)
 				executeAction(BossAction.THROW_HAT, ActorState.ATTACKING);
-			else if (randNum < 0.67)
+			else if (randNum < 0.5)
 				executeAction(BossAction.SHOOT_LASER, ActorState.ATTACKING);
 			else
 				executeAction(BossAction.SLAM_GROUND, ActorState.ATTACKING);
@@ -338,6 +342,7 @@ package people.enemies
 			{
 				dealDamage(attack.damage);
 				FlxG.play(Sounds.PLAYER_HURT, 0.3);
+				flicker(0.18);
 			}
 			/*
 			if (state != ActorState.DEAD && state != ActorState.HURT)

@@ -15,6 +15,7 @@ package people.enemies
 	import people.states.ActorAction;
 	import people.states.ActorState;
 	import people.states.BossAction;
+	import util.Sounds;
 	
 	/**
 	 * ...
@@ -100,6 +101,7 @@ package people.enemies
 								if (!actionTimer.running)
 								{
 									actionTimer.start(_enrageMultiplier * HAT_WINDUP, 1, function(timer : FlxTimer) : void {
+										FlxG.play(Sounds.BOSS_HAT_ATTACK, 0.2);
 										var attackDirection : uint = facing == FlxObject.LEFT ? FlxObject.RIGHT : FlxObject.LEFT;
 										var startX : Number = (facing == FlxObject.RIGHT ? x - HatThrow.HAT_WIDTH : x + width);
 										attackManager.throwHat(startX, y, attackDirection);
@@ -124,6 +126,7 @@ package people.enemies
 										if (_enrageMultiplier == 1)
 										{
 											actionTimer.start(.25, 1, function(timer : FlxTimer) : void {
+												FlxG.play(Sounds.BOSS_LASER, 0.5);
 												attackManager.fireLaser(newX, y + 20, attackDirection);
 												executeAction(ActorAction.STOP, ActorState.IDLE);
 											});
@@ -133,6 +136,7 @@ package people.enemies
 											attackManager.fireLaser(newX, y + 20 - LaserAttack.LASER_HEIGHT, attackDirection);
 											
 											actionTimer.start(.25, 1, function(timer : FlxTimer) : void {
+												FlxG.play(Sounds.BOSS_LASER, 0.5);
 												attackManager.fireLaser(newX, y + 20, attackDirection);
 												attackManager.fireLaser(newX, y + 20 - LaserAttack.LASER_HEIGHT, attackDirection);
 												executeAction(ActorAction.STOP, ActorState.IDLE);
@@ -146,6 +150,7 @@ package people.enemies
 								if (!actionTimer.running)
 								{
 									actionTimer.start(_enrageMultiplier * 2 * ATTACK_WINDUP, 1, function(timer : FlxTimer) : void {
+										FlxG.play(Sounds.BOSS_GROUND_SLAM, 0.3);
 										var attackDirection : uint = facing == FlxObject.LEFT ? FlxObject.RIGHT : FlxObject.LEFT;
 										var attackX : Number = facing == FlxObject.RIGHT ? x : x + width;
 										(Manager.getManager(GroundSlamManager) as GroundSlamManager).groundSlam(attackX, y + height, attackDirection);
@@ -210,6 +215,7 @@ package people.enemies
 						}
 						break;
 					case ActorState.DEAD:
+						FlxG.play(Sounds.PLAYER_DEATH, 0.5);
 						velocity.x = 0;
 						(Manager.getManager(UIObjectManager) as UIObjectManager).toggleBossHud();
 						var cutscene : Cutscene = new BossCutscene3(function() : void

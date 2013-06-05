@@ -51,7 +51,7 @@ package cutscenes.engine
 			// Set the position of the box to be right above the object.
 			var position : FlxPoint = new FlxPoint();
 			_object.getScreenXY(position, FlxG.camera);
-			_messageBox = new MessageBox(Math.max(position.x + _object.width / 2 - 80, 0),
+			_messageBox = new MessageBox(Math.min(Math.max(position.x + _object.width / 2 - 80, 0), 160),
 					Math.max(position.y - MessageBox.getHeight(), 0), 160, Color.WHITE, _color);
 			add(_messageBox);
 			(Manager.getManager(CutsceneManager) as CutsceneManager).addMessageBox(_messageBox);

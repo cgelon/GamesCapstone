@@ -83,6 +83,11 @@ package managers
 			}
 		}
 		
+		public function get staminaBarFlashing() : Boolean
+		{
+			return _flashTimer.running;
+		}
+		
 		/**
 		 * Add a health bar that monitors the health attribute of the given actor.
 		 * 
