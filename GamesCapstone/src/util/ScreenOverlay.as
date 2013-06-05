@@ -5,6 +5,7 @@ package util
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxSprite;
 	import org.flixel.FlxText;
+	import states.CreditState;
 	import states.MainMenuState;
 	
 	public class ScreenOverlay extends FlxGroup 
@@ -71,7 +72,7 @@ package util
 			}
 			
 			// Create the fading text to tell the player what to press.
-			_fadingText = new FadingText(FlxG.width / 4, 200, FlxG.width / 2, "Press [R] to reset!", true);
+			_fadingText = new FadingText(FlxG.width / 4, 200, FlxG.width / 2, "Press [ENTER] to continue!", true);
 			_fadingText.setFormat(null, 8, Color.WHITE, "center");
 			_fadingText.exists = false;
 			add(_fadingText);
@@ -106,13 +107,13 @@ package util
 				_fadingText.exists = true;
 			}
 			
-			if (_fadingText.exists && !_reset && FlxG.keys.justPressed("R"))
+			if (_fadingText.exists && !_reset && FlxG.keys.justPressed("ENTER"))
 			{
 				FlxG.music.fadeOut(1);
 				FlxG.fade(Color.BLACK, 1, function() : void
 				{
 					Registry.reset();
-					FlxG.switchState(new MainMenuState());
+					FlxG.switchState(new CreditState());
 				});
 				_reset = true;
 			}

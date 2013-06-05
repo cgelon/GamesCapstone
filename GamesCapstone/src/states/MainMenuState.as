@@ -49,9 +49,13 @@ package states
 			add(_subtitle);
 			
 			// Create the fading text to tell the player what to press.
-			var fadingText : FadingText = new FadingText(FlxG.width / 4, 200, FlxG.width / 2, "Press [SPACE] to start!", true);
+			var fadingText : FadingText = new FadingText(FlxG.width / 4, 210, FlxG.width / 2, "Press [SPACE] to start!", true);
 			fadingText.setFormat(null, 8, Color.WHITE, "center");
 			add(fadingText);
+			// Create the fading text to tell the player what to press.
+			var fadingCreditText : FadingText = new FadingText(FlxG.width / 4, 220, FlxG.width / 2, "Press [C] for credits!", true);
+			fadingCreditText.setFormat(null, 8, Color.WHITE, "center");
+			add(fadingCreditText);
 			
 			// Create the time text.
 			if (SpeedRunTime.time > 0)
@@ -95,7 +99,16 @@ package states
 					FlxG.switchState(new GameState(Registry.roomFlow.getCurrentRoom()));
 				});
 				_spacePressed = true;
-				FlxG.play(Sounds.MAIN_MENU_LONG, 0.5);
+				FlxG.play(Sounds.MAIN_MENU_LONG, 0.3);
+			}
+			if (!_spacePressed && FlxG.keys.justPressed("C"))
+			{
+				FlxG.fade(Color.BLACK, 1, function() : void
+				{
+					FlxG.switchState(new CreditState());
+				});
+				_spacePressed = true;
+				FlxG.play(Sounds.MAIN_MENU_LONG, 0.3);
 			}
 			
 			// Keep scrolling the text until it reaches a certain point.
@@ -103,7 +116,7 @@ package states
 			{
 				_title.velocity.y = 0;
 				_subtitle.velocity.y = 0;
-				FlxG.play(Sounds.MAIN_MENU_SHORT, 0.75);
+				FlxG.play(Sounds.MAIN_MENU_SHORT, 0.4);
 			}
 		}
 		

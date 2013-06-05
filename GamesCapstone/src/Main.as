@@ -2,6 +2,7 @@ package
 {
 	import org.flixel.FlxGame;
 	import org.flixel.FlxG;
+	import states.CreditState;
 	import states.MainMenuState;
 	import states.GameState;
 	import util.SpeedRunTime;
