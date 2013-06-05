@@ -27,8 +27,10 @@ package states
 	import org.flixel.FlxG;
 	import org.flixel.FlxObject;
 	import org.flixel.FlxRect;
+	import org.flixel.FlxSprite;
 	import org.flixel.FlxState;
 	import org.flixel.FlxTilemap;
+	import org.flixel.FlxTimer;
 	import people.Actor;
 	import people.enemies.BossEnemy;
 	import people.enemies.Enemy;
@@ -36,6 +38,7 @@ package states
 	import people.players.PlayerStats;
 	import people.states.ActorState;
 	import UI.TimeText;
+	import util.Color;
 	import util.Music;
 	import util.PauseOverlay;
 	import util.ScreenOverlay;
@@ -71,10 +74,23 @@ package states
 		/** Displayed when the game is paused. */
 		private var _pauseOverlay:PauseOverlay;
 		
+		/** Used for screen transitions. */
+		private var _screenTransition:FlxSprite;
+		
+		/** Timer used for screen transitions. */
+		private var _timer:FlxTimer
+		
+		private var _moving:Boolean;
+		
 		public function GameState(level:Level = null, backward:Boolean = false)
 		{
 			_level = (level != null) ? level : Registry.roomFlow.getFirstRoom();
 			_backward = backward;
+			_screenTransition = new FlxSprite(0, 0);
+			_screenTransition.makeGraphic(FlxG.width, FlxG.height, Color.BLACK);
+			_screenTransition.scrollFactor.make(0, 0);
+			_timer = new FlxTimer();
+			_moving = false;
 		}
 		
 		override public function create():void
@@ -183,10 +199,11 @@ package states
 			addManager(enemyAttackManager);
 			addManager(groundSlamManager);
 			addManager(playerAttackManager);
-			addManager(informant);
 			addManager(controlBlockManager);
+			addManager(informant);
 			addManager(cutsceneManager);
 			add(_pauseOverlay);
+			add(_screenTransition);
 			active = true;
 			
 			//	Tell flixel how big our game world is
@@ -202,6 +219,9 @@ package states
 			{
 				levelManager.level.cutscene.run();
 			}
+			
+			// Start screen Transition
+			_screenTransition.velocity.y = -960;
 		}
 		
 		override public function preUpdate():void
@@ -226,6 +246,16 @@ package states
 			}
 			
 			super.update();
+			
+			// Make the screen transition disappear once off-screen.
+			if (_screenTransition.exists && !_screenTransition.onScreen())
+			{
+				_screenTransition.exists = false;
+			}
+			if (_screenTransition.exists && _timer.running && _screenTransition.y <= 0)
+			{
+				_screenTransition.y = 0;
+			}
 			
 			// Keep a running total of how much time has passed in the game.
 			if (!FlxG.cutscene)
@@ -428,19 +458,39 @@ package states
 		
 		protected function moveToNextRoom():void
 		{
-			var nextRoom:Level = Registry.roomFlow.getNextRoom();
-			if (nextRoom != null)
+			if (!_moving)
 			{
-				FlxG.switchState(new GameState(nextRoom));
+				var nextRoom:Level = Registry.roomFlow.getNextRoom();
+				if (nextRoom != null)
+				{
+					_screenTransition.exists = true;
+					_screenTransition.y = 239;
+					_timer.start(0.25, 1, function() : void
+					{
+						FlxG.fade(Color.BLACK, 0);
+						FlxG.switchState(new GameState(nextRoom));
+					});
+					_moving = true;
+				}
 			}
 		}
 		
 		protected function moveToPreviousRoom():void
 		{
-			var previousRoom:Level = Registry.roomFlow.getPreviousRoom();
-			if (previousRoom != null)
+			if (!_moving)
 			{
-				FlxG.switchState(new GameState(previousRoom, true));
+				var previousRoom:Level = Registry.roomFlow.getPreviousRoom();
+				if (previousRoom != null)
+				{
+					_screenTransition.exists = true;
+					_screenTransition.y = 239;
+					_timer.start(0.25, 1, function() : void
+					{
+						FlxG.fade(Color.BLACK, 0);
+						FlxG.switchState(new GameState(previousRoom, true));
+					});
+					_moving = true;
+				}
 			}
 		}
 		
@@ -486,6 +536,8 @@ package states
 			super.destroy();
 			_level = null;
 			_pauseOverlay = null;
+			_timer.destroy();
+			_timer = null;
 		}
 	}
 }
