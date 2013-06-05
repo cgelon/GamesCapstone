@@ -88,6 +88,7 @@ package people.enemies
 				}
 				hurt(attack.damage)
 				hurtType = attack is StrongAttack ? StrongAttack : WeakAttack;
+				flicker(0.18);
 			}
 			
 		}

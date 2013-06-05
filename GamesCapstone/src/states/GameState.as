@@ -221,7 +221,7 @@ package states
 			}
 			
 			// Start screen Transition
-			_screenTransition.velocity.y = -960;
+			_screenTransition.velocity.x = -1600;
 		}
 		
 		override public function preUpdate():void
@@ -252,9 +252,9 @@ package states
 			{
 				_screenTransition.exists = false;
 			}
-			if (_screenTransition.exists && _timer.running && _screenTransition.y <= 0)
+			if (_screenTransition.exists && _moving && _screenTransition.x <= 0)
 			{
-				_screenTransition.y = 0;
+				_screenTransition.x = 0;
 			}
 			
 			// Keep a running total of how much time has passed in the game.
@@ -265,11 +265,13 @@ package states
 			
 			if ((getManager(PlayerManager) as PlayerManager).player.x > _level.map.width)
 			{
+				(getManager(PlayerManager) as PlayerManager).player.velocity.make(0, 0);
 				moveToNextRoom();
 			}
 			
 			if ((getManager(PlayerManager) as PlayerManager).player.x < 0)
 			{
+				(getManager(PlayerManager) as PlayerManager).player.velocity.make(0, 0);
 				moveToPreviousRoom();
 			}
 			
@@ -464,8 +466,8 @@ package states
 				if (nextRoom != null)
 				{
 					_screenTransition.exists = true;
-					_screenTransition.y = 239;
-					_timer.start(0.25, 1, function() : void
+					_screenTransition.x = 319;
+					_timer.start(0.2, 1, function() : void
 					{
 						FlxG.fade(Color.BLACK, 0);
 						FlxG.switchState(new GameState(nextRoom));
@@ -483,8 +485,8 @@ package states
 				if (previousRoom != null)
 				{
 					_screenTransition.exists = true;
-					_screenTransition.y = 239;
-					_timer.start(0.25, 1, function() : void
+					_screenTransition.x = 319;
+					_timer.start(0.2, 1, function() : void
 					{
 						FlxG.fade(Color.BLACK, 0);
 						FlxG.switchState(new GameState(previousRoom, true));
