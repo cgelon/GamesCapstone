@@ -25,7 +25,7 @@ package cutscenes
 	 */
 	public class BossCutscene1 extends Cutscene
 	{
-		private static var bossMusic : Boolean = false;
+		public static var bossMusic : Boolean = false;
 		
 		public function BossCutscene1(callback : Function = null)
 		{

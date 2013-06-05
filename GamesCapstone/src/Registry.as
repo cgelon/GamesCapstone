@@ -1,5 +1,6 @@
 package 
 {
+	import cutscenes.BossCutscene1;
 	import cutscenes.TheInformant;
 	import flash.utils.getQualifiedClassName;
 	import levels.Level;
@@ -77,6 +78,7 @@ package
 			{
 				s_registry.destroy();
 			}
+			BossCutscene1.bossMusic = false;
 			return getInstance();
 		}
 		

@@ -121,7 +121,7 @@ package cutscenes.engine
 		{
 			super.update();
 			
-			if (!finished && FlxG.keys.pressed("ENTER"))
+			if (FlxG.cutscene && !finished && FlxG.keys.pressed("ENTER"))
 			{
 				skip();
 			}
