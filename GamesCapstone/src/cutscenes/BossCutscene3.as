@@ -42,7 +42,7 @@ package cutscenes
 		
 		override public function run() : void
 		{
-			FlxG.music.fadeOut(3);
+			FlxG.music.fadeOut(2);
 			var player : Player = (Manager.getManager(PlayerManager) as PlayerManager).player;
 			player.velocity.x = player.velocity.y = 0;
 			player.executeAction(ActorAction.STOP, ActorState.IDLE);

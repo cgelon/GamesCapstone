@@ -113,6 +113,7 @@ package util
 				FlxG.fade(Color.BLACK, 1, function() : void
 				{
 					Registry.reset();
+					FlxG.cutscene = false;
 					FlxG.switchState(new CreditState());
 				});
 				_reset = true;

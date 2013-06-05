@@ -1,5 +1,6 @@
 package util
 {
+	import cutscenes.BossCutscene1;
 	import managers.Manager;
 	import managers.PlayerManager;
 	import org.flixel.FlxG;
@@ -55,6 +56,7 @@ package util
 					(Manager.getManager(PlayerManager) as PlayerManager).player.health = PlayerStats.MAX_HEALTH;
 					Registry.playerStats.health = PlayerStats.MAX_HEALTH;
 					FlxG.paused = false;
+					BossCutscene1.bossMusic = false;
 					(FlxG.state as GameState).resetRoom();
 				});
 				_reset = true;
