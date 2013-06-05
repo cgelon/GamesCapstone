@@ -2,6 +2,7 @@ package states
 {
 	import org.flixel.FlxG;
 	import org.flixel.FlxPoint;
+	import org.flixel.FlxSprite;
 	import org.flixel.FlxState;
 	import org.flixel.FlxText;
 	import org.flixel.FlxTimer;
@@ -21,14 +22,14 @@ package states
 		/** The subtitle of the game. */
 		private var _subtitle : FlxText;
 		
-		/** The fading text that tells the player to press space. */
-		private var _fadingText : FadingText;
-		
-		/** Text to indicate the player's best time to beat the game. */
-		private var _timeText : FlxText;
-		
 		/** True if space has already been pressed, false otherwise. */
 		private var _spacePressed : Boolean;
+		
+		/** The image that represents a filled star for speed time. */
+		[Embed(source = '../../assets/speedrun/star_filled.png')] private var starFilledPNG : Class;
+		
+		/** The image that represents an unfilled star for speed time. */
+		[Embed(source = '../../assets/speedrun/star_unfilled.png')] private var starUnfilledPNG : Class;
 		
 		override public function create() : void
 		{
@@ -39,31 +40,45 @@ package states
 			_title.setFormat(null, 32, Color.WHITE, "center", Color.DARK_GRAY);
 			_title.velocity.y = 150;
 			_title.moves = true;
+			add(_title);
 			// Create the subtitle for the title text.
 			_subtitle = new FlxText(0, -60, FlxG.width, "Legend of the Robot Arm", true);
 			_subtitle.setFormat(null, 16, Color.ORANGE, "center", Color.DARK_GRAY);
 			_subtitle.velocity.y = 150;
 			_subtitle.moves = true;
+			add(_subtitle);
 			
 			// Create the fading text to tell the player what to press.
-			_fadingText = new FadingText(FlxG.width / 4, 200, FlxG.width / 2, "Press [SPACE] to start!", true);
-			_fadingText.setFormat(null, 8, Color.WHITE, "center");
+			var fadingText : FadingText = new FadingText(FlxG.width / 4, 200, FlxG.width / 2, "Press [SPACE] to start!", true);
+			fadingText.setFormat(null, 8, Color.WHITE, "center");
+			add(fadingText);
 			
 			// Create the time text.
 			if (SpeedRunTime.time > 0)
 			{
+				// Create stars based on time.
+				for (var i : int = 0; i < 5; i ++)
+				{
+					var star : FlxSprite = new FlxSprite(30 + i * 52, 120, (SpeedRunTime.stars > i) ? starFilledPNG : starUnfilledPNG);
+					add(star);
+				}
+				
+				if (SpeedRunTime.stars < 5)
+				{
+					var starMinutes : uint = SpeedRunTime.secondsUntilNextStar / 60;
+					var starSeconds : uint = SpeedRunTime.secondsUntilNextStar % 60;
+					var starMilliseconds : uint = (SpeedRunTime.secondsUntilNextStar * 100) % 100;
+					var starText : FlxText = new FlxText(0, 170, FlxG.width, "Time for Next Star: " + starMinutes + ":" + ((starSeconds < 10) ? "0" : "") + starSeconds + ":" + (starMilliseconds < 10 ? "0" : "") + starMilliseconds, true);
+					starText.setFormat(null, 8, Color.WHITE, "center", Color.DARK_GRAY);
+					add(starText);
+				}
 				var minutes : uint = SpeedRunTime.time / 60;
 				var seconds : uint = SpeedRunTime.time % 60;
 				var milliseconds : uint = (SpeedRunTime.time * 100) % 100;
-				_timeText = new FlxText(0, 170, FlxG.width, "Time to Beat: " + minutes + ":" + ((seconds < 10) ? "0" : "") + seconds + ":" + (milliseconds < 10 ? "0" : "") + milliseconds, true);
-				_timeText.setFormat(null, 16, Color.WHITE, "center", Color.DARK_GRAY);
+				var timeText : FlxText = new FlxText(0, (SpeedRunTime.stars < 5) ? 180 : 170, FlxG.width, "Personal Best: " + minutes + ":" + ((seconds < 10) ? "0" : "") + seconds + ":" + (milliseconds < 10 ? "0" : "") + milliseconds, true);
+				timeText.setFormat(null, (SpeedRunTime.stars < 5) ? 8 : 16, Color.WHITE, "center", Color.DARK_GRAY);
+				add(timeText);
 			}
-			
-			// Add all of the texts!
-			add(_title);
-			add(_subtitle);
-			add(_fadingText);
-			add(_timeText);
 			
 			_spacePressed = false;
 		}
@@ -98,8 +113,6 @@ package states
 			
 			_title = null;
 			_subtitle = null;
-			_fadingText = null;
-			_timeText = null;
 		}
 	}
 }
