@@ -40,7 +40,7 @@ package levels
 			super.checkInformant();
 			
 			if (_informantTalked[0] == null) {
-				informant.talk("Warning: new enemy ahead! How is it humanly possible to shoot lightning? I didn't know lightning moves that slowly...");
+				informant.talk("Warning: new enemy ahead! What, they shoot lightning? How is that humanly possible? Oh wait...");
 				_informantTalked[0] = true;
 			}
 		}
