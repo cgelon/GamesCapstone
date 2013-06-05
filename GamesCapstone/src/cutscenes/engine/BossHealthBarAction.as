@@ -28,7 +28,7 @@ package cutscenes.engine
 		{
 			boss.health = 0;
 			(Manager.getManager(UIObjectManager) as UIObjectManager).createBossHud();
-			_timer.start(0.1, 41, bossTimerCallback);
+			_timer.start(0.05, 41, bossTimerCallback);
 			_callback = callback;
 		}
 		
