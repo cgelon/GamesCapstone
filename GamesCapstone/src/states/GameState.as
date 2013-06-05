@@ -214,13 +214,14 @@ package states
 		
 		override public function update():void
 		{
-			if (!FlxG.cutscene && FlxG.keys.justPressed("ESCAPE"))
+			if (!FlxG.cutscene && (FlxG.keys.justPressed("ESCAPE") || FlxG.keys.justPressed("P")))
 			{
 				FlxG.paused = !FlxG.paused;
 				_pauseOverlay.exists = FlxG.paused;
 			}
 			if (FlxG.paused)
 			{
+				_pauseOverlay.update();
 				return;
 			}
 			
@@ -451,7 +452,7 @@ package states
 			}
 		}
 		
-		protected function resetRoom():void
+		public function resetRoom():void
 		{
 			FlxG.switchState(new GameState(Registry.roomFlow.getCurrentRoom()));
 		}
