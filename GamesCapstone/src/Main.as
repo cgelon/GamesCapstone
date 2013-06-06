@@ -1,5 +1,6 @@
 package
 {
+	import flash.external.ExternalInterface;
 	import org.flixel.FlxGame;
 	import org.flixel.FlxG;
 	import states.CreditState;
@@ -21,6 +22,10 @@ package
 			//{
 				//FlxG.recordReplay();
 			//}
+			if (ExternalInterface.available)
+			{
+				ExternalInterface.call("givemefocus");
+			}
 		}
 	}
 }
