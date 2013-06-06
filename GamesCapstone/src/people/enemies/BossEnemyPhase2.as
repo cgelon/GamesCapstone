@@ -52,7 +52,7 @@ package people.enemies
 			{
 				if (!_enrageSet && health <= maxHealth / 4)
 				{
-					_enrageMultiplier = .5;
+					_enrageMultiplier = .66;
 					
 					//color = 0x3FFF0000;
 					replaceColor(0xFFCCAE9D, 0xFFFF0000);
