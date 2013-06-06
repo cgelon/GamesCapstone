@@ -702,7 +702,7 @@ package org.flixel
 		 */
 		static public function resumeSounds():void
 		{
-			if((music != null) && music.exists)
+			if((music != null) && music.exists && music._paused)
 				music.play();
 			var i:uint = 0;
 			var sound:FlxSound;

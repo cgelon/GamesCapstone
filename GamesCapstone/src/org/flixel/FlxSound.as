@@ -67,7 +67,7 @@ package org.flixel
 		/**
 		 * Internal tracker for whether the sound is paused or not (not the same as stopped).
 		 */
-		protected var _paused:Boolean;
+		public var _paused:Boolean;
 		/**
 		 * Internal tracker for the position in runtime of the music playback.
 		 */
