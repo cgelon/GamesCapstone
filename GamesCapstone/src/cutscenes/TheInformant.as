@@ -15,7 +15,7 @@ package cutscenes
 	{
 		public function talk(message : String) : void
 		{
-			var messageBox : MessageBox = new MessageBox(160, 0, 160, Color.WHITE, Color.BLUE, 3, "right");
+			var messageBox : MessageBox = new MessageBox(160, 0, 160, Color.WHITE, Color.BLUE, 4, "right");
 			messageBox.displayText("The Informant", message, null, 0.02, true, 5);
 			add(messageBox);
 		}

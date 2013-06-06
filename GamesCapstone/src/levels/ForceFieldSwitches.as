@@ -77,7 +77,7 @@ package levels
 			super.checkInformant();
 			
 			if (_informantTalked[0] == null) {
-				informant.talk("That generator seems to be powering the forcefield, maybe your fists could break it... Actually, that's a ridiculous notion.");
+				informant.talk("That generator seems to be powering the forcefield, maybe your fists could break it...");
 				_informantTalked[0] = true;
 			}
 		}
